@@ -14,8 +14,8 @@
                         
                         <!-- Jeśli jest zdjęcie profilowe, pokaż je -->
                         <div class="form-group text-center">
-                            {% if user.profile.profile_picture %}
-                                <img src="{{ user.profile.profile_picture.url }}" alt="Profile Picture" class="img-fluid rounded-circle" style="max-width: 150px;">
+                            {% if user.profile_picture %}
+                                <img src="{{ user.profile_picture.url }}" alt="Profile Picture" class="img-fluid rounded-circle" style="max-width: 150px;">
                             {% else %}
                                 <img src="https://via.placeholder.com/150" alt="Profile Picture" class="img-fluid rounded-circle">
                             {% endif %}

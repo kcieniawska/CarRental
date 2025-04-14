@@ -7,6 +7,6 @@ urlpatterns = [
     path('edit-profile/', views.edit_profile, name='edit_profile'),
     path('logout/', views.logout_view, name='logout'), 
     path('profile/', views.profile, name='profile'),
-    path('my_orders/', views.my_orders, name='my_orders')
+    path('orders/', views.my_orders, name='my_orders')
 
 ]

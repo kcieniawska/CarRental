@@ -1,6 +1,6 @@
-# users/forms.py
 from django import forms
 from .models import CustomUser
+from django.core.exceptions import ValidationError
 
 # Formularz do rejestracji użytkownika
 class CustomUserCreationForm(forms.ModelForm):
@@ -9,7 +9,7 @@ class CustomUserCreationForm(forms.ModelForm):
 
     class Meta:
         model = CustomUser
-        fields = ['username', 'password1', 'password2', 'email', 'first_name', 'last_name', 'bio', 'profile_picture', 'birth_date']
+        fields = ['username', 'email', 'password1', 'password2', 'first_name', 'last_name', 'bio', 'profile_picture', 'birth_date']
 
     def clean_password2(self):
         password1 = self.cleaned_data.get("password1")
@@ -18,6 +18,12 @@ class CustomUserCreationForm(forms.ModelForm):
         if password1 and password2 and password1 != password2:
             raise forms.ValidationError("Hasła muszą się zgadzać.")
         return password2
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if CustomUser.objects.filter(email=email).exists():
+            raise forms.ValidationError("Ten adres e-mail jest już zajęty.")
+        return email
 
     def save(self, commit=True):
         user = super().save(commit=False)  # Pobranie instancji użytkownika
@@ -31,7 +37,7 @@ class CustomUserCreationForm(forms.ModelForm):
 class CustomUserChangeForm(forms.ModelForm):
     class Meta:
         model = CustomUser
-        fields = ['username', 'first_name', 'last_name', 'email', 'bio', 'profile_picture', 'birth_date']
+        fields = ['username', 'email', 'first_name', 'last_name', 'bio', 'profile_picture', 'birth_date']
 
     def save(self, commit=True):
         user = super().save(commit=False)

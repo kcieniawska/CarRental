@@ -1384,7 +1384,7 @@ nav.log .user-profile:hover {
 
 /* Przyciski checkout */
 .checkout-button {
-    background-color: #f7a541; /* papaya orange 🍊 */
+    background-color: #f7a541; 
     color: white;
     padding: 14px 24px;
     font-size: 1.1em;
@@ -1413,4 +1413,85 @@ nav.log .user-profile:hover {
 
 .order-success-message p {
     margin: 5px 0;
+}
+
+/* Styl dla tekstu przycisku "Zaloguj się" */
+.btn-papaya-orange-text {
+    color: #ff6a13; /* Papaya Orange - kolor tekstu */
+    border: none; /* Brak obramowania */
+    font-weight: bold; /* Pogrubienie tekstu */
+    text-decoration: none; /* Usunięcie podkreślenia */
+}
+
+.btn-papaya-orange-text:hover {
+    color: #e15a10; /* Ciemniejszy odcień tekstu po najechaniu */
+}
+
+.alert {
+    background-color: #e9fbe9;
+    border-left: 5px solid #28a745;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+.message-container {
+    margin: 20px auto;
+    max-width: 700px;
+    padding: 10px;
+}
+
+.message-box {
+    background-color: #fef7f2;
+    border-left: 5px solid papayawhip;
+    border-radius: 10px;
+    padding: 16px 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.message-text {
+    color: #333;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.message-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.btn-cart {
+    background-color: #ffa07a; /* Papaya orange */
+    color: white;
+    padding: 8px 16px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.btn-cart:hover {
+    background-color: #ff8c66;
+}
+
+.btn-browse {
+    background-color: transparent;
+    border: 1px solid #ccc;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-browse:hover {
+    background-color: #eee;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
