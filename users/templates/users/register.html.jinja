@@ -1,0 +1,50 @@
+{% extends "base.html.jinja" %}
+
+{% block content %}
+<div class="auth-container">
+    <h2>Utwórz konto</h2>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <div class="form-field">
+            <label for="{{ form.username.id_for_label }}">Nazwa użytkownika</label>
+            {{ form.username }}
+            {% if form.username.errors %}
+                <ul class="errorlist">
+                    {% for error in form.username.errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+
+        <div class="form-field">
+            <label for="{{ form.password1.id_for_label }}">Hasło</label>
+            {{ form.password1 }}
+            {% if form.password1.errors %}
+                <ul class="errorlist">
+                    {% for error in form.password1.errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+
+        <div class="form-field">
+            <label for="{{ form.password2.id_for_label }}">Potwierdź hasło</label>
+            {{ form.password2 }}
+            {% if form.password2.errors %}
+                <ul class="errorlist">
+                    {% for error in form.password2.errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+
+        <button type="submit">Zarejestruj się</button>
+    </form>
+
+    <p>Masz już konto? <a href="{% url 'login' %}">Zaloguj się</a></p>
+</div>
+{% endblock %}

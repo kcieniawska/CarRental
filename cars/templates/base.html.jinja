@@ -12,8 +12,16 @@
     <header>
         <div class="header-top">
             <nav class="log">
-                <a href="/login/">Logowanie</a> <span> </span>
-                <a href="/Register/">Rejestracja</a>
+                {% if user.is_authenticated %}
+                    <!-- Jeśli użytkownik jest zalogowany -->
+                    <li> <a href="{% url 'profile' %}" class="user-profile">{{ user.username }}</a></li>
+                    <li><a href="{% url 'cart' %}">Koszyk</a></li>
+                    <li><a href="{% url 'logout' %}">Wyloguj się</a></li>
+                {% else %}
+                    <!-- Jeśli użytkownik nie jest zalogowany -->
+                    <li><a href="{% url 'login' %}" class="auth-link">Logowanie</a> <span></span></li>
+                    <li><a href="{% url 'register' %}" class="auth-link">Rejestracja</a></li>
+                {% endif %}
             </nav>
         </div>
         <div class="header-main">

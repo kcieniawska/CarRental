@@ -58,11 +58,17 @@ ROOT_URLCONF = 'carrental.urls'
 
 TEMPLATES = [
     {
+        'BACKEND': 'django.template.backends.jinja2.Jinja2',
+        'DIRS': [BASE_DIR / 'templates'],  # lub inny katalog z szablonami
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'environment': 'carrental.jinja2.environment',  # to za chwilę tworzymy
+        },
+    },
+    {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [
-            BASE_DIR / 'templates',  # jeśli masz globalne szablony
-        ],
-        'APP_DIRS': True,  # Umożliwia szukanie szablonów w katalogu aplikacji
+        'DIRS': [BASE_DIR / 'templates'],
+        'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -117,7 +123,7 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-
+LANGUAGE_CODE = 'pl'  
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
@@ -135,3 +141,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'users.CustomUser'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+CSRF_COOKIE_SECURE = False
+SESSION_COOKIE_SECURE = False 

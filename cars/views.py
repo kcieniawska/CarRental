@@ -66,3 +66,6 @@ def logout_view(request):
     from django.contrib.auth import logout
     logout(request)
     return redirect('index')  # Przekierowanie po wylogowaniu
+def cart(request):
+    # logika dla koszyka
+    return render(request, 'cars/cart.html.jinja')

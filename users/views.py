@@ -1,21 +1,24 @@
-# users/views.py
 from django.shortcuts import render, redirect
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.contrib.auth import login, authenticate
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
-from .forms import CustomUserChangeForm  # Zakładając, że masz ten formularz
+from .forms import CustomUserCreationForm, CustomUserChangeForm  # Zaimportuj formularze
+from django.views.decorators.cache import never_cache
 
 # Widok rejestracji
+@never_cache
 def register(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)  # Zalogowanie użytkownika po rejestracji
-            return redirect('home')  # Możesz przekierować na stronę główną lub inną
+            return redirect('/')  # Możesz przekierować na stronę główną lub inną
     else:
-        form = UserCreationForm()
-    return render(request, 'users/register.html', {'form': form})
+        form = CustomUserCreationForm()
+
+    # Renderowanie formularza rejestracji
+    return render(request, 'users/register.html.jinja', {'form': form})
 
 # Widok logowania
 def user_login(request):
@@ -27,13 +30,14 @@ def user_login(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('home')  # Po zalogowaniu, przekieruj na stronę główną
+                return redirect('/')  # Po zalogowaniu, przekieruj na stronę główną
             else:
                 form.add_error(None, "Nieprawidłowy login lub hasło")
     else:
         form = AuthenticationForm()
     
-    return render(request, 'users/login.html', {'form': form})
+    # Renderowanie formularza logowania
+    return render(request, 'users/login.html.jinja', {'form': form})
 
 # Widok edycji profilu
 @login_required
@@ -46,4 +50,20 @@ def edit_profile(request):
     else:
         form = CustomUserChangeForm(instance=request.user)
     
-    return render(request, 'users/edit_profile.html', {'form': form})
+    # Renderowanie formularza edycji profilu
+    return render(request, 'users/edit_profile.html.jinja', {'form': form})
+
+# Widok wylogowania
+def logout_view(request):
+    logout(request)  # Wylogowanie użytkownika
+    return redirect('index')  # Przekierowanie na stronę główną
+
+# Widok koszyka
+def cart(request):
+    # Na razie pokazujemy tylko prostą stronę koszyka.
+    # Tutaj możesz pobierać przedmioty z sesji, bazy danych itd.
+    return render(request, 'cars/cart.html.jinja')
+
+# Widok profilu
+def profile(request):
+    return render(request, 'users/profile.html.jinja')  # Lub inny szablon, który wyświetla profil

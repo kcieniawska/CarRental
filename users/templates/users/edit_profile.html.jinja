@@ -1,0 +1,54 @@
+{% extends 'base.html.jinja' %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h2>Edytuj swój profil</h2>
+                </div>
+                <div class="card-body">
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <!-- Jeśli jest zdjęcie profilowe, pokaż je -->
+                        <div class="form-group text-center">
+                            {% if user.profile.profile_picture %}
+                                <img src="{{ user.profile.profile_picture.url }}" alt="Profile Picture" class="img-fluid rounded-circle" style="max-width: 150px;">
+                            {% else %}
+                                <img src="https://via.placeholder.com/150" alt="Profile Picture" class="img-fluid rounded-circle">
+                            {% endif %}
+                        </div>
+
+                        <!-- Zmienianie zdjęcia -->
+                        <div class="form-group">
+                            <label for="profile_picture">Zmień zdjęcie profilowe</label>
+                            <input type="file" name="profile_picture" class="form-control" accept="image/*">
+                        </div>
+
+                        <!-- Edytowanie danych użytkownika -->
+                        <div class="form-group">
+                            <label for="first_name">Imię</label>
+                            <input type="text" name="first_name" class="form-control" value="{{ user.first_name }}" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="last_name">Nazwisko</label>
+                            <input type="text" name="last_name" class="form-control" value="{{ user.last_name }}" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" name="email" class="form-control" value="{{ user.email }}" required>
+                        </div>
+
+                        <!-- Przycisk zapisz -->
+                        <button type="submit" class="btn btn-success mt-3">Zapisz zmiany</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
