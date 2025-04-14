@@ -10,11 +10,10 @@
     <div class="car-info">
         <ul>
             <li><strong>Kategoria samochodu: </strong><a href="{% url 'category_detail' car.category %}">{{ car.get_category_display }}</a></li><br>
-            </ul>
+        </ul>
         <h1 class="car-title">{{ car.brand }} {{ car.model }}</h1>
-        <h2 class="car-description-heading">{{ car.description }}</h2>
+        <p class="car-description-heading">{{ car.description }}</p>
 
-        
         <div class="car-specs">
             <ul>
                 <li><strong>Rok produkcji:</strong> {{ car.year }}</li>
@@ -39,10 +38,17 @@
             </div>
         </div>
 
-
-        <div class="car-cta">
-            <button class="rent-button"><strong>Zarezerwuj teraz</strong></button>
-        </div>
+        <!-- Formularz do dodania samochodu do koszyka -->
+        <form method="POST" action="{% url 'orders:add_to_cart' car.id %}">
+            {% csrf_token %}
+            <div class="rental-days">
+                <label for="rental_days">Liczba dni wynajmu:</label>
+                <input type="number" id="rental_days" name="rental_days" min="1" value="1" required>
+            </div>
+            <div class="car-cta">
+                <button type="submit" class="rent-button"><strong>Zarezerwuj teraz</strong></button>
+            </div>
+        </form>
     </div>
 </div>
 {% endblock %}

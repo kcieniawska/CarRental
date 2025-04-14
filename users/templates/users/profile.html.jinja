@@ -26,13 +26,51 @@
                             <p><strong>Email:</strong> {{ user.email }}</p>
                             <p><strong>Data rejestracji:</strong> {{ user.date_joined|date:"d M Y" }}</p>
 
-                            <!-- Link do edytowania profilu --><br>
+                            <!-- Link do edytowania profilu -->
                             <a href="{% url 'edit_profile' %}" class="btn btn-warning mt-3">Edytuj profil</a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- Zakładka Moje zamówienia -->
+        <div class="col-md-8 mt-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-info text-white">
+                    <h2>Moje zamówienia</h2>
+                </div>
+                <div class="card-body">
+                    {% if user.orders.all %}
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Samochód</th>
+                                    <th scope="col">Liczba dni</th>
+                                    <th scope="col">Całkowita cena</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Data zamówienia</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for order in user.orders.all %}
+                                <tr>
+                                    <td>{{ order.car }}</td>
+                                    <td>{{ order.rental_days }}</td>
+                                    <td>{{ order.total_price }} PLN</td>
+                                    <td>{{ order.get_status_display }}</td>
+                                    <td>{{ order.rental_date|date:"d M Y" }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <p>Nie masz żadnych zamówień.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
 {% endblock %}

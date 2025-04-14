@@ -1,0 +1,37 @@
+{% extends "base.html.jinja" %}
+
+{% block title %}Potwierdzenie zamówienia{% endblock %}
+
+{% block content %}
+<div class="order-confirmation-container">
+    <h1>Potwierdzenie zamówienia</h1>
+
+    {% if order_items %}
+        <ul>
+            {% for item in order_items %}
+                <li class="order-item">
+                    <div class="car-info">
+                        <!-- Sprawdzamy, czy zdjęcie samochodu jest dostępne -->
+                        {% if item.car_image %}
+                            <img src="{{ item.car_image }}" alt="{{ item.car_brand }} {{ item.car_model }}" class="car-img" />
+                        {% else %}
+                            <p>Brak zdjęcia</p>
+                        {% endif %}
+                        
+                        <span class="car-brand">{{ item.car_brand }} {{ item.car_model }}</span>
+                        <span class="rental-days">Dni wynajmu: {{ item.rental_days }}</span>
+                        <span class="total-price">Cena: {{ item.total_price }} PLN</span>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Brak zamówionych samochodów.</p>
+    {% endif %}
+
+    <div class="total-price-container">
+        <span class="total-price-label">Łączna cena: </span>
+        <span class="total-price-value">{{ total_price }} PLN</span>
+    </div>
+</div>
+{% endblock %}

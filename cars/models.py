@@ -1,8 +1,9 @@
 from django.db import models
-import os
-from django.contrib.auth.models import AbstractUser
-from django.db import models
+from django.conf import settings  # Importujemy settings, by uzyskać dostęp do modelu użytkownika
 
+    
+
+# Model Equipment
 class Equipment(models.Model):
     equipment = models.CharField(max_length=50)
 
@@ -10,6 +11,7 @@ class Equipment(models.Model):
         return self.equipment
 
 
+# Model Car
 class Car(models.Model):
     CAR_CLASSES = [
         ("a", "małe i mini"),
@@ -23,16 +25,19 @@ class Car(models.Model):
         ("i", "terenowe"),
         ("m", "van"),
     ]
+    
     ENGINE_TYPES = [
         ('Diesel', 'Diesel'),
         ('Petrol', 'Benzyna'),
         ('Electric', 'Elektryczny'),
         ('Hybrid', 'Hybrydowy'),
     ]
+    
     GEARBOX_TYPES = [
         ('Manual', 'Manualna'),
         ('Automatic', 'Automatyczna'),
     ]
+    
     BODY_TYPES = [
         ('Sedan', 'Sedan'),
         ('Hatchback', 'Hatchback'),
@@ -43,6 +48,7 @@ class Car(models.Model):
         ('Van', 'Van'),
         ('Pickup', 'Pickup'),
     ]
+    
     category = models.CharField(max_length=50, choices=CAR_CLASSES)
     brand = models.CharField(max_length=50)
     model = models.CharField(max_length=50)
@@ -62,12 +68,8 @@ class Car(models.Model):
     rent = models.DecimalField(max_digits=10, decimal_places=2)  
     value = models.PositiveIntegerField()  
     mileage_limit = models.PositiveIntegerField()  
-    equipment = models.ManyToManyField(Equipment)    
-    category = models.CharField(
-        max_length=1,
-        choices=CAR_CLASSES,
-        default='a',  # domyślnie przypiszemy "małe i mini"
-    )
+    equipment = models.ManyToManyField(Equipment)  # Relacja M:N do modelu Equipment
+    
 
     def __str__(self):
         return f"{self.brand} {self.model} ({self.year})"

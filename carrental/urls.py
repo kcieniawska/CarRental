@@ -4,6 +4,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from cars import views
 from users import views as user_views
+from orders import views as orders_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -16,7 +17,8 @@ urlpatterns = [
     path('register/', user_views.register, name='register'),
     path('users/', include('users.urls')),  # Obsługuje logowanie/wylogowanie
     # Ścieżka koszyka:
-    path('cart/', views.cart, name='cart'),  # Użyj views.cart zamiast cars_views.cart
+    path('cart/', orders_views.cart, name='cart'),  # Zmieniamy cars.views.cart na orders_views.cart
+    path('orders/', include('orders.urls')),
 ]
 
 # Dodajemy ścieżki do obsługi plików multimedialnych

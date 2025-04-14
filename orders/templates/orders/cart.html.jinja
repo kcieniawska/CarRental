@@ -1,0 +1,52 @@
+{% extends 'base.html.jinja' %}
+
+{% block content %}
+    <h2>Twój koszyk</h2>
+    
+    {% if cart_items %}
+        <div class="cart-container">
+            <ul class="cart-items-list">
+                {% for item in cart_items %}
+                <li class="cart-item">
+                    <div class="cart-item-image">
+                        <img src="{{ item.car_image }}" alt="{{ item.car_brand }} {{ item.car_model }}" class="cart-item-img" />
+                    </div>
+            
+                    <div class="cart-item-info">
+                        <strong class="cart-item-title">{{ item.car_brand }} {{ item.car_model }}</strong><br>
+                        {% if item.car_id %}
+                        <form method="POST" action="{% url 'orders:update_rental_days' item.car_id %}">
+                            {% csrf_token %}
+                            <label for="rental_days">Dni wynajmu:</label>
+                            <input type="number" name="rental_days" id="rental_days" min="1" value="{{ item.rental_days }}" class="input-days" />
+                            <button type="submit" class="update-btn">Zaktualizuj</button>
+                        </form><br>
+                    {% else %}
+                        <p>Brak dostępnego identyfikatora samochodu.</p>
+                    {% endif %}
+                        <span class="cart-item-total">Całkowity koszt: {{ item.total_price }} PLN</span>
+                    </div>
+            
+                    <div class="cart-item-remove">
+                        <form method="POST" action="{% if item.car_id %}{% url 'orders:remove_from_cart' item.car_id %}{% else %}#{% endif %}">
+                            {% csrf_token %}
+                            <button type="submit" class="remove-btn">Usuń</button>
+                        </form>
+                    </div>
+                </li>
+            {% endfor %}
+            </ul>
+
+            <!-- Podsumowanie koszyka -->
+            <div class="cart-summary">
+                <span>Łączna cena: {{ total_price }} PLN</span>
+                <form method="POST" action="{% url 'orders:checkout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="checkout-btn">Przejdź do płatności</button>
+                </form>
+            </div>
+        </div>
+    {% else %}
+        <p>Twój koszyk jest pusty.</p>
+    {% endif %}
+{% endblock %}

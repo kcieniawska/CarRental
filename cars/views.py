@@ -1,16 +1,23 @@
-from django.shortcuts import render
+import logging
+from django.shortcuts import render, get_object_or_404, redirect
 from .models import Car
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from .forms import CustomUserCreationForm
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import login, logout
+
+logger = logging.getLogger(__name__)
 
 def index(request):
-    cars = Car.objects.all()  # Pobieranie wszystkich samochodów, jeśli to ma sens w widoku
+    cars = Car.objects.all()  # Pobieranie wszystkich samochodów
     return render(request, 'cars/index.html.jinja', {'cars': cars})
 
 def car(request, car_id):
-    try:
-        car = Car.objects.get(id=car_id)
-    except Car.DoesNotExist:
-        car = None
+    car = get_object_or_404(Car, id=car_id)  # Automatycznie zwróci błąd 404, jeśli car_id nie istnieje
     return render(request, 'cars/car.html.jinja', {'car': car})
+
+
 def category_list(request):
     # Pobieramy wszystkie unikalne kategorie samochodów
     categories = Car.objects.values_list('category', flat=True).distinct()
@@ -38,8 +45,6 @@ def category_view(request, category):
 
 def contact(request):
     return render(request, 'cars/contact.html.jinja')
-from django.shortcuts import render, redirect
-from .forms import CustomUserCreationForm
 
 def register(request):
     if request.method == 'POST':
@@ -50,6 +55,7 @@ def register(request):
     else:
         form = CustomUserCreationForm()
     return render(request, 'cars/register.html.jinja', {'form': form})
+
 def login_view(request):
     if request.method == 'POST':
         form = AuthenticationForm(request, data=request.POST)
@@ -63,9 +69,5 @@ def login_view(request):
     return render(request, 'cars/login.html.jinja', {'form': form})
 
 def logout_view(request):
-    from django.contrib.auth import logout
     logout(request)
     return redirect('index')  # Przekierowanie po wylogowaniu
-def cart(request):
-    # logika dla koszyka
-    return render(request, 'cars/cart.html.jinja')

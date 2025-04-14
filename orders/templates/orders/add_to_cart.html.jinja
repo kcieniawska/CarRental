@@ -1,0 +1,14 @@
+{% for car in cart_items %}
+  <div class="cart-item">
+    <img src="{{ car.image.url }}" alt="{{ car.name }}">
+    <div class="details">
+      <h2>{{ car.name }}</h2>
+      <p>{{ car.description }}</p>
+      <p><strong>Cena:</strong> {{ car.price }} zł/dzień</p>
+      <form action="{% url 'remove_from_cart' car.id %}" method="POST">
+        {% csrf_token %}
+        <button type="submit" class="remove-btn">Usuń</button>
+      </form>
+    </div>
+  </div>
+{% endfor %}

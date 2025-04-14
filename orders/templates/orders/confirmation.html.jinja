@@ -1,0 +1,37 @@
+{% extends 'base.html.jinja' %}
+
+{% block content %}
+    <div class="confirmation-container">
+        <h2 class="confirmation-title">Finalizacja Rezerwacji</h2>
+
+        {% if cart_items %}
+            <div class="cart-items-list">
+                <ul>
+                    {% for item in cart_items %}
+                        <li class="cart-item">
+                            <div class="cart-item-image">
+                                <img src="{{ item.car_image }}" alt="{{ item.car_brand }} {{ item.car_model }}" class="cart-item-img" />
+                            </div>
+                            <div class="cart-item-info">
+                                <strong>{{ item.car_brand }} {{ item.car_model }}</strong><br>
+                                Dni wynajmu: {{ item.rental_days }}<br>
+                                Cena: {{ item.total_price }} PLN
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <p class="total-price"><strong>Łączna cena: {{ total_price }} PLN</strong></p>
+
+            <div class="payment-button">
+                <form method="POST" action="#">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-payment">Dokonaj płatności</button>
+                </form>
+            </div>
+        {% else %}
+            <p class="empty-cart">Brak przedmiotów w koszyku.</p>
+        {% endif %}
+    </div>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends 'base.html.jinja' %}
+
+{% block content %}
+    <h2>Twoje zamówienia</h2>
+
+    {% if orders %}
+        <ul>
+            {% for order in orders %}
+                <li>
+                    <strong>Samochód:</strong> {{ order.car.brand }} {{ order.car.model }}<br>
+                    <strong>Liczba dni wynajmu:</strong> {{ order.rental_days }}<br>
+                    <strong>Całkowity koszt:</strong> {{ order.total_price }} PLN<br>
+                    <strong>Status zamówienia:</strong> {{ order.get_status_display }}<br>
+                    <strong>Data zamówienia:</strong> {{ order.rental_date }}<br>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Nie masz żadnych zamówień.</p>
+    {% endif %}
+{% endblock %}

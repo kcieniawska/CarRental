@@ -1,0 +1,50 @@
+{% extends "base.html.jinja" %}
+
+{% block title %}Podsumowanie zamówienia{% endblock %}
+
+{% block content %}
+<div class="checkout-container">
+    <h1 class="checkout-title">Podsumowanie zamówienia</h1>
+
+    {% if order_success %}
+        <div class="order-success-message">
+            <p>Twoje zamówienie zostało złożone pomyślnie! 🎉</p>
+            <p>Wkrótce otrzymasz potwierdzenie na e-mail.</p>
+        </div>
+    {% else %}
+        {% if cart_items %}
+            <ul class="checkout-items-list">
+                {% for item in cart_items %}
+                    <li class="checkout-item">
+                        <div class="checkout-car-info">
+                            {% if item.car_image %}
+                                <img src="{{ item.car_image }}" alt="{{ item.car_brand }} {{ item.car_model }}" class="checkout-car-img" />
+                            {% else %}
+                                <div class="no-image-placeholder">Brak zdjęcia</div>
+                            {% endif %}
+                            
+                            <div class="checkout-car-details">
+                                <span class="checkout-car-brand">{{ item.car_brand }} {{ item.car_model }}</span>
+                                <span class="checkout-rental-days">Dni wynajmu: {{ item.rental_days }}</span>
+                                <span class="checkout-total-price">Cena: {{ item.total_price }} PLN</span>
+                            </div>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="empty-cart-message">Brak samochodów w koszyku.</p>
+        {% endif %}
+    
+        <div class="total-price-container">
+            <span class="total-price-label">Łączna cena: </span>
+            <span class="total-price-value">{{ total_price }} PLN</span>
+        </div>
+    
+        <form method="POST" action="{% url 'orders:checkout' %}">
+            {% csrf_token %}
+            <button type="submit" class="checkout-button">Zatwierdź zamówienie</button>
+        </form>
+    {% endif %}
+</div>
+{% endblock %}

@@ -4,6 +4,8 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from .forms import CustomUserCreationForm, CustomUserChangeForm  # Zaimportuj formularze
 from django.views.decorators.cache import never_cache
+from django.contrib.auth.decorators import login_required
+from .models import Order
 
 # Widok rejestracji
 @never_cache
@@ -67,3 +69,8 @@ def cart(request):
 # Widok profilu
 def profile(request):
     return render(request, 'users/profile.html.jinja')  # Lub inny szablon, który wyświetla profil
+
+@login_required
+def my_orders(request):
+    orders = Order.objects.filter(user=request.user)
+    return render(request, 'my_orders.html.jinja', {'orders': orders})
