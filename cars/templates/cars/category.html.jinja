@@ -1,0 +1,27 @@
+{% extends "base.html.jinja" %}
+
+{% block title %}Auta w kategorii {{ category|capfirst }}{% endblock %}
+
+{% block content %}
+<section class="categories">
+    <div class="content-wrapper">
+        <h2>Samochody z kategorii {{ category|capfirst }}</h2>
+
+        <div class="category-list">
+            {% if cars %}
+                {% for car in cars %}
+                    <div class="category-item">
+                        <a href="{% url 'car' car.id %}">
+                            <img src="{{ car.image.url }}" alt="{{ car.model }}" />
+                            <h3>{{ car.brand }} {{ car.model }}</h3>
+                            <p>{{ car.description|truncatewords:15 }}</p>
+                        </a>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>Brak samochodów w tej kategorii.</p>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}

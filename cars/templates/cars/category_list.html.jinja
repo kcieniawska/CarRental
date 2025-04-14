@@ -1,0 +1,23 @@
+{% extends "base.html.jinja" %}
+
+{% block title %}Kategorie samochodów{% endblock %}
+
+{% block content %}
+
+<!-- Sekcja kategorii samochodów -->
+<section class="categories">
+    <div class="content-wrapper">
+        <h2>Wybierz interesującą kategorię samochodu </h2>
+       
+        <ul class="category-list">
+            {% for category in categories %}
+            <li class="category-item">
+                <a href="{% url 'category_detail' category.0 %}">
+                    <h3>{{ category.1|capfirst }}</h3>
+                </a>
+            </li>
+        {% endfor %}
+        </ul>
+    </div>
+</section>
+{% endblock %}

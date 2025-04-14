@@ -1,0 +1,787 @@
+/* Globalne resetowanie marginesów i paddingów */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Podstawowe style dla całej strony */
+html, body {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    font-family: Roboto, sans-serif;
+    background-color: #e1e1e1;
+}
+
+/* Nagłówki */
+header {
+    background-color: rgba(230, 122, 43, 0.8);
+}
+header a {
+    text-decoration: none;
+    color: #fff;
+}
+
+/* Górna część nagłówka */
+.header-top {
+    display: flex;
+    justify-content: flex-end;
+    background-color: rgba(229, 103, 23, 0.5);
+    padding: 0;
+}
+
+header h1 img {
+    width: 40px;
+    height: 50px;
+    margin-right: 10px;
+}
+
+nav.log {
+    font-size: 0.8em;
+}
+
+nav.log a {
+    color: #e7e7e7;
+    padding: 1px;
+    text-decoration: none;
+}
+
+/* Główna część nagłówka */
+.header-main {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+}
+
+header h1 {
+    font-size: 2em;
+    font-family: Staatliches, sans-serif;
+    letter-spacing: 0.1em;
+    margin-left: 200px;
+}
+
+header h1 span {
+    color: #a04913;
+}
+
+nav {
+    font-family: 'roboto', sans-serif;
+}
+
+nav a {
+    text-decoration: none;
+    color: #ffffff;
+    margin: 0 15px;
+    font-size: 1.2em;
+    display: inline-block;
+    padding: 10px 0;
+}
+
+nav a:hover {
+    color: #333130;
+}
+
+nav span {
+    color: #333130;
+    border-right: 3px solid #000;
+}
+
+/* Główna sekcja zawartości */
+.main-content {
+    flex: 1;
+    padding: 40px 10%;
+    text-align: center;
+}
+
+/* Stopka */
+footer {
+    margin-top: auto;
+    padding: 20px;
+    background-color: rgba(230, 122, 43, 0.8);
+    text-align: center;
+    width: 100%;
+}
+
+footer p {
+    color: #fff;
+    font-size: 1em;
+}
+
+/* Sekcja powitania (1) */
+.welcome {
+    background-color: #f0f0f0;
+    padding: 100px 10%;
+    margin-bottom: 60px;
+}
+
+.content-wrapper img {
+    width: 20%;
+    margin-bottom: 50px;
+    height: auto;
+}
+.categories h2 {
+    margin-top: 40px;
+    margin-bottom: 80px; /* lub np. 100px */
+}
+.welcome h2 {
+    font-size: 2.5em;
+    margin-bottom: 50px;
+    color: #333;
+}
+
+.welcome p {
+    font-size: 1.2em;
+    color: #555;
+}
+
+/* Sekcja samochodów (2) */
+.cars {
+    background-color: #ffffff;
+    padding: 60px 10%;
+    margin-bottom: 100px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.cars h2 {
+    font-size: 2.8em;
+    margin-bottom: 50px;
+    color: #333;
+    text-align: center;
+}
+
+.car-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Zwiększona szerokość kafelków */
+    gap: 24px;
+    justify-content: center;
+    padding: 0;
+}
+
+.car-item {
+    background-color: #fcfcfc;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.car-item:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+.car-item a {
+    display: block;
+    padding: 20px;
+    text-decoration: none;
+    color: inherit;
+    transition: background-color 0.3s;
+}
+
+.car-item:hover a {
+    background-color: #f5f5f5;
+}
+
+.car-item img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.car-item h3 {
+    font-size: 1.2em;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 8px;
+    text-align: center;
+}
+
+.price {
+    font-size: 1em;
+    color: #ed8c4e;
+    text-align: center;
+    font-weight: 600;
+    margin-top: 5px;
+}
+
+.price span {
+    color: #333;
+}
+
+.price-label {
+    color: #333;
+    font-weight: bold;
+}
+
+/* Sekcja "Dlaczego warto wybrać naszą wypożyczalnię" (3) */
+.why-choose {
+    background-color: #ffffff;
+    padding: 60px 10%;
+    margin-bottom: 60px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.why-choose h2 {
+    font-size: 2.5em;
+    margin-bottom: 40px;
+    color: #333;
+    text-align: center;
+}
+
+.info-cards {
+    display: flex;
+    justify-content: center;
+    flex-wrap: nowrap;
+    gap: 20px;
+}
+
+.info-card {
+    padding: 20px;
+    width: 250px;
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.info-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+}
+
+.info-card h3 {
+    font-size: 1.6em;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.info-card p {
+    font-size: 1.1em;
+    color: #555;
+}
+
+.info-card img {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 15px;
+    object-fit: contain;
+}
+
+/* Sekcja punktów odbioru (4) */
+.customer-reviews {
+    background-color: #ffffff;
+    padding: 60px 10%;
+    margin-bottom: 60px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.customer-reviews h2 {
+    font-size: 2.5em;
+    margin-bottom: 40px;
+    color: #333;
+    text-align: center;
+}
+
+.reviews {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.review {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    width: 23%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.review:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+}
+
+.review h3 {
+    font-size: 1.6em;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.review p {
+    font-size: 1.1em;
+    color: #555;
+}
+
+.review img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    margin-bottom: 15px;
+    object-fit: cover;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    border: 4px solid #000000;
+}
+
+/* Dodatkowe style dla responsywności */
+@media (max-width: 768px) {
+    .review {
+        width: 48%;
+    }
+}
+
+@media (max-width: 480px) {
+    .review {
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .car-item, .location {
+        width: 100%;
+    }
+
+    .info-card {
+        width: 30%;
+    }
+}
+/* Dodatkowe style dla responsywności */
+@media (max-width: 768px) {
+    .review {
+        width: 48%; /* Zmniejszenie szerokości na małych ekranach */
+    }
+}
+
+@media (max-width: 480px) {
+    .review {
+        width: 100%; /* Zajmująca pełną szerokość na bardzo małych ekranach */
+    }
+}
+
+/* Dodatkowe style dla responsywności */
+@media (max-width: 768px) {
+    .car-item, .location {
+        width: 100%;
+    }
+
+    .info-card {
+        width: 30%;  /* Zwiększona szerokość na małych ekranach */
+    }
+}
+/* Kontener dla szczegółów samochodu */
+.car-detail-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    padding: 40px;
+    background-color: #f9f9f9;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.car-image {
+    flex: 1 1 45%;
+}
+
+.car-img {
+    width: 100%;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.car-info {
+    flex: 1 1 45%;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.car-info p {
+    background-color: #f1f1f1; /* Jasny szary */
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    font-size: 1.1em;
+    color: #8e8c8c;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    text-align: justify;
+    line-height: 1.6;
+}
+.car-info ul {
+    text-decoration: none;
+    list-style-type: none;
+    text-align: left;
+    font-size: 0.8em;
+}
+.car-info a {
+    text-decoration: none;
+    color: #484848;
+}
+.car-description-heading {
+    font-size: 1.1em;
+    font-weight: 400;
+    color: #888; /* jaśniejszy szary odcień */
+    margin-bottom: 20px;
+    line-height: 1.5;
+    text-align: justify;
+}
+
+.car-title {
+    font-size: 2em;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.car-description {
+    font-size: 0.5em;
+    color: #cdcdcd;
+    margin-bottom: 20px;
+}
+
+.car-specs ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.car-specs li {
+    text-align: left;
+    font-size: 1.1em;
+    margin-bottom: 10px;
+    color: #555;
+}
+
+.car-price-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.car-price-left {
+    font-size: 1.1em;
+    color: #333;
+}
+
+.car-price-right {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #ed8c4e;
+}
+
+.car-additional-info {
+    margin-top: 40px;
+}
+
+.car-additional-info h3 {
+    font-size: 1.4em;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.car-additional-info ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.car-additional-info li {
+    font-size: 1.1em;
+    margin-bottom: 10px;
+    color: #555;
+}
+
+.rent-button {
+    background-color: #ed8c4e;
+    color: white;
+    padding: 20px 5px;
+    font-size: 1.2em;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    width: auto;
+    transition: background-color 0.3s;
+}
+
+.car-cta {
+    display: flex;
+    justify-content: flex-end; /* Wyrównuje przycisk do prawej strony */
+    margin-top: 20px;
+}
+.rent-button:hover {
+    background-color: #d4783e;
+    color: #333;
+}
+
+/* Stylizacja dla responsywności */
+@media (max-width: 768px) {
+    .car-detail-container {
+        flex-direction: column;
+        padding: 20px;
+    }
+
+    .car-image {
+        margin-right: 0;
+        margin-bottom: 20px;
+    }
+
+    .car-info {
+        flex: 1;
+    }
+
+    .car-title {
+        font-size: 2em;
+    }
+
+    .car-description {
+        font-size: 1em;
+    }
+
+    .car-price {
+        font-size: 1.2em;
+    }
+}
+/* Stylizacja dla elementów kategorii */
+.category-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 24px;
+    justify-content: center;
+    padding: 0;
+    margin-top: 20px; /* Dodatkowy odstęp nad kafelkami */
+}
+
+.category-item {
+    background-color: #fcfcfc;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.category-item:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+.category-item img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.category-item h3 {
+    font-size: 1.2em;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 8px;
+    text-align: center;
+}
+
+/* Hiperłącza wewnątrz kategorii - niewidoczne */
+.category-item a {
+    display: block;
+    text-decoration: none; /* Usunięcie podkreślenia */
+    color: inherit; /* Dziedziczenie koloru z rodzica */
+    width: 100%;
+    height: 100%;
+    padding: 0; /* Usunięcie wszelkich marginesów i paddingu */
+}
+
+/* Zapewnienie, że linki nie zmieniają koloru ani stylu na hover */
+.category-item a:hover,
+.category-item a:focus {
+    color: inherit; /* Brak zmiany koloru na hover */
+    background-color: transparent; /* Brak zmiany tła */
+    box-shadow: none; /* Brak efektów cieniowania na hover */
+}
+
+/* Nagłówek sekcji kategorii - zwiększenie odstępu */
+.category-cars h2 {
+    margin-bottom: 60px; /* Zwiększenie odstępu poniżej nagłówka */
+}
+.category-cars .content-wrapper {
+    margin-top: 30px; /* Zwiększenie marginesu na górze kontenera */
+}
+/* Strona kontaktowa */
+.contact {
+    padding: 80px 10%;
+    background-color: #f8f8f8;
+}
+
+.contact h2 {
+    font-size: 2.5em;
+    color: #333;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.content-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.contact-form, .contact-info, .contact-map {
+    margin-bottom: 60px;
+}
+
+.contact-form h3, .contact-info h3 {
+    font-size: 2em;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    font-size: 1.1em;
+    color: #555;
+}
+
+.form-group input, .form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1em;
+    color: #333;
+}
+
+.form-group textarea {
+    resize: vertical;
+}
+
+.submit-btn {
+    background-color: #ed8c4e;
+    color: white;
+    padding: 12px 20px;
+    font-size: 1.2em;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 100%;
+}
+
+.submit-btn:hover {
+    background-color: #d4783e;
+}
+
+/* Sekcja danych kontaktowych */
+.contact-info p {
+    font-size: 1.2em;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+/* Sekcja mapy */
+.contact-map iframe {
+    border-radius: 12px;
+}
+
+/* Responsywność */
+@media (max-width: 768px) {
+    .contact {
+        padding: 60px 5%;
+    }
+
+    .contact h2 {
+        font-size: 2.2em;
+    }
+
+    .contact-form, .contact-info {
+        margin-bottom: 40px;
+    }
+
+    .contact-info p {
+        font-size: 1.1em;
+    }
+
+    .submit-btn {
+        font-size: 1.1em;
+    }
+}
+.category-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+}
+/* Stopka */
+footer {
+    margin-top: auto;
+    padding: 20px;
+    background-color: rgba(230, 122, 43, 0.8);
+    text-align: center;
+    width: 100%;
+}
+
+footer p {
+    color: #fff;
+    font-size: 1em;
+}
+
+
+.auth-container {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.auth-container h2 {
+    font-size: 2em;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.auth-container form {
+    display: flex;
+    flex-direction: column;
+}
+
+.auth-container form input {
+    margin-bottom: 15px;
+    padding: 12px;
+    font-size: 1em;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+.auth-container button {
+    padding: 12px;
+    font-size: 1.2em;
+    background-color: #ed8c4e;
+    border: none;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.auth-container button:hover {
+    background-color: #d4783e;
+}
+
+.auth-container p {
+    text-align: center;
+}
+
+.auth-container a {
+    color: #ed8c4e;
+    text-decoration: none;
+}
+
+.auth-container a:hover {
+    text-decoration: underline;
+}

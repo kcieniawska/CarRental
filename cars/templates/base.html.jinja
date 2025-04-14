@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <link rel="icon" href="{% static 'images/papaya.png' %}" type="image/x-icon">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css">
+    <title>PapayaRentCar | {% block title %}Strona główna{% endblock %}</title>
+</head>
+<body>
+    <header>
+        <div class="header-top">
+            <nav class="log">
+                <a href="/login/">Logowanie</a> <span> </span>
+                <a href="/Register/">Rejestracja</a>
+            </nav>
+        </div>
+        <div class="header-main">
+            <h1><a href="/"><img src="{% static 'images/papaya-logo.png' %}" alt="Opis zdjęcia">Papaya<span>Rent</span>Car</a></h1>
+            <nav>
+                <a href="/">Strona główna</a> <span> </span>
+                <a href="/#poznaj-nasze-samochody">Nasze samochody</a> <span> </span>
+                <a href="{% url 'category_list' %}">Kategorie</a> <span> </span>
+                <a href="/contact/">Kontakt</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="main-content">
+        {% block content %}
+        <!-- Tutaj pojawi się zawartość z innych stron -->
+        {% endblock %}
+    </section>
+
+    <footer>
+        <p>© Karolina Cieniawska ● 14690 ● 2025 ●</p>
+        <p>Projekt wykonany na potrzeby przedmiotu "Architektura oprogramowania" na Akademii Nauk Stosowanych w Nowym Targu</p>
+    </footer>
+</body>
+</html>

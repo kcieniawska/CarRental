@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="auth-container">
+    <h2>Rejestracja</h2>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Zarejestruj się</button>
+    </form>
+    <p>Masz już konto? <a href="{% url 'login' %}">Zaloguj się</a></p>
+</div>
+{% endblock %}

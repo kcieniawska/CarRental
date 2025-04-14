@@ -1,67 +1,73 @@
 from django.db import models
+import os
+from django.contrib.auth.models import AbstractUser
+from django.db import models
 
 class Equipment(models.Model):
-    name = models.CharField(max_length=50, unique=True)  # Pole na nazwę wyposażenia
+    equipment = models.CharField(max_length=50)
 
-    def __str__(self):
-        return self.name  # Powinno zwracać 'name', a nie 'equipment'
+    def __str__(self) -> str:
+        return self.equipment
 
 
 class Car(models.Model):
+    CAR_CLASSES = [
+        ("a", "małe i mini"),
+        ("b", "miejskie"),
+        ("c", "kompaktowe"),
+        ("d", "rodzinne"),
+        ("e", "limuzyny"),
+        ("f", "luksusowe"),
+        ("g", "sportowe"),
+        ("h", "kabriolety"),
+        ("i", "terenowe"),
+        ("m", "van"),
+    ]
     ENGINE_TYPES = [
         ('Diesel', 'Diesel'),
-        ('Petrol', 'Petrol'),
-        ('Electric', 'Electric'),
-        ('Hybrid', 'Hybrid')
+        ('Petrol', 'Benzyna'),
+        ('Electric', 'Elektryczny'),
+        ('Hybrid', 'Hybrydowy'),
     ]
-    
     GEARBOX_TYPES = [
-        ('Manual', 'Manual'),
-        ('Automatic', 'Automatic')
+        ('Manual', 'Manualna'),
+        ('Automatic', 'Automatyczna'),
     ]
-    
     BODY_TYPES = [
         ('Sedan', 'Sedan'),
         ('Hatchback', 'Hatchback'),
         ('SUV', 'SUV'),
         ('Coupe', 'Coupe'),
-        ('Convertible', 'Convertible'),
-        ('Wagon', 'Wagon'),
+        ('Convertible', 'Kabriolet'),
+        ('Wagon', 'Kombi'),
         ('Van', 'Van'),
-        ('Pickup', 'Pickup')
+        ('Pickup', 'Pickup'),
     ]
-    
-    CAR_CLASSES = [
-        ('A', 'małe auta miejskie'),
-        ('B', 'auta miejskie'),
-        ('C', 'kompaktowe'),
-        ('D', 'średnie'),
-        ('E', 'wyższe klasy'),
-        ('F', 'luksusowe'),
-        ('J', 'SUV-y'),
-        ('M', 'vany'),
-        ('S', 'sportowe'),
-        ('T', 'pickup-y')
-    ]
-    car_class = models.CharField(max_length=1, choices=CAR_CLASSES)
+    category = models.CharField(max_length=50, choices=CAR_CLASSES)
     brand = models.CharField(max_length=50)
     model = models.CharField(max_length=50)
-    engine_type = models.CharField(max_length=10, choices=ENGINE_TYPES)
-    engine_capacity = models.PositiveSmallIntegerField()
-    engine_power = models.PositiveSmallIntegerField()
-    gearbox = models.CharField(max_length=10, choices=GEARBOX_TYPES)
-    fuel_consumption = models.DecimalField(max_digits=4, decimal_places=2)
-    image = models.ImageField(upload_to="cars/")
-    doors_count = models.PositiveSmallIntegerField()  # poprawiona literówka z "dors_count"
-    seats_count = models.PositiveSmallIntegerField()
-    body_type = models.CharField(max_length=15, choices=BODY_TYPES)
-    year = models.PositiveSmallIntegerField()
-    location = models.CharField(max_length=100)
-    available = models.BooleanField(default=True)
-    rent = models.DecimalField(max_digits=10, decimal_places=2)
-    value = models.PositiveIntegerField()  # dodano brakujące nawiasy
-    mileage_limit = models.PositiveIntegerField()
-    equipment = models.ManyToManyField(Equipment)  # poprawiona nazwa modelu Equipment
+    description = models.TextField(default="Nowoczesne, komfortowe i niezawodne auto, idealne do codziennych podróży oraz długich tras.")
+    engine_type = models.CharField(max_length=10, choices=ENGINE_TYPES)  
+    engine_capacity = models.PositiveSmallIntegerField()  
+    engine_power = models.PositiveSmallIntegerField()  
+    gearbox = models.CharField(max_length=10, choices=GEARBOX_TYPES)  
+    fuel_consumption = models.DecimalField(max_digits=4, decimal_places=2)  
+    image = models.ImageField(upload_to='car_images/')
+    doors_count = models.PositiveSmallIntegerField()  
+    seats_count = models.PositiveSmallIntegerField()  
+    body_type = models.CharField(max_length=15, choices=BODY_TYPES)  
+    year = models.PositiveSmallIntegerField()  
+    location = models.CharField(max_length=100)  
+    available = models.BooleanField(default=True)  
+    rent = models.DecimalField(max_digits=10, decimal_places=2)  
+    value = models.PositiveIntegerField()  
+    mileage_limit = models.PositiveIntegerField()  
+    equipment = models.ManyToManyField(Equipment)    
+    category = models.CharField(
+        max_length=1,
+        choices=CAR_CLASSES,
+        default='a',  # domyślnie przypiszemy "małe i mini"
+    )
 
     def __str__(self):
         return f"{self.brand} {self.model} ({self.year})"

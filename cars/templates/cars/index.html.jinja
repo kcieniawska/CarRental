@@ -1,0 +1,101 @@
+{% extends "base.html.jinja" %}
+
+{% load static %}
+
+{% block title %}Strona Główna{% endblock %}
+
+{% block content %}
+    <!-- Sekcja 1: Powitanie -->
+    <section class="welcome">
+        <div class="content-wrapper">
+            <img src="{% static 'images/papaya.png' %}" alt="Opis zdjęcia">
+            <h2>Witamy w PapayaRentCar!</h2>
+            <p>
+                Wynajmij auto na wymarzony urlop, rodzinny wypad za miasto lub służbową podróż. W PapayaRentCar stawiamy na 
+                komfort, bezpieczeństwo i pełną satysfakcję naszych klientów. Oferujemy szeroką gamę nowoczesnych i niezawodnych pojazdów – 
+                od ekonomicznych modeli miejskich, przez przestronne SUV-y, aż po eleganckie auta premium. <br>
+                <br>A wszystko to w konkurencyjnych cenach i z elastycznymi warunkami wynajmu!
+
+            </p>
+        </div>
+    </section>
+
+    <!-- Sekcja 2: Poznaj nasze samochody -->
+    <section class="cars" id="poznaj-nasze-samochody">
+        <h2>Poznaj nasze samochody</h2>
+        <div class="car-list">
+            {% for car in cars %}
+                <div class="car-item">
+                    <a href="{% url 'car_detail' car.id %}">
+                        <img src="{{ car.image.url }}" alt="{{ car.brand }} {{ car.model }}">
+                        <h3>{{ car.brand }} {{ car.model }}</h3>
+                        <div class="price"><span>Miejsce odbioru:</span> {{ car.location }}</div>
+                        <div class="price"><span>Rocznik:</span> {{ car.year }}</div><br>
+                        <div class="price"><span>Cena wynajmu:</span> {{ car.rent }} PLN/dzień</div>
+                    </a>
+                </div>
+            {% empty %}
+                <p>Brak dostępnych samochodów w naszej bazie.</p>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- Sekcja 3: Dlaczego wybrać naszą wypożyczalnię -->
+    <section class="why-choose">
+        <h2>Dlaczego warto wybrać PapayaRentCar?</h2>
+        <div class="info-cards">
+            <div class="info-card">
+                <img src="{% static 'images/car.png' %}" alt="Auta">
+                <h3>Szeroka gama samochodów</h3>
+                <p>Od ekonomicznych po luksusowe pojazdy – mamy wszystko, czego potrzebujesz!</p>
+            </div>
+            <div class="info-card">
+                <img src="{% static 'images/security.png' %}" alt="Bezpieczeństwo">
+                <h3>Bezpieczeństwo</h3>
+                <p>Nasze auta są regularnie serwisowane i sprawdzane, by zapewnić Ci pełne bezpieczeństwo na drodze.</p>
+            </div>
+            <div class="info-card">
+                <img src="{% static 'images/flexibility.png' %}" alt="Elastyczność">
+                <h3>Elastyczne warunki</h3>
+                <p>Wynajmuj na dowolny okres, z możliwością przedłużenia lub skrócenia umowy.</p>
+            </div>
+            <div class="info-card">
+                <img src="{% static 'images/support.png' %}" alt="Obsługa">
+                <h3>Profesjonalna obsługa</h3>
+                <p>Nasza ekipa jest dostępna 24/7, by pomóc Ci w każdej sytuacji.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sekcja 4: Opinie klientów -->
+<section class="customer-reviews">
+    <h2>Opinie naszych klientów</h2>
+    <div class="reviews">
+        <div class="review">
+            <img src="{% static 'images/customer.png' %}" alt="Klient 1">
+            <h3>Jan</h3>
+            <p>★★★★★</p><br>
+            <p>"Wynajem auta był szybki i bezproblemowy. Bardzo polecam!</p>
+        </div>
+        <div class="review">
+            <img src="{% static 'images/customer.png' %}" alt="Klient 2">
+            <h3>Anna</h3>
+            <p>★★★★★</p><br>
+            <p>"Profesjonalna obsługa i świetna jakość samochodów. Na pewno wrócę!"</p>
+        </div>
+        <div class="review">
+            <img src="{% static 'images/customer.png' %}" alt="Klient 3">
+            <h3>Piotr</h3>
+            <p>★★★★</p><br>
+            <p>"Szeroka gama samochodów w bardzo dobrej cenie. Naprawdę warto!"</p>
+        </div>
+        <div class="review">
+            <img src="{% static 'images/customer.png' %}" alt="Klient 4">
+            <h3>Andrzej</h3>
+            <p>★★★★★</p><br>
+            <p>"Bardzo miła obsługa. Samochód czysty i gotowy do jazdy. Polecam!"</p>
+        </div>
+    </div>
+</section>
+    </section>
+{% endblock %}

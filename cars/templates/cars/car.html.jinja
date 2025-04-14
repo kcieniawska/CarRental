@@ -1,0 +1,48 @@
+{% extends "base.html.jinja" %}
+
+{% block title %}{{ car.brand }} {{ car.model }}{% endblock %}
+
+{% block content %}
+<div class="car-detail-container">
+    <div class="car-image">
+        <img src="{{ car.image.url }}" alt="{{ car.brand }} {{ car.model }}" class="car-img" />
+    </div>
+    <div class="car-info">
+        <ul>
+            <li><strong>Kategoria samochodu: </strong><a href="{% url 'category_detail' car.category %}">{{ car.get_category_display }}</a></li><br>
+            </ul>
+        <h1 class="car-title">{{ car.brand }} {{ car.model }}</h1>
+        <h2 class="car-description-heading">{{ car.description }}</h2>
+
+        
+        <div class="car-specs">
+            <ul>
+                <li><strong>Rok produkcji:</strong> {{ car.year }}</li>
+                <li><strong>Typ nadwozia:</strong> {{ car.body_type }}</li>
+                <li><strong>Rodzaj paliwa:</strong> {{ car.engine_type }}</li>
+                <li><strong>Pojemność silnika:</strong> {{ car.engine_capacity }} L</li>
+                <li><strong>Moc:</strong> {{ car.engine_power }} KM</li>
+                <li><strong>Typ skrzyni biegów:</strong> {{ car.gearbox }}</li>
+                <li><strong>Zużycie paliwa:</strong> {{ car.fuel_consumption }} L/100km</li>
+                <li><strong>Liczba drzwi:</strong> {{ car.doors_count }}</li>
+                <li><strong>Liczba miejsc:</strong> {{ car.seats_count }}</li>
+                <li><strong>Lokalizacja:</strong> {{ car.location }}</li>
+            </ul>
+        </div>
+
+        <div class="car-price-container">
+            <div class="car-price-left">
+                <span class="price-label">Cena za wynajem:</span>
+            </div>
+            <div class="car-price-right">
+                <span class="price-value">{{ car.rent }} PLN/dzień</span>
+            </div>
+        </div>
+
+
+        <div class="car-cta">
+            <button class="rent-button"><strong>Zarezerwuj teraz</strong></button>
+        </div>
+    </div>
+</div>
+{% endblock %}
