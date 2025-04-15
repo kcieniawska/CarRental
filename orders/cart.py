@@ -3,25 +3,24 @@ from datetime import datetime
 class Cart:
     def __init__(self, request):
         self.session = request.session
-        cart = self.session.get('cart')
+        cart = self.session.get('cart', {})
         if not cart:
             cart = self.session['cart'] = {}
         self.cart = cart
 
     def add_item(self, car, rental_days, total_price, start_date, end_date):
-        # Convert datetime objects to strings before storing them in the session
-        start_date_str = start_date.strftime('%Y-%m-%d')
-        end_date_str = end_date.strftime('%Y-%m-%d')
+        if str(car.id) not in self.cart:
+            self.cart[str(car.id)] = {
+                'car_id': car.id,
+                'rental_days': rental_days,
+                'total_price': total_price,
+                'start_date': start_date.strftime('%Y-%m-%d'),
+                'end_date': end_date.strftime('%Y-%m-%d'),
+            }
+            self.save()
 
-        item = {
-            'car_id': car.id,
-            'rental_days': rental_days,
-            'total_price': total_price,  # Now total_price is float
-            'start_date': start_date_str,
-            'end_date': end_date_str
-        }
-        self.cart[car.id] = item
-        self.save()
+    def save(self):
+        self.session.modified = True
 
     def save(self):
         self.session['cart'] = self.cart

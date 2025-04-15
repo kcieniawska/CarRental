@@ -1,7 +1,7 @@
 {% extends 'base.html.jinja' %}
 
 {% block content %}
-<h1>Twój koszyk</h1>
+<h1 style="margin-bottom: 50px;">Twój koszyk</h1>
 
 {% if cart %}
     <div class="cart-table-wrapper">
@@ -23,12 +23,7 @@
                     <td>{{ item.car_brand }} {{ item.car_model }}</a></td>
                     <td>{{ item.start_date }}</td>
                     <td>{{ item.end_date }}</td>
-                    <td>
-                        <form method="post" action="{% url 'orders:update_rental_days' item.car_id %}">
-                            {% csrf_token %}
-                            <input type="number" name="rental_days" value="{{ item.rental_days }}" min="1" />
-                            <button type="submit" class="btn-update">Zaktualizuj</button>
-                        </form>
+                    <td>{{ item.rental_days }}</td>
                     </td>
                     <td>
                         <form method="post" action="{% url 'orders:remove_from_cart' item.car_id %}">

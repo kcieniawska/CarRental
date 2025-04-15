@@ -1803,3 +1803,76 @@ nav.log .user-profile:hover {
     border-color: #999;
     color: #000;
 }
+
+/* Stylowanie profilu użytkownika */
+.profile-card {
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.profile-details {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #333;
+}
+
+.profile-details p {
+    margin-bottom: 1.5rem;
+}
+
+.card-header.bg-papaya-orange {
+    background-color: #FF6A13;
+}
+
+.card-header h2 {
+    font-size: 1.8rem;
+}
+
+.card-body {
+    background-color: #f9f9f9;
+}
+
+.card-body .btn {
+    padding: 0.8rem 1.6rem;
+    border-radius: 25px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.card-body .btn-warning {
+    background-color: #FF6A13;
+    border-color: #FF6A13;
+}
+
+/* Unikalny styl dla tabeli w sekcji "Moje zamówienia" */
+.table-profile-orders {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.table-profile-orders th,
+.table-profile-orders td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.table-profile-orders th {
+    background-color: #f8f9fa;
+}
+
+.table-profile-orders td {
+    background-color: #fff;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.btn-warning {
+    color: #fff;
+    text-decoration: none;
+}

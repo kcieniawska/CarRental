@@ -5,7 +5,11 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
 from .forms import CustomUserCreationForm, CustomUserChangeForm
 from .models import Order
-from django.conf import settings
+
+from django.shortcuts import render, redirect
+from django.contrib import messages
+
+
 
 # Widok rejestracji
 @never_cache
@@ -43,13 +47,17 @@ def user_login(request):
 @login_required
 def edit_profile(request):
     if request.method == 'POST':
-        form = CustomUserChangeForm(request.POST, request.FILES, instance=request.user)
-        if form.is_valid():
-            form.save()
-            return redirect('profile')
-    else:
-        form = CustomUserChangeForm(instance=request.user)
-    return render(request, 'users/edit_profile.html.jinja', {'form': form})
+        user = request.user
+        user.first_name = request.POST.get('first_name')
+        user.last_name = request.POST.get('last_name')
+        user.email = request.POST.get('email')
+        
+        user.save()
+        messages.success(request, 'Profil został pomyślnie zaktualizowany!')
+        
+        return redirect('profile')  # Przekierowanie na stronę profilu (załóżmy, że masz widok o nazwie 'profile')
+
+    return render(request, 'users/edit_profile.html.jinja')
 # Widok wylogowania
 def logout_view(request):
     logout(request)

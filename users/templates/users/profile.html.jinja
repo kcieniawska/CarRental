@@ -4,30 +4,25 @@
 <div class="container py-5">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card shadow-sm">
-                <div class="card-header bg-primary text-white">
+            <div class="card shadow-sm profile-card">
+                <div class="card-header bg-papaya-orange text-white text-center">
                     <h2>Twój profil</h2>
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <!-- Kolumna z obrazkiem profilowym -->
-                        <div class="col-md-4 text-center">
-                            {% if user.profile_picture %}
-                                <img src="{{ user.profile_picture.url }}" alt="Profile Picture" class="img-fluid rounded-circle" style="max-width: 150px;">
-                            {% else %}
-                                <img src="https://via.placeholder.com/150" alt="Profile Picture" class="img-fluid rounded-circle">
-                            {% endif %}
-                        </div>
-
                         <!-- Kolumna z danymi użytkownika -->
-                        <div class="col-md-8">
-                            <p><strong>Użytkownik:</strong> {{ user.username }}</p><br>
-                            <p><strong>Imię: </strong>{{ user.first_name }}<br> <strong>Nazwisko: </strong> {{ user.last_name }}</p>
-                            <p><strong>Email:</strong> {{ user.email }}</p>
-                            <p><strong>Data rejestracji:</strong> {{ user.date_joined|date:"d M Y" }}</p>
+                        <div class="col-md-12">
+                            <div class="profile-details">
+                                <p><strong>Użytkownik:</strong> {{ user.username }}</p><br>
+                                <p><strong>Imię: </strong>{{ user.first_name }}<br> <strong>Nazwisko: </strong> {{ user.last_name }}</p>
+                                <p><strong>Email:</strong> {{ user.email }}</p>
+                                <p><strong>Data rejestracji:</strong> {{ user.date_joined|date:"d M Y" }}</p>
+                            </div>
 
                             <!-- Link do edytowania profilu -->
-                            <a href="{% url 'edit_profile' %}" class="btn btn-warning mt-3">Edytuj profil</a>
+                            <div class="text-center mt-4">
+                                <a href="{% url 'edit_profile' %}" class="btn btn-warning">Edytuj profil</a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -42,7 +37,7 @@
                 </div>
                 <div class="card-body">
                     {% if user.orders.all %}
-                        <table class="table">
+                        <table class="table table-profile-orders">
                             <thead>
                                 <tr>
                                     <th scope="col">Samochód</th>
