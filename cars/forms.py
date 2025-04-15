@@ -27,3 +27,15 @@ class CustomUserCreationForm(UserCreationForm):
             'required': 'Potwierdź swoje hasło.',
             'password_mismatch': 'Hasła nie pasują do siebie.',
         }
+
+from .models import Review
+class ReviewForm(forms.ModelForm):
+    class Meta:
+        model = Review
+        fields = ['content']
+        widgets = {
+            'content': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Napisz swoją opinię...'})
+        }
+        labels = {
+            'content': 'Twoja opinia',
+        }

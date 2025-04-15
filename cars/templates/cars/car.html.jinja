@@ -41,7 +41,7 @@
             </div>
 
             <h2 style="color: #333; margin-top: 50px; text-align: center;">Wypożycz samochód</h2>
-
+            <div>
             {% if user.is_authenticated %}
             <form method="POST" action="{% url 'orders:add_to_cart' car.id %}" id="add-to-cart-form">
                 {% csrf_token %}
@@ -63,6 +63,18 @@
                 <a href="{% url 'login' %}" style="color: #ff6a13;" class="btn btn-papaya-orange-text">Zaloguj się</a>
             </div>
             {% endif %}
-        </div>
+            <div class="reviews-container">
+                <h3>Opinie</h3>
+                <div class="reviews-section">
+                    {% for review in reviews %}
+                        <div class="review">
+                            <p><strong>{{ review.user.username }}</strong> ({{ review.created_at|date:"F j, Y, H:i" }})</p>
+                            <p>{{ review.content }}</p>
+                        </div>
+                    {% empty %}
+                        <p>Brak zatwierdzonych opinii.</p>
+                    {% endfor %}
+                </div>
+            </div>
     </div>
 {% endblock %}

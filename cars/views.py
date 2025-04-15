@@ -7,7 +7,11 @@ from .forms import CustomUserCreationForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login, logout
 from django.http import Http404
-
+from django.db import models
+from django.contrib.auth.models import User
+from django.utils import timezone
+from .forms import ReviewForm
+from django.contrib import messages
 # Ustawienie loggera
 logger = logging.getLogger(__name__)
 
@@ -95,3 +99,29 @@ def logout_view(request):
     logout(request)
     logger.info(f'User {request.user.username} logged out.')
     return redirect('index')  # Przekierowanie po wylogowaniu
+
+@login_required
+def add_review(request, car_id):
+    car = get_object_or_404(Car, id=car_id)
+    
+    # Sprawdzamy, czy użytkownik już dodał opinię
+    if car.reviews.filter(user=request.user).exists():
+        messages.warning(request, "Już dodałeś opinię dla tego samochodu.")
+        return redirect('car', car_id=car.id)
+
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.car = car
+            review.user = request.user
+            review.save()
+            messages.success(request, "Twoja opinia została dodana i czeka na zatwierdzenie przez moderatora.")
+            return redirect('car', car_id=car.id)
+    else:
+        form = ReviewForm()
+
+    return render(request, 'cars/car.html.jinja', {
+        'car': car,
+        'review_form': form,
+    })

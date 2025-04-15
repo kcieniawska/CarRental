@@ -10,6 +10,7 @@ urlpatterns = [
     path('categories/', views.category_list, name='category_list'),
     path('categories/<str:category>/', views.category_view, name='category_detail'),
     path('car/<int:car_id>/', views.car, name='car'),
+    path('<int:car_id>/add_review/', views.add_review, name='add_review'),  # Dodana ścieżka
 ]
 
 

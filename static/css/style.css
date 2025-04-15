@@ -578,7 +578,44 @@ footer p {
     display: flex;
     justify-content: flex-end; /* Wyrównuje przycisk do prawej strony */
     margin-top: 20px;
+    margin-bottom: 20px;
 }
+
+/* Ustawienia kontenera dla opinii */
+.reviews-section {
+    margin-top: 50px; /* Odstęp od innych elementów na stronie */
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Odstęp pomiędzy opiniami */
+}
+
+/* Ustawienie dla pojedynczej opinii */
+.review {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Klasa dla kontenera z opiniami */
+.reviews-container {
+    display: flex;
+    flex-direction: column;
+    margin-top: 30px;/* Odstęp od przycisku "Zarezerwuj teraz" */
+    color: #333;
+}
+
+
+/* Opinia po lewej stronie */
+.reviews-section {
+    text-align: left;
+}
+
+.reviews-section .review {
+    max-width: 50%; /* Zapewnia, że opinie nie będą za szerokie */
+    margin-bottom: 15px; /* Odstęp między kolejnymi opiniami */
+}
+
 .rent-button:hover {
     background-color: #d4783e;
     color: #333;

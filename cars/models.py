@@ -1,6 +1,6 @@
 from django.db import models
 from django.conf import settings  # Importujemy settings, by uzyskać dostęp do modelu użytkownika
-
+from django.contrib.auth.models import User
     
 
 # Model Equipment
@@ -10,7 +10,7 @@ class Equipment(models.Model):
     def __str__(self) -> str:
         return self.equipment
 
-
+    
 # Model Car
 class Car(models.Model):
     CAR_CLASSES = [
@@ -73,3 +73,13 @@ class Car(models.Model):
 
     def __str__(self):
         return f"{self.brand} {self.model} ({self.year})"
+#Model opinii
+class Review(models.Model):
+    car = models.ForeignKey(Car, related_name='reviews', on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='reviews', on_delete=models.CASCADE)  # Używamy AUTH_USER_MODEL
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_approved = models.BooleanField(default=False)  # Opinia czeka na zatwierdzenie
+
+    def __str__(self):
+        return f"Opinia {self.user.username} o {self.car.brand} {self.car.model}"
