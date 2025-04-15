@@ -13,7 +13,17 @@ from .forms import OrderForm
 from .models import Order, OrderItem, CartItem
 from .cart import Cart
 
+def calculate_total_price(order):
+    total_price = 0
 
+    # Dla każdego elementu zamówienia, obliczamy cenę na podstawie liczby dni wynajmu
+    for order_item in order.orderitem_set.all():
+        rental_days = order_item.rental_days
+        car_price_per_day = order_item.car.rent  # Cena wynajmu na dzień
+        total_price += rental_days * car_price_per_day  # Całkowity koszt
+
+    # Zwróć łączną cenę
+    return total_price
 # === Widok koszyka (bazujący na bazie danych) ===
 @login_required
 def cart(request):
@@ -89,10 +99,10 @@ def checkout(request):
             order.save()
 
             # Zapisz ID zamówienia w sesji
-            request.session['order_id'] = order.id  # Ustawiamy order_id w sesji
+            request.session['order_id'] = order.id
 
             # Przekierowanie do strony podsumowania
-            return redirect('orders:summary')  # Przekierowuje na stronę podsumowania
+            return redirect('orders:summary')  # Przekierowanie na 'summary' po zapisaniu zamówienia
         else:
             # Jeśli formularz jest niepoprawny, zapisujemy dane w sesji, aby były dostępne przy kolejnym renderowaniu formularza
             request.session['first_name'] = request.POST.get('first_name')
@@ -121,22 +131,16 @@ def checkout(request):
 
 @login_required
 def summary(request):
-    # Pobieramy zamówienie na podstawie ID zapisanym w sesji
     order_id = request.session.get('order_id')
-    
     if not order_id:
-        # Jeśli brak zamówienia w sesji, przekierowujemy do koszyka
-        return redirect('orders:cart')
+        return redirect('orders:checkout')  # Jeśli nie ma zamówienia w sesji, przekieruj do checkout
 
-    # Pobieramy zamówienie na podstawie ID
-    order = get_object_or_404(Order, id=order_id)
+    try:
+        order = Order.objects.get(id=order_id)
+    except Order.DoesNotExist:
+        return redirect('orders:checkout')  # Jeśli zamówienie nie istnieje, przekieruj do checkout
 
-    return render(request, 'orders/summary.html.jinja', {
-        'order': order
-    })
-
-
-# === Przetwarzanie płatności ===
+    return render(request, 'orders/summary.html.jinja', {'order': order})
 @login_required
 def process_payment(request, order_id):
     order = get_object_or_404(Order, id=order_id)

@@ -43,26 +43,9 @@
                 <label for="house_number">Numer domu/mieszkania:</label>
                 <input type="text" id="house_number" name="house_number" value="{{ request.session.house_number|default:'' }}" required />
             </div>
-            
-            <!-- Wybór metody płatności -->
-            <div class="payment-methods">
-                <h3>Wybierz metodę płatności</h3>
-                <div class="payment-option">
-                    <input type="radio" id="credit_card" name="payment_method" value="credit_card" required />
-                    <label for="credit_card">Karta kredytowa</label>
-                </div>
-                <div class="payment-option">
-                    <input type="radio" id="paypal" name="payment_method" value="paypal" />
-                    <label for="paypal">PayPal</label>
-                </div>
-                <div class="payment-option">
-                    <input type="radio" id="bank_transfer" name="payment_method" value="bank_transfer" />
-                    <label for="bank_transfer">Przelew bankowy</label>
-                </div>
-            </div>
-        
+
             <div class="checkout-buttons">
-                <button type="submit" class="pay-now-btn"> <a href="{% url 'orders:summary' %}" class="pay-now-btn">Przejdź do podsumowania</a></button>
+                <button type="submit" class="pay-now-btn">Przejdź do podsumowania</button>
                 <a href="{% url 'orders:cart' %}" class="back-to-cart-button">Wróć do koszyka</a>
             </div>
         </form>

@@ -56,7 +56,6 @@ def category_view(request, category):
         'category': full_category_name,
     })
 
-# Strona kontaktowa
 def contact(request):
     return render(request, 'cars/contact.html.jinja')
 
