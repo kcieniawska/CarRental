@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Podsumowanie zamówienia</h2>
+
+<!-- Wyświetlanie szczegółów zamówienia -->
+<div class="order-summary">
+    <h3>Twoje dane:</h3>
+    <p><strong>Imię:</strong> {{ order.first_name }}</p>
+    <p><strong>Nazwisko:</strong> {{ order.last_name }}</p>
+    <p><strong>Email:</strong> {{ order.email }}</p>
+    <p><strong>Telefon:</strong> {{ order.phone }}</p>
+
+    <h3>Adres dostawy:</h3>
+    <p><strong>Ulica:</strong> {{ order.street }} {{ order.house_number }}</p>
+    <p><strong>Miasto:</strong> {{ order.city }}</p>
+    <p><strong>Kod pocztowy:</strong> {{ order.postal_code }}</p>
+
+    <h3>Informacje o wynajmie:</h3>
+    <p><strong>Samochód:</strong> {{ order.car.name }}</p>
+    <p><strong>Data rozpoczęcia wynajmu:</strong> {{ order.start_date }}</p>
+    <p><strong>Data zakończenia wynajmu:</strong> {{ order.end_date }}</p>
+
+    <h3>Całkowita cena:</h3>
+    <p><strong>{{ order.total_price }} PLN</strong></p>
+</div>
+
+<!-- Formularz potwierdzający płatność -->
+<div class="payment-section">
+    <h3>Potwierdź płatność</h3>
+    <p>Proszę kliknąć przycisk poniżej, aby zatwierdzić płatność i zakończyć zamówienie.</p>
+
+    <!-- Formularz POST do potwierdzenia płatności -->
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary">Zatwierdź płatność</button>
+    </form>
+</div>
+
+{% endblock %}

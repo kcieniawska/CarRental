@@ -3,72 +3,66 @@
 {% block title %}{{ car.brand }} {{ car.model }}{% endblock %}
 
 {% block content %}
-{% if messages %}
-    <div class="message-container">
-        {% for message in messages %}
-            <div class="message-box">
-                <p class="message-text">{{ message|safe }}</p>
-                <div class="message-actions">
-                    <a href="{% url 'orders:cart' %}" class="btn-cart">🛒 Idź do koszyka</a>
-                    <button class="btn-browse" onclick="this.closest('.message-box').style.display='none'">👀 Przeglądaj dalej</button>
+    <div class="car-detail-container">
+        <div class="car-info">
+            <ul>
+                <li><strong>Kategoria samochodu: </strong><a href="{% url 'category_detail' car.category %}">{{ car.get_category_display }}</a></li><br>
+            </ul>
+            <h1 class="car-title">{{ car.brand }} {{ car.model }}</h1>
+
+            <div class="car-image">
+                <img src="{{ car.image.url }}" alt="{{ car.brand }} {{ car.model }}" class="car-detail-img">
+            </div>
+
+            <p class="car-description-heading">{{ car.description }}</p>
+
+            <div class="car-specs">
+                <ul>
+                    <li><strong>Rok produkcji:</strong> {{ car.year }}</li>
+                    <li><strong>Typ nadwozia:</strong> {{ car.body_type }}</li>
+                    <li><strong>Rodzaj paliwa:</strong> {{ car.engine_type }}</li>
+                    <li><strong>Pojemność silnika:</strong> {{ car.engine_capacity }} L</li>
+                    <li><strong>Moc:</strong> {{ car.engine_power }} KM</li>
+                    <li><strong>Typ skrzyni biegów:</strong> {{ car.gearbox }}</li>
+                    <li><strong>Zużycie paliwa:</strong> {{ car.fuel_consumption }} L/100km</li>
+                    <li><strong>Liczba drzwi:</strong> {{ car.doors_count }}</li>
+                    <li><strong>Liczba miejsc:</strong> {{ car.seats_count }}</li>
+                    <li><strong>Lokalizacja:</strong> {{ car.location }}</li>
+                </ul>
+            </div>
+
+            <div class="car-price-container">
+                <div class="car-price-left">
+                    <span class="price-label">Cena za wynajem:</span>
+                </div>
+                <div class="car-price-right">
+                    <span class="price-value">{{ car.rent }} PLN/dzień</span>
                 </div>
             </div>
-        {% endfor %}
-    </div>
-{% endif %}
-<div class="car-detail-container">
-    <div class="car-image">
-        <img src="{{ car.image.url }}" alt="{{ car.brand }} {{ car.model }}" class="car-img" />
-    </div>
-    <div class="car-info">
-        <ul>
-            <li><strong>Kategoria samochodu: </strong><a href="{% url 'category_detail' car.category %}">{{ car.get_category_display }}</a></li><br>
-        </ul>
-        <h1 class="car-title">{{ car.brand }} {{ car.model }}</h1>
-        <p class="car-description-heading">{{ car.description }}</p>
 
-        <div class="car-specs">
-            <ul>
-                <li><strong>Rok produkcji:</strong> {{ car.year }}</li>
-                <li><strong>Typ nadwozia:</strong> {{ car.body_type }}</li>
-                <li><strong>Rodzaj paliwa:</strong> {{ car.engine_type }}</li>
-                <li><strong>Pojemność silnika:</strong> {{ car.engine_capacity }} L</li>
-                <li><strong>Moc:</strong> {{ car.engine_power }} KM</li>
-                <li><strong>Typ skrzyni biegów:</strong> {{ car.gearbox }}</li>
-                <li><strong>Zużycie paliwa:</strong> {{ car.fuel_consumption }} L/100km</li>
-                <li><strong>Liczba drzwi:</strong> {{ car.doors_count }}</li>
-                <li><strong>Liczba miejsc:</strong> {{ car.seats_count }}</li>
-                <li><strong>Lokalizacja:</strong> {{ car.location }}</li>
-            </ul>
-        </div>
+            <h2 style="color: #333; margin-top: 50px; text-align: center;">Wypożycz samochód</h2>
 
-        <div class="car-price-container">
-            <div class="car-price-left">
-                <span class="price-label">Cena za wynajem:</span>
+            {% if user.is_authenticated %}
+            <form method="POST" action="{% url 'orders:add_to_cart' car.id %}" id="add-to-cart-form">
+                {% csrf_token %}
+                <div class="rental-dates">
+                    <label for="start_date">Data początkowa:</label>
+                    <input type="date" id="start_date" name="start_date" required>
+                </div>
+                <div class="rental-dates">
+                    <label for="end_date">Data końcowa:</label>
+                    <input type="date" id="end_date" name="end_date" required>
+                </div>
+                <div class="car-cta">
+                    <button type="submit" class="rent-button"><strong>Zarezerwuj teraz</strong></button>
+                </div>
+            </form>
+            {% else %}
+            <div class="alert alert-warning">
+                <strong>Uwaga!</strong> Musisz być zalogowany, aby dokonać rezerwacji.
+                <a href="{% url 'login' %}" style="color: #ff6a13;" class="btn btn-papaya-orange-text">Zaloguj się</a>
             </div>
-            <div class="car-price-right">
-                <span class="price-value">{{ car.rent }} PLN/dzień</span>
-            </div>
+            {% endif %}
         </div>
-
-        {% if user.is_authenticated %}
-        <!-- Formularz do dodania samochodu do koszyka tylko dla zalogowanych użytkowników -->
-        <form method="POST" action="{% url 'orders:add_to_cart' car.id %}">
-            {% csrf_token %}
-            <div class="rental-days">
-                <label for="rental_days">Liczba dni wynajmu:</label>
-                <input type="number" id="rental_days" name="rental_days" min="1" value="1" required>
-            </div>
-            <div class="car-cta">
-                <button type="submit" class="rent-button"><strong>Zarezerwuj teraz</strong></button>
-            </div>
-        </form>
-        {% else %}
-        <div class="alert alert-warning">
-            <strong>Uwaga!</strong> Musisz być zalogowany, aby dokonać rezerwacji.
-            <a href="{% url 'login' %}" style="color: #ff6a13;"class="btn btn-papaya-orange-text">Zaloguj się</a>
-        </div>
-        {% endif %}
     </div>
-</div>
 {% endblock %}

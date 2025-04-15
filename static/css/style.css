@@ -473,6 +473,13 @@ footer p {
     text-align: justify;
     line-height: 1.6;
 }
+.car-detail-img {
+    width: 100%;
+    max-width: 600px;
+    border-radius: 16px;
+    object-fit: cover;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
 .car-info ul {
     text-decoration: none;
     list-style-type: none;
@@ -941,21 +948,157 @@ nav.log .user-profile:hover {
     border-color: #f88008;
     box-shadow: 0 0 8px rgba(254, 156, 36, 0.5);
 }
+.car-detail-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
 
-.btn-success {
-    font-size: 1.1em;
-    padding: 10px 30px;
-    border-radius: 5px;
-    background-color: #ff7c25;
-    border-color: #ff7c25;
+.car-info {
     text-align: center;
-    display: block;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.car-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.car-image {
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: center;
+    width: 100%; /* Upewniamy się, że obrazek ma pełną szerokość kontenera */
+}
+
+.car-img {
+    width: 80%; /* Zwiększamy szerokość zdjęcia */
+    height: auto;
+    max-height: 500px; /* Ograniczamy maksymalną wysokość zdjęcia */
+    object-fit: cover; /* Zachowuje proporcje, ale przycina obrazek, aby pasował */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.car-info {
+    flex: 1 1 55%;
+}
+.rental-info {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+
+.rental-dates {
+    margin-top: 20px;
+    text-align: left;
+}
+
+.rental-dates label {
+    font-size: 14px;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.rental-dates input[type="date"] {
+    padding: 8px;
+    margin-right: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.car-cta {
     margin-top: 20px;
 }
 
-.btn-success:hover {
-    background-color: #ff7c25;
-    border-color: #ff7c25;
+.rent-button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.rent-button:hover {
+    background-color: #45a049;
+}
+
+/* Kontener wiadomości */
+.message-container {
+    position: fixed;
+    top: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 999;
+    width: 90%;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+/* Okienko z wiadomością */
+.message-box {
+    background-color: #28a745; /* Kolor sukcesu */
+    color: white;
+    padding: 15px;
+    border-radius: 5px;
+    margin: 10px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative; /* Pozwoli na absolutne pozycjonowanie przycisku zamknięcia */
+}
+
+/* Tekst wiadomości */
+.message-text {
+    margin: 0;
+    font-size: 16px;
+    flex-grow: 1;
+}
+
+/* Kontener przycisków */
+.message-actions {
+    display: flex;
+    align-items: center;
+}
+
+/* Przycisk zamknięcia */
+.btn-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    z-index: 1; /* Zapewnia, że X będzie zawsze na wierzchu */
+}
+
+.btn-close:hover {
+    color: #ff0000; /* Kolor przycisku X przy najechaniu */
+}
+
+/* Przycisk przejścia do koszyka */
+.btn-go-cart {
+    background-color: #ff6a13; /* Kolor przycisku przejścia do koszyka */
+    color: white;
+    padding: 8px 16px;
+    border-radius: 5px;
+    font-size: 16px;
+    text-decoration: none;
+    margin-right: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-go-cart:hover {
+    background-color: #e65c10;
 }
 
 /* Stylizacja dla zdjęcia profilowego */
@@ -975,369 +1118,201 @@ nav.log .user-profile:hover {
     border-radius: 5px;
 }
 
-/* Kontener koszyka */
-.cart-container {
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-    padding: 20px;
-    background-color: #f7f7f7;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+/* === Styl dla kontenera tabeli === */
+.cart-table-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    overflow-x: auto;
 }
 
-/* Lista przedmiotów w koszyku */
-.cart-items-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-/* Elementy na liście */
-.cart-item {
-    display: flex;
-    gap: 20px;
-    padding: 20px;
-    border: 1px solid #e0e0e0;
-    border-radius: 12px;
-    background-color: #ffffff;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
-    align-items: center;
-}
-
-/* Efekt na hover */
-.cart-item:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-}
-
-/* Obrazek samochodu */
-.cart-item-image {
-    width: 150px; /* szerokość kontenera */
-    height: 150px; /* wysokość kontenera */
-    overflow: hidden;
-    border-radius: 12px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #f0f0f0;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-}
-
-.cart-item-img {
+.cart-table {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
+    border-collapse: collapse;
+    background-color: #fff;
 }
 
-/* Informacje o produkcie */
-.cart-item-info {
-    flex-grow: 1;
+.cart-table th, .cart-table td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    font-size: 0.9rem;
 }
 
-.cart-item-title {
-    font-size: 20px;
+.cart-table th {
+    background-color: #f8f8f8;
     font-weight: bold;
-    margin: 0;
-    color: #333;
 }
 
-.cart-item-days,
-.cart-item-total {
-    font-size: 16px;
-    color: #666;
-    margin: 5px 0;
+.cart-table td {
+    background-color: #fff;
 }
 
-/* Przycisk do usuwania */
-.cart-item-remove {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.remove-btn {
+/* === Przyciski === */
+.btn-remove {
     background-color: #e74c3c;
-    color: #fff;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 5px;
-    font-size: 14px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: bold;
 }
 
-.remove-btn:hover {
+.btn-remove:hover {
     background-color: #c0392b;
 }
 
-/* Podsumowanie koszyka */
-.checkout-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-    font-family: 'Arial', sans-serif;
-}
-
-.checkout-title {
-    text-align: center;
-    font-size: 2em;
-    margin-bottom: 20px;
-    color: #333;
-}
-
-.cart-items-list {
-    list-style-type: none;
-    padding: 0;
-}
-
-.cart-item {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background-color: #f9f9f9;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-
-
-.no-image-placeholder {
-    width: 100px;
-    height: 100px;
-    background-color: #ccc;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: #fff;
-    font-size: 0.9em;
-    border-radius: 8px;
-    margin-right: 20px;
-}
-
-.car-details {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.car-brand {
+.btn-update {
+    background-color: #3498db; /* Kolor przycisku Zaktualizuj */
+    color: white;
+    padding: 8px 16px;
+    border-radius: 4px;
+    text-decoration: none;
     font-weight: bold;
-    font-size: 1.1em;
-    margin-bottom: 5px;
-    color: #333;
 }
 
-.rental-days, .total-price {
-    font-size: 1em;
-    margin-bottom: 5px;
-    color: #555;
+.btn-update:hover {
+    background-color: #2980b9; /* Ciemniejszy kolor na hover */
 }
 
+.btn-checkout {
+    display: inline-block;
+    margin-top: 20px;
+    background-color: #27ae60;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.btn-checkout:hover {
+    background-color: #2ecc71;
+}
+
+.btn-checkout:focus, .btn-checkout:active {
+    text-decoration: none;
+}
+
+.btn-browse {
+    border: 1px solid #fc9f00;
+    margin-top: 10px;
+    display: inline-block;
+    background-color: #f37012;
+    color: rgb(29, 28, 28);
+    padding: 10px 16px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.btn-browse:hover {
+    background-color: #ff7700;
+}
+
+/* === Styl dla pustego koszyka === */
+.empty-cart-message {
+    margin-top: 50px;
+    text-align: center;
+    font-size: 18px;
+}
+
+/* === Responsywność === */
+@media (max-width: 768px) {
+    .cart-table th, .cart-table td {
+        font-size: 0.85rem;
+        padding: 10px;
+    }
+
+    .cart-table th {
+        font-size: 1rem;
+    }
+
+    .cart-item-image {
+        width: 60px;
+        height: 60px;
+    }
+
+    .cart-item-info {
+        font-size: 0.9rem;
+    }
+
+    .btn-checkout {
+        font-size: 1rem;
+        padding: 15px;
+    }
+
+    .empty-cart-message {
+        font-size: 1rem;
+    }
+}
+
+/* === Stylizacja kontenera zakupu === */
+.checkout-container {
+    margin-top: 20px;
+}
+/* Styl dla przycisku przejścia do podsumowania zamówienia */
+.btn-checkout {
+    display: inline-block;
+    padding: 12px 24px;
+    background-color: #007bff;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 8px;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-checkout:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+.btn-checkout:active {
+    transform: scale(1);
+}
+
+/* Styl dla linku samochodu w tabeli */
+.cart-table a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.cart-table a:hover {
+    text-decoration: underline;
+}
+
+/* === Styl dla całkowitej ceny === */
 .total-price-container {
     display: flex;
-    justify-content: space-between;
-    margin-top: 30px;
-    font-size: 1.2em;
-    font-weight: bold;
+    justify-content: flex-end;
+    margin-top: 20px;
 }
-
-.total-price-label {
-    color: #333;
-}
-
-.total-price-value {
-    color: #e67e22;
-}
-
-.checkout-button {
-    display: block;
-    width: 100%;
-    padding: 15px;
-    background-color: #f8551a;
-    color: #fff;
-    font-size: 1.2em;
+/* Kolor papaya orange */
+.btn-papaya-orange {
+    background-color: #FF6F40; /* Papaya Orange */
+    color: white;
     border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    text-align: center;
-    margin-top: 20px;
-}
-
-.checkout-button:hover {
-    background-color: #ec460a;
-}
-
-.empty-cart-message {
-    text-align: center;
-    font-size: 1.2em;
-    color: #e74c3c;
-}
-/* Ogólne style dla strony potwierdzenia */
-.confirmation-container {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    font-family: Arial, sans-serif;
-}
-
-.confirmation-container h2 {
-    font-size: 24px;
-    font-weight: bold;
-    color: #28a745;  /* Kolor zielony, symbolizujący sukces */
-    margin-bottom: 20px;
-}
-
-.confirmation-container p {
-    font-size: 16px;
-    color: #333;
-    margin-bottom: 20px;
-    line-height: 1.6;
-}
-
-.confirmation-container .btn {
-    display: inline-block;
-    background-color: #ff9900;  /* Niebieski kolor przycisku */
-    color: #fff;
-    font-size: 16px;
-    padding: 12px 24px;
-    text-decoration: none;
+    padding: 10px 20px;
     border-radius: 5px;
-    transition: background-color 0.3s ease;
-}
-
-.confirmation-container .btn:hover {
-    background-color: #da7802;  /* Ciemniejszy niebieski po najechaniu */
-}
-
-.confirmation-container .btn-primary {
-    background-color: #ea8b17;
-}
-
-.confirmation-container .btn-primary:hover {
-    background-color: #ea8b17;
-}
-
-.confirmation-container a {
+    text-decoration: none;
+    font-size: 16px;
     display: inline-block;
-    margin-top: 20px;
-}
-
-.confirmation-container .message {
-    font-size: 18px;
-    font-weight: bold;
-    color: #ea8b17;  /* Kolor niebieski dla komunikatów */
-}
-/* Confirmation Page Styling */
-.confirmation-container {
-    max-width: 1000px;
-    margin: 40px auto;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.confirmation-title {
-    font-size: 2.5em;
-    font-weight: bold;
-    color: #333;
     text-align: center;
-    margin-bottom: 40px;
+    transition: background-color 0.3s;
 }
 
-.cart-items-list {
-    margin-bottom: 30px;
-}
-
-.cart-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px;
-    border-bottom: 1px solid #e1e1e1;
-    transition: background-color 0.3s ease;
-}
-
-.cart-item:hover {
-    background-color: #f9f9f9;
-}
-
-.cart-item-image img {
-    width: 120px;
-    height: 80px;
-    object-fit: cover;
-    border-radius: 8px;
-}
-
-.cart-item-info {
-    flex: 1;
-    margin-left: 20px;
-}
-
-.cart-item-info strong {
-    font-size: 1.2em;
-    color: #333;
-}
-
-.cart-item-info p {
-    font-size: 1em;
-    color: #555;
-    margin-top: 5px;
+.btn-papaya-orange:hover {
+    background-color: #FF4E23; /* Darker Papaya Orange on hover */
 }
 
 .total-price {
-    font-size: 1.5em;
-    color: #ed8c4e;
+    font-size: 1.5rem;
+    color: #e74c3c; /* Wyraźny kolor, aby przyciągnąć uwagę */
     font-weight: bold;
-    text-align: right;
-    margin-bottom: 40px;
 }
-
-.payment-button {
-    display: flex;
-    justify-content: center;
-}
-
-/* === Przyciski w koszyku === */
-.update-btn,
-.remove-btn,
-.checkout-btn {
-    background-color: #f7a541; /* papaya orange */
-    color: #fff;
-    padding: 10px 16px;
-    font-size: 1em;
-    font-weight: 600;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-top: 10px;
-}
-
-.update-btn:hover,
-.remove-btn:hover,
-.checkout-btn:hover {
-    background-color: #e89036; /* ciemniejszy odcień papaya orange */
-}
-
-/* Opcjonalnie: różnicowanie wyglądu */
-.remove-btn {
-    background-color: #f44336; /* czerwony przycisk usuwania */
-}
-
-.remove-btn:hover {
-    background-color: #d32f2f;
-}
-
 .checkout-car-info {
     display: flex;
     align-items: center;
@@ -1485,8 +1460,17 @@ nav.log .user-profile:hover {
     font-weight: bold;
     cursor: pointer;
     transition: background-color 0.2s;
+    margin-top: 50px;
+    margin-bottom: 50px;
 }
-
+.empty-cart-message p {
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+}
+.empty-cart-message a {
+    color: #333;
+ text-decoration: none;
+}
 .btn-browse:hover {
     background-color: #eee;
 }
@@ -1494,4 +1478,291 @@ nav.log .user-profile:hover {
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(-10px); }
     to { opacity: 1; transform: translateY(0); }
+}
+.cart-page .cart-item {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 20px;
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    background-color: #fafafa;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.cart-page .cart-image {
+    flex-shrink: 0;
+}
+
+.cart-page .cart-image img {
+    width: 150px;
+    height: auto;
+    border-radius: 8px;
+    object-fit: cover;
+    display: block;
+}
+
+.cart-page .cart-info {
+    flex-grow: 1;
+    text-align: left;
+    max-width: calc(100% - 180px);
+}
+
+.cart-page .cart-info h3 {
+    margin: 0 0 10px;
+}
+
+.cart-page .btn-remove {
+    background-color: #ff4d4d;
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.cart-page .btn-remove:hover {
+    background-color: #cc0000;
+}
+
+.cart-page .cart-summary {
+    border-top: 2px solid #ccc;
+    padding-top: 20px;
+    font-size: 1.2rem;
+    text-align: right;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.cart-page .checkout-btn {
+    margin-top: 10px;
+    padding: 10px 16px;
+    background-color: #2b8a3e;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.cart-page .checkout-btn:hover {
+    background-color: #20722f;
+}
+/* === Styl dla formularza danych użytkownika === */
+.personal-info {
+    margin-bottom: 30px;
+}
+
+.personal-info h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 1.1rem;
+    color: #555;
+    margin-bottom: 5px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    margin-top: 5px;
+}
+
+.form-group input:focus {
+    border-color: #f8551a;
+    outline: none;
+}
+
+/* Pozostały styl checkout */
+.checkout-page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 30px;
+    background-color: #f4f4f4;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.checkout-title {
+    font-size: 2rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 40px;
+    color: #333;
+}
+
+.checkout-form-container {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.payment-methods {
+    margin-bottom: 30px;
+}
+
+.payment-methods h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.payment-option {
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+    color: #555;
+    display: flex;
+    align-items: center;
+}
+
+.payment-option input[type="radio"] {
+    display: none;
+}
+
+.payment-option label {
+    position: relative;
+    padding-left: 35px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    color: #555;
+    display: inline-block;
+    line-height: 1.5;
+}
+
+.payment-option label:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #fff;
+    border: 2px solid #f8551a;
+    transition: all 0.3s ease;
+}
+
+.payment-option input[type="radio"]:checked + label:before {
+    background-color: #f8551a;
+    border-color: #f8551a;
+    box-shadow: 0 0 0 5px rgba(248, 85, 26, 0.2);
+}
+
+.payment-option input[type="radio"]:checked + label:after {
+    content: "";
+    position: absolute;
+    left: 5px;
+    top: 5px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #fff;
+}
+
+.payment-option input[type="radio"]:hover + label:before {
+    background-color: #fdf0e1;
+    border-color: #e89036;
+}
+
+.payment-option input[type="radio"]:focus + label:before {
+    outline: 2px solid #f39c12;
+}
+
+/* Przycisk zapłać */
+.pay-now-btn {
+    background-color: #f8551a;
+    color: white;
+    padding: 15px 30px;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 48%;
+    transition: background-color 0.3s ease;
+}
+
+.pay-now-btn:hover {
+    background-color: #e89036;
+}
+
+/* Przycisk wróć do koszyka */
+.back-to-cart-btn {
+    background-color: #888;
+    color: white;
+    padding: 15px 30px;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 48%;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.back-to-cart-btn:hover {
+    background-color: #666;
+}
+
+/* Responsywność */
+@media (max-width: 768px) {
+    .checkout-page {
+        padding: 20px;
+    }
+
+    .checkout-title {
+        font-size: 1.6rem;
+        margin-bottom: 20px;
+    }
+
+    .checkout-form-container {
+        padding: 20px;
+    }
+
+    .checkout-buttons {
+        flex-direction: column;
+    }
+
+    .pay-now-btn,
+    .back-to-cart-btn {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
+.back-to-cart-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #f0f0f0;
+    color: #333;
+    text-decoration: none;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+}
+
+.back-to-cart-button:hover {
+    background-color: #e0e0e0;
+    border-color: #999;
+    color: #000;
 }

@@ -1,50 +1,71 @@
-{% extends "base.html.jinja" %}
-
-{% block title %}Podsumowanie zamówienia{% endblock %}
+{% extends 'base.html.jinja' %}
 
 {% block content %}
-<div class="checkout-container">
-    <h1 class="checkout-title">Podsumowanie zamówienia</h1>
+<div class="checkout-page">
+    <h2 class="checkout-title">Podaj swoje dane</h2>
 
-    {% if order_success %}
-        <div class="order-success-message">
-            <p>Twoje zamówienie zostało złożone pomyślnie! 🎉</p>
-            <p>Wkrótce otrzymasz potwierdzenie na e-mail.</p>
-        </div>
-    {% else %}
-        {% if cart_items %}
-            <ul class="checkout-items-list">
-                {% for item in cart_items %}
-                    <li class="checkout-item">
-                        <div class="checkout-car-info">
-                            {% if item.car_image %}
-                                <img src="{{ item.car_image }}" alt="{{ item.car_brand }} {{ item.car_model }}" class="checkout-car-img" />
-                            {% else %}
-                                <div class="no-image-placeholder">Brak zdjęcia</div>
-                            {% endif %}
-                            
-                            <div class="checkout-car-details">
-                                <span class="checkout-car-brand">{{ item.car_brand }} {{ item.car_model }}</span>
-                                <span class="checkout-rental-days">Dni wynajmu: {{ item.rental_days }}</span>
-                                <span class="checkout-total-price">Cena: {{ item.total_price }} PLN</span>
-                            </div>
-                        </div>
-                    </li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <p class="empty-cart-message">Brak samochodów w koszyku.</p>
-        {% endif %}
-    
-        <div class="total-price-container">
-            <span class="total-price-label">Łączna cena: </span>
-            <span class="total-price-value">{{ total_price }} PLN</span>
-        </div>
-    
+    <div class="checkout-form-container">
         <form method="POST" action="{% url 'orders:checkout' %}">
             {% csrf_token %}
-            <button type="submit" class="checkout-button">Zatwierdź zamówienie</button>
+            
+            <!-- Formularz danych osobowych -->
+            <div class="form-group">
+                <label for="first_name">Imię:</label>
+                <input type="text" id="first_name" name="first_name" value="{{ request.session.first_name|default:'' }}" required />
+            </div>
+            <div class="form-group">
+                <label for="last_name">Nazwisko:</label>
+                <input type="text" id="last_name" name="last_name" value="{{ request.session.last_name|default:'' }}" required />
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" value="{{ request.session.email|default:'' }}" required />
+            </div>
+            <div class="form-group">
+                <label for="phone">Telefon:</label>
+                <input type="text" id="phone" name="phone" value="{{ request.session.phone|default:'' }}" required />
+            </div>
+            
+            <!-- Formularz adresowy -->
+            <div class="form-group">
+                <label for="street">Ulica:</label>
+                <input type="text" id="street" name="street" value="{{ request.session.street|default:'' }}" />
+            </div>
+            <div class="form-group">
+                <label for="city">Miejscowość:</label>
+                <input type="text" id="city" name="city" value="{{ request.session.city|default:'' }}" required />
+            </div>
+            <div class="form-group">
+                <label for="postal_code">Kod pocztowy:</label>
+                <input type="text" id="postal_code" name="postal_code" value="{{ request.session.postal_code|default:'' }}" required />
+            </div>
+            <div class="form-group">
+                <label for="house_number">Numer domu/mieszkania:</label>
+                <input type="text" id="house_number" name="house_number" value="{{ request.session.house_number|default:'' }}" required />
+            </div>
+            
+            <!-- Wybór metody płatności -->
+            <div class="payment-methods">
+                <h3>Wybierz metodę płatności</h3>
+                <div class="payment-option">
+                    <input type="radio" id="credit_card" name="payment_method" value="credit_card" required />
+                    <label for="credit_card">Karta kredytowa</label>
+                </div>
+                <div class="payment-option">
+                    <input type="radio" id="paypal" name="payment_method" value="paypal" />
+                    <label for="paypal">PayPal</label>
+                </div>
+                <div class="payment-option">
+                    <input type="radio" id="bank_transfer" name="payment_method" value="bank_transfer" />
+                    <label for="bank_transfer">Przelew bankowy</label>
+                </div>
+            </div>
+        
+            <div class="checkout-buttons">
+                <button type="submit" class="pay-now-btn"> <a href="{% url 'orders:summary' %}" class="pay-now-btn">Przejdź do podsumowania</a></button>
+                <a href="{% url 'orders:cart' %}" class="back-to-cart-button">Wróć do koszyka</a>
+            </div>
         </form>
-    {% endif %}
+    </div>
 </div>
 {% endblock %}

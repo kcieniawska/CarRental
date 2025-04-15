@@ -9,6 +9,54 @@
         {% csrf_token %}
         <button type="submit" class="remove-btn">Usuń</button>
       </form>
-    </div>
+    </div>{% extends 'base.html' %}
+
+    {% block content %}
+      <div class="cart-container">
+        <h1>Twój koszyk</h1>
+    
+        {% if cart_items %}
+          <div class="cart-items">
+            {% for car in cart_items %}
+              <div class="cart-item">
+                <img src="{{ car.car.image.url }}" alt="{{ car.car.name }}" class="cart-item-image">
+                <div class="cart-item-details">
+                  <h2>{{ car.car.name }}</h2>
+                  <p>{{ car.car.description }}</p>
+                  <p><strong>Cena:</strong> {{ car.car.price }} zł/dzień</p>
+    
+                  <form action="{% url 'orders:update_rental_days' car.car.id %}" method="POST" class="update-rental-form">
+                    {% csrf_token %}
+                    <label for="rental_days_{{ car.car.id }}">Liczba dni wynajmu:</label>
+                    <input type="number" id="rental_days_{{ car.car.id }}" name="rental_days" value="{{ car.rental_days }}" min="1" required>
+                    <button type="submit" class="update-btn">Zaktualizuj</button>
+                  </form>
+    
+                  <form action="{% url 'orders:remove_from_cart' car.car.id %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="remove-btn">Usuń z koszyka</button>
+                  </form>
+    
+                  <p><strong>Data początkowa:</strong> {{ car.start_date }}</p>
+                  <p><strong>Data końcowa:</strong> {{ car.end_date }}</p>
+                  <p><strong>Całkowity koszt:</strong> {{ car.total_price }} zł</p>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+    
+          <div class="cart-summary">
+            <h3>Podsumowanie</h3>
+            <p><strong>Łączna cena:</strong> {{ total_price }} zł</p>
+            <a href="{% url 'orders:checkout' %}" class="checkout-btn">Przejdź do kasy</a>
+          </div>
+    
+        {% else %}
+          <p>Twój koszyk jest pusty.</p>
+          <a href="{% url 'cars:car_list' %}" class="continue-shopping-btn">Kontynuuj zakupy</a>
+        {% endif %}
+      </div>
+    {% endblock %}
+    
   </div>
 {% endfor %}

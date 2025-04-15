@@ -1,0 +1,28 @@
+{% extends 'base.html.jinja' %}
+
+{% block content %}
+<div class="summary-page">
+    <h2>Podsumowanie zamówienia</h2>
+    
+    <h3>Twoje dane:</h3>
+    <p><strong>Imię:</strong> {{ first_name }}</p>
+    <p><strong>Nazwisko:</strong> {{ last_name }}</p>
+    <p><strong>Email:</strong> {{ email }}</p>
+    <p><strong>Telefon:</strong> {{ phone }}</p>
+    <p><strong>Adres:</strong> {{ street }}, {{ house_number }}, {{ city }}, {{ postal_code }}</p>
+
+    <h3>Metoda płatności:</h3>
+    <p>{{ payment_method }}</p>
+
+    <div class="payment-buttons">
+        <form method="POST" action="{% url 'orders:process_payment' order_id=order.id %}">
+            {% csrf_token %}
+            <button type="submit" class="pay-now-btn">Przejdź do płatności</button>
+        </form>
+    </div>
+    
+    <div class="checkout-buttons">
+        <a href="{% url 'orders:checkout' %}" class="back-to-checkout-button">Edytuj dane</a>
+    </div>
+</div>
+{% endblock %}

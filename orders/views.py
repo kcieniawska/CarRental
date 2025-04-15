@@ -1,174 +1,267 @@
 from django.db import models
 from django.conf import settings
-from cars.models import Car
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.http import HttpResponse, JsonResponse
+from django.utils import timezone
+from datetime import datetime
 from decimal import Decimal
 
-# Widok koszyka
+from cars.models import Car
+from .forms import OrderForm
+from .models import Order, OrderItem, CartItem
+from .cart import Cart
+
+
+# === Widok koszyka (bazujący na bazie danych) ===
 @login_required
 def cart(request):
-    # Pobieramy wszystkie przedmioty w koszyku
-    cart_items = request.session.get('cart', [])
-    
-    # Obliczanie łącznej ceny koszyka
-    total_price = sum(item['total_price'] for item in cart_items)
-    
+    cart_items = CartItem.objects.filter(user=request.user)
+    total_price = sum(item.total_price for item in cart_items)
+
     return render(request, 'orders/cart.html.jinja', {
-        'cart_items': cart_items,
-        'total_price': total_price
+        'cart': cart_items,
+        'total_price': total_price,
     })
 
-# Dodawanie do koszyka
+
+# === Dodawanie samochodu do koszyka ===
+@login_required
 def add_to_cart(request, car_id):
     car = get_object_or_404(Car, id=car_id)
 
-    # Pobierz liczbę dni z formularza POST
-    rental_days = int(request.POST.get('rental_days', 1))
+    start_date = request.POST.get('start_date')
+    end_date = request.POST.get('end_date')
 
-    # Pobieramy koszyk z sesji
-    cart = request.session.get('cart', [])
+    if not start_date or not end_date:
+        messages.error(request, "Obie daty muszą być wybrane.")
+        return redirect('car_detail', car_id=car.id)
 
-    # Upewniamy się, że koszyk to lista
-    if not isinstance(cart, list):
-        cart = []
+    try:
+        start_date_obj = timezone.make_aware(datetime.strptime(start_date, '%Y-%m-%d'))
+        end_date_obj = timezone.make_aware(datetime.strptime(end_date, '%Y-%m-%d'))
+    except ValueError:
+        messages.error(request, "Niepoprawny format daty.")
+        return redirect('car_detail', car_id=car.id)
 
-    # Sprawdź, czy samochód już jest w koszyku
-    found = False
-    for item in cart:
-        if item.get('car_id') == car_id:
-            item['rental_days'] += rental_days  # Dodajemy dni
-            found = True
-            break
+    today = timezone.now()
 
-    if not found:
-        cart.append({
-            'car_id': car.id,
-            'rental_days': rental_days
-        })
+    if end_date_obj <= start_date_obj:
+        messages.error(request, "Data końcowa musi być późniejsza niż początkowa.")
+        return redirect('car_detail', car_id=car.id)
 
-    # Zapisz koszyk
-    request.session['cart'] = cart
+    if start_date_obj < today:
+        messages.error(request, "Data początkowa nie może być w przeszłości.")
+        return redirect('car_detail', car_id=car.id)
 
-    # Wiadomość z potwierdzeniem
-    messages.success(
-        request,
-        f"Samochód <strong>{car.brand} {car.model}</strong> został dodany do koszyka na {rental_days} dzień/dni wynajmu :)"
-    )
+    rental_days = (end_date_obj - start_date_obj).days
+    total_price = float(car.rent * rental_days)
 
-    return redirect('car_detail', car_id=car.id)
-# Tworzenie zamówienia
+    cart = Cart(request)
+    cart.add_item(car, rental_days, total_price, start_date_obj, end_date_obj)
+
+    messages.success(request, f"Auto {car.brand} {car.model} dodane do koszyka! ({rental_days} dni)")
+    return redirect('orders:cart')
+
+
+# === Checkout - formularz danych i przejście do płatności ===
+
 @login_required
 def checkout(request):
-    cart = request.session.get('cart', [])
+    if request.method == 'POST':
+        form = OrderForm(request.POST)
+        
+        if form.is_valid():
+            # Tworzymy zamówienie, ale nie zapisujemy jeszcze do bazy danych
+            order = form.save(commit=False)
 
-    # Jeśli koszyk jest pusty, wyświetlamy komunikat
-    if not cart:
+            # Dodajemy ID samochodu i daty do zamówienia
+            order.car = Car.objects.get(id=request.session['car_id'])
+            order.start_date = request.session['start_date']
+            order.end_date = request.session['end_date']
+
+            # Jeśli masz pole użytkownika, przypisz go
+            order.user = request.user
+            order.total_price = calculate_total_price(order)  # Funkcja obliczająca cenę
+
+            # Zapisujemy zamówienie
+            order.save()
+
+            # Zapisz ID zamówienia w sesji
+            request.session['order_id'] = order.id  # Ustawiamy order_id w sesji
+
+            # Przekierowanie do strony podsumowania
+            return redirect('orders:summary')  # Przekierowuje na stronę podsumowania
+        else:
+            # Jeśli formularz jest niepoprawny, zapisujemy dane w sesji, aby były dostępne przy kolejnym renderowaniu formularza
+            request.session['first_name'] = request.POST.get('first_name')
+            request.session['last_name'] = request.POST.get('last_name')
+            request.session['email'] = request.POST.get('email')
+            request.session['phone'] = request.POST.get('phone')
+            request.session['street'] = request.POST.get('street')
+            request.session['city'] = request.POST.get('city')
+            request.session['postal_code'] = request.POST.get('postal_code')
+            request.session['house_number'] = request.POST.get('house_number')
+
+    else:
+        # Przy pierwszym renderowaniu formularza, wypełniamy go danymi z sesji
+        form = OrderForm(initial={
+            'first_name': request.session.get('first_name', ''),
+            'last_name': request.session.get('last_name', ''),
+            'email': request.session.get('email', ''),
+            'phone': request.session.get('phone', ''),
+            'street': request.session.get('street', ''),
+            'city': request.session.get('city', ''),
+            'postal_code': request.session.get('postal_code', ''),
+            'house_number': request.session.get('house_number', ''),
+        })
+
+    return render(request, 'orders/checkout.html.jinja', {'form': form})
+
+@login_required
+def summary(request):
+    # Pobieramy zamówienie na podstawie ID zapisanym w sesji
+    order_id = request.session.get('order_id')
+    
+    if not order_id:
+        # Jeśli brak zamówienia w sesji, przekierowujemy do koszyka
         return redirect('orders:cart')
 
-    cleaned_cart = []
-    total_price = Decimal('0.00')
+    # Pobieramy zamówienie na podstawie ID
+    order = get_object_or_404(Order, id=order_id)
 
-    # Zbieramy dane zamówionych samochodów
-    for item in cart:
-        if 'rental_days' not in item:
-            item['rental_days'] = 1  # Jeśli nie ma dni wynajmu, ustawiamy domyślnie 1 dzień
+    return render(request, 'orders/summary.html.jinja', {
+        'order': order
+    })
 
+
+# === Przetwarzanie płatności ===
+@login_required
+def process_payment(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+
+    if request.method == 'POST':
+        # Załóżmy, że płatność jest zawsze udana
+        order.payment_status = 'success'
+        order.save()
+
+        # Przekierowanie do strony potwierdzenia zamówienia
+        return redirect('orders:order_confirmation', order_id=order.id)
+
+    return render(request, 'orders/process_payment.html.jinja', {
+        'order': order
+    })
+# === Potwierdzenie zamówienia ===
+@login_required
+def order_confirmation(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+    return render(request, 'orders/order_confirmation.html.jinja', {'order': order})
+
+# === Zmiana liczby dni wynajmu ===
+@login_required
+def update_rental_days(request, car_id):
+    if request.method == 'POST':
+        try:
+            cart_item = CartItem.objects.get(user=request.user, car_id=car_id)
+            rental_days = int(request.POST.get('rental_days'))
+
+            if rental_days >= 1:
+                cart_item.rental_days = rental_days
+                cart_item.total_price = cart_item.car.rent * rental_days
+                cart_item.save()
+                messages.success(request, f"Liczba dni wynajmu została zaktualizowana do {rental_days}.")
+            else:
+                messages.error(request, "Liczba dni wynajmu musi być co najmniej 1.")
+        except CartItem.DoesNotExist:
+            messages.error(request, "Nie znaleziono takiego elementu w koszyku.")
+        return redirect('orders:cart')
+    return HttpResponse(status=405)
+
+
+# === Usuwanie z koszyka ===
+@login_required
+def remove_from_cart(request, car_id):
+    cart = request.session.get('cart', {})
+    cart = {k: v for k, v in cart.items() if v['car_id'] != car_id}
+    request.session['cart'] = cart
+    return redirect('orders:cart')
+
+
+# === Widok potwierdzenia (statyczny) ===
+def confirmation(request):
+    return render(request, 'orders/confirmation.html.jinja')
+
+
+# === Aktualizacja koszyka ===
+@login_required
+def update_cart(request):
+    if request.method == 'POST':
+        for item in CartItem.objects.filter(user=request.user):
+            start_date = request.POST.get(f'start_date_{item.car_id}')
+            end_date = request.POST.get(f'end_date_{item.car_id}')
+            rental_days = int(request.POST.get(f'rental_days_{item.car_id}', 0))
+
+            if start_date and end_date and rental_days > 0:
+                item.start_date = start_date
+                item.end_date = end_date
+                item.rental_days = rental_days
+                item.total_price = item.car.rent * rental_days
+                item.save()
+
+        return redirect('orders:cart')
+    return HttpResponse(status=405)
+
+
+# === Widok koszyka z sesji ===
+@login_required
+def cart_view(request):
+    cart = request.session.get('cart', {})
+    updated_cart = []
+    total_price = 0
+
+    for item in cart.values():
         try:
             car = Car.objects.get(id=item['car_id'])
-            item['total_price'] = car.rent * item['rental_days']
-            item['car_brand'] = car.brand
-            item['car_model'] = car.model
-            item['car_image'] = car.image.url if car.image else None
-            cleaned_cart.append(item)
-            total_price += item['total_price']
+            rental_days = item.get('rental_days', 1)
+            item_total_price = car.rent * rental_days
+
+            updated_cart.append({
+                'car_id': car.id,
+                'car_brand': car.brand,
+                'car_model': car.model,
+                'rental_days': rental_days,
+                'total_price': item_total_price,
+                'car_image': car.image.url if car.image else None,
+                'start_date': item.get('start_date'),
+                'end_date': item.get('end_date')
+            })
+
+            total_price += item_total_price
         except Car.DoesNotExist:
             continue
 
-    # Obsługa formularza
-    order_success = False
-    if request.method == 'POST':
-        # Możemy tutaj stworzyć zamówienie
-        # Order.objects.create(user=request.user, total_price=total_price, items=cleaned_cart)
-        
-        # Opróżniamy koszyk po złożeniu zamówienia
-        request.session['cart'] = []
-        order_success = True
-
-    return render(request, 'orders/checkout.html.jinja', {
-        'cart_items': cleaned_cart,
-        'total_price': total_price,
-        'order_success': order_success,  # Przekazujemy zmienną do szablonu
-    })
-
-# Widok kart
-@login_required
-def cart_view(request):
-    cart = request.session.get('cart', [])
-    
-    if not cart:
-        return render(request, 'orders/cart.html.jinja', {
-            'message': 'Twój koszyk jest pusty.'
-        })
-
-    cart_items = []
-    total_price = 0
-
-    for item in cart:
-        if isinstance(item, dict):
-            try:
-                car = Car.objects.get(id=item['car_id'])
-                rental_days = item.get('rental_days', 1)
-                total_price += car.rent * rental_days
-
-                cart_items.append({
-                    'car_id': car.id,
-                    'car_brand': car.brand,
-                    'car_model': car.model,
-                    'car_image': car.image.url if car.image else None,
-                    'rental_days': rental_days,
-                    'total_price': car.rent * rental_days,
-                })
-            except Car.DoesNotExist:
-                continue
-
     return render(request, 'orders/cart.html.jinja', {
-        'cart_items': cart_items,
+        'cart': updated_cart,
         'total_price': total_price,
     })
 
-# Zaktualizowanie dni wynajmu
-@login_required
-def update_rental_days(request, car_id):
-    cart = request.session.get('cart', [])
-    
-    for item in cart:
-        if item['car_id'] == car_id:
-            rental_days = int(request.POST.get('rental_days', 1))
-            item['rental_days'] = rental_days
-            try:
-                car = Car.objects.get(id=car_id)
-                item['total_price'] = float(car.rent * rental_days)
-            except Car.DoesNotExist:
-                continue
-            break
-    
-    request.session['cart'] = cart
-    return redirect('orders:cart')
 
-# Usuwanie z koszyka
-@login_required
-def remove_from_cart(request, car_id):
-    cart = request.session.get('cart', [])
-    
-    cart = [item for item in cart if item['car_id'] != car_id]
-    
-    request.session['cart'] = cart
-    return redirect('orders:cart')
+# === Pomocnicza funkcja do tworzenia zamówienia z koszyka ===
+def create_order_from_cart(request):
+    cart = request.session.get('cart', {})
+    if not cart:
+        return None
 
-# Potwierdzenie
-def confirmation(request):
-    return render(request, 'orders/confirmation.html.jinja')
-def order_confirmation(request):
-    return render(request, 'orders/order_confirmation.html')
+    order = Order.objects.create(user=request.user, total_price=0)  # price uzupełnimy później
+
+    for item in cart.values():
+        car = get_object_or_404(Car, id=item['car_id'])
+        OrderItem.objects.create(
+            order=order,
+            car=car,
+            rental_days=item['rental_days'],
+            total_price=item['total_price']
+        )
+
+    return order
