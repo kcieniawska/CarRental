@@ -17,9 +17,10 @@ logger = logging.getLogger(__name__)
 
 # Strona główna - wyświetlanie wszystkich samochodów
 def index(request):
-    cars = Car.objects.all()  # Pobieranie wszystkich samochodów
-    return render(request, 'cars/index.html.jinja', {'cars': cars})
-
+    recommended_cars = Car.objects.filter(is_recommended=True)[:3]  # Pobieranie polecanych samochodów
+    return render(request, 'cars/index.html.jinja', {
+        'recommended_cars': recommended_cars
+    })
 # Strona szczegółów samochodu
 def car(request, car_id):
     try:
@@ -29,6 +30,9 @@ def car(request, car_id):
         raise Http404("Car not found")
     
     return render(request, 'cars/car.html.jinja', {'car': car})
+def all_cars_view(request):
+    cars = Car.objects.all()  # lub filtrujesz, jak chcesz
+    return render(request, 'cars/cars.html.jinja', {'cars': cars})
 
 # Lista kategorii samochodów
 def category_list(request):

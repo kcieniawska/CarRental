@@ -11,6 +11,7 @@ urlpatterns = [
     path('categories/<str:category>/', views.category_view, name='category_detail'),
     path('car/<int:car_id>/', views.car, name='car'),
     path('<int:car_id>/add_review/', views.add_review, name='add_review'),  # Dodana ścieżka
+     path('cars/', views.all_cars_view, name='all_cars')
 ]
 
 

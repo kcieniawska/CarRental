@@ -15,16 +15,15 @@
                 komfort, bezpieczeństwo i pełną satysfakcję naszych klientów. Oferujemy szeroką gamę nowoczesnych i niezawodnych pojazdów – 
                 od ekonomicznych modeli miejskich, przez przestronne SUV-y, aż po eleganckie auta premium. <br>
                 <br>A wszystko to w konkurencyjnych cenach i z elastycznymi warunkami wynajmu!
-
             </p>
         </div>
     </section>
 
     <!-- Sekcja 2: Poznaj nasze samochody -->
-    <section class="cars" id="poznaj-nasze-samochody">
-        <h2>Poznaj nasze samochody</h2>
+    <section class="cars" id="polecane-samochody">
+        <h2>Polecane samochody</h2>
         <div class="car-list">
-            {% for car in cars %}
+            {% for car in recommended_cars %}
                 <div class="car-item">
                     <a href="{% url 'car_detail' car.id %}">
                         <img src="{{ car.image.url }}" alt="{{ car.brand }} {{ car.model }}">
@@ -35,8 +34,11 @@
                     </a>
                 </div>
             {% empty %}
-                <p>Brak dostępnych samochodów w naszej bazie.</p>
+                <p>Brak polecanych samochodów.</p>
             {% endfor %}
+        </div>
+        <div class="center-button"><br>
+            <a href="{% url 'all_cars' %}" class="btn-show-all">Zobacz wszystkie samochody</a>
         </div>
     </section>
 
@@ -67,35 +69,71 @@
         </div>
     </section>
 
-    <!-- Sekcja 4: Opinie klientów -->
-<section class="customer-reviews">
-    <h2>Opinie naszych klientów</h2>
-    <div class="reviews">
-        <div class="review">
-            <img src="{% static 'images/customer.png' %}" alt="Klient 1">
-            <h3>Jan</h3>
-            <p>★★★★★</p><br>
-            <p>"Wynajem auta był szybki i bezproblemowy. Bardzo polecam!</p>
+    <!-- Sekcja 4: FAQ -->
+    <section class="faq" id="faq">
+        <h2>Najczęściej zadawane pytania</h2>
+        <div class="faq-item">
+            <h3>Jakie dokumenty są potrzebne, aby wynająć samochód?</h3>
+            <p>Aby wynająć samochód, potrzebujesz ważnego prawa jazdy oraz dowodu tożsamości. W niektórych przypadkach możemy poprosić o dodatkowe dokumenty.</p>
         </div>
-        <div class="review">
-            <img src="{% static 'images/customer.png' %}" alt="Klient 2">
-            <h3>Anna</h3>
-            <p>★★★★★</p><br>
-            <p>"Profesjonalna obsługa i świetna jakość samochodów. Na pewno wrócę!"</p>
+        <div class="faq-item">
+            <h3>Czy mogę wynająć samochód na jeden dzień?</h3>
+            <p>Tak, oferujemy wynajem na krótki okres, nawet na jeden dzień. Prosimy o wcześniejsze złożenie rezerwacji.</p>
         </div>
-        <div class="review">
-            <img src="{% static 'images/customer.png' %}" alt="Klient 3">
-            <h3>Piotr</h3>
-            <p>★★★★</p><br>
-            <p>"Szeroka gama samochodów w bardzo dobrej cenie. Naprawdę warto!"</p>
+        <div class="faq-item">
+            <h3>Jakie są zasady ubezpieczenia samochodów?</h3>
+            <p>Wszystkie nasze samochody są objęte podstawowym ubezpieczeniem OC. Istnieje również możliwość wykupienia dodatkowego ubezpieczenia, które obejmuje np. szkody własne, kradzież lub uszkodzenia opon.</p>
         </div>
-        <div class="review">
-            <img src="{% static 'images/customer.png' %}" alt="Klient 4">
-            <h3>Andrzej</h3>
-            <p>★★★★★</p><br>
-            <p>"Bardzo miła obsługa. Samochód czysty i gotowy do jazdy. Polecam!"</p>
+        <div class="faq-item">
+            <h3>Czy mogę wynająć samochód, jeśli nie mam pełnych 25 lat?</h3>
+            <p>Tak, oferujemy wynajem dla kierowców powyżej 21. roku życia, jednak w przypadku osób poniżej 25. roku życia może obowiązywać dodatkowa opłata młodego kierowcy.</p>
         </div>
-    </div>
-</section>
+        <div class="faq-item">
+            <h3>Czy mogę zwrócić samochód wcześniej niż zaplanowano?</h3>
+            <p>Tak, możliwe jest wcześniejsze zwrócenie samochodu, jednak prosimy o kontakt w celu ustalenia szczegółów. W przypadku wcześniejszego zwrotu mogą obowiązywać dodatkowe opłaty.</p>
+        </div>
+        <div class="faq-item">
+            <h3>Czy oferujecie dostawę samochodów do miejsca zamieszkania?</h3>
+            <p>Tak, oferujemy usługę dostawy samochodu pod wskazany adres w wybranych lokalizacjach. Prosimy o wcześniejsze skontaktowanie się z nami, aby omówić szczegóły.</p>
+        </div>
+        <div class="faq-item">
+            <h3>Co się stanie, jeśli spóźnię się z oddaniem samochodu?</h3>
+            <p>Jeśli spóźnisz się z oddaniem samochodu, będziesz musiał zapłacić dodatkową opłatę za opóźnienie. W przypadku dużych opóźnień mogą obowiązywać dodatkowe koszty.</p>
+        </div>
+        <div class="faq-item">
+            <h3>Czy mogę wynająć samochód na długoterminowo?</h3>
+            <p>Tak, oferujemy wynajem długoterminowy. Możemy zaproponować korzystniejsze warunki i zniżki dla klientów, którzy wynajmują pojazd na dłuższy okres.</p>
+        </div>
+        <div class="faq-item">
+            <h3>Czy samochód jest dostarczany z pełnym bakiem?</h3>
+            <p>Tak, wszystkie nasze pojazdy są wydawane z pełnym bakiem. Prosimy o zwrócenie pojazdu z pełnym bakiem, aby uniknąć dodatkowych opłat.</p>
+        </div>
+        <div class="faq-item">
+            <h3>Czy mogę wynająć samochód za granicą?</h3>
+            <p>Wynajem samochodu za granicą jest możliwy w wybranych lokalizacjach. Prosimy o kontakt przed dokonaniem rezerwacji, aby upewnić się, że oferujemy wynajem w kraju, do którego się wybierasz.</p>
+        </div>
+        <div class="faq-item">
+            <h3>Jak mogę zmienić lub anulować moją rezerwację?</h3>
+            <p>Możesz zmienić lub anulować rezerwację do 24 godzin przed planowanym odbiorem pojazdu. W takim przypadku nie pobieramy żadnej opłaty. Po tym czasie mogą obowiązywać opłaty za anulowanie.</p>
+        </div>
+        <div class="faq-item">
+            <h3>Czy mogę wynająć samochód, jeśli nie mam karty kredytowej?</h3>
+            <p>Tak, w większości przypadków akceptujemy płatności gotówką lub przelewem. Jednak do zabezpieczenia kaucji wymagamy posiadania karty kredytowej.</p>
+        </div>
     </section>
+
+    <!-- Skrypt JavaScript - Dodaj na końcu, przed zamknięciem tagu </body> -->
+    <script>
+        // Wyszukiwanie wszystkich pytań w FAQ
+        const faqItems = document.querySelectorAll('.faq-item h3');
+
+        // Dodanie zdarzenia kliknięcia dla każdego pytania
+        faqItems.forEach(item => {
+            item.addEventListener('click', function() {
+                // Toggle dla klasy 'open', aby rozwijać i zwijać odpowiedzi
+                const faqItem = item.parentElement;
+                faqItem.classList.toggle('open');
+            });
+        });
+    </script>
 {% endblock %}

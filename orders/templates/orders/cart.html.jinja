@@ -49,7 +49,7 @@
 
 {% else %}
     <p class="empty-cart-message">Twój koszyk jest pusty.</p>
-    <a href="/#poznaj-nasze-samochody" class="btn-browse">🚗 Poznaj nasze samochody</a>
+    <a href="{% url 'all_cars' %}" class="btn-browse">🚗 Poznaj nasze samochody</a>
 {% endif %}
 
 {% endblock %}

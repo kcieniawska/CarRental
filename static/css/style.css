@@ -578,44 +578,7 @@ footer p {
     display: flex;
     justify-content: flex-end; /* Wyrównuje przycisk do prawej strony */
     margin-top: 20px;
-    margin-bottom: 20px;
 }
-
-/* Ustawienia kontenera dla opinii */
-.reviews-section {
-    margin-top: 50px; /* Odstęp od innych elementów na stronie */
-    display: flex;
-    flex-direction: column;
-    gap: 20px; /* Odstęp pomiędzy opiniami */
-}
-
-/* Ustawienie dla pojedynczej opinii */
-.review {
-    background-color: #f9f9f9;
-    padding: 15px;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-/* Klasa dla kontenera z opiniami */
-.reviews-container {
-    display: flex;
-    flex-direction: column;
-    margin-top: 30px;/* Odstęp od przycisku "Zarezerwuj teraz" */
-    color: #333;
-}
-
-
-/* Opinia po lewej stronie */
-.reviews-section {
-    text-align: left;
-}
-
-.reviews-section .review {
-    max-width: 50%; /* Zapewnia, że opinie nie będą za szerokie */
-    margin-bottom: 15px; /* Odstęp między kolejnymi opiniami */
-}
-
 .rent-button:hover {
     background-color: #d4783e;
     color: #333;
@@ -736,7 +699,12 @@ footer p {
     margin-bottom: 60px;
 }
 
-.contact-form h3, .contact-info h3 {
+.contact-form h3, .contact-info h3{
+    font-size: 2em;
+    color: #333;
+    margin-bottom: 20px;
+}
+.contact-map h3 {
     font-size: 2em;
     color: #333;
     margin-bottom: 20px;
@@ -1803,76 +1771,141 @@ nav.log .user-profile:hover {
     border-color: #999;
     color: #000;
 }
-
-/* Stylowanie profilu użytkownika */
-.profile-card {
-    border-radius: 8px;
-    border: 1px solid #ddd;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.profile-details {
-    font-size: 1.1rem;
-    line-height: 1.6;
-    color: #333;
-}
-
-.profile-details p {
-    margin-bottom: 1.5rem;
-}
-
-.card-header.bg-papaya-orange {
-    background-color: #FF6A13;
-}
-
-.card-header h2 {
-    font-size: 1.8rem;
-}
-
-.card-body {
-    background-color: #f9f9f9;
-}
-
-.card-body .btn {
-    padding: 0.8rem 1.6rem;
-    border-radius: 25px;
-    font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.card-body .btn-warning {
-    background-color: #FF6A13;
-    border-color: #FF6A13;
-}
-
-/* Unikalny styl dla tabeli w sekcji "Moje zamówienia" */
-.table-profile-orders {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-}
-
-.table-profile-orders th,
-.table-profile-orders td {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-}
-
-.table-profile-orders th {
-    background-color: #f8f9fa;
-}
-
-.table-profile-orders td {
-    background-color: #fff;
-}
-
-.text-center {
+ /* Sekcja kontenera kategorii */
+.category-container {
+    padding: 60px 20px;
+    background-color: #f7f7f7;
     text-align: center;
 }
 
-.btn-warning {
-    color: #fff;
+/* Nagłówek */
+.category-header h2 {
+    font-size: 2.5rem;
+    color: #333;
+    margin-bottom: 40px;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Sekcja kontenera kategorii */
+.category-container {
+    padding: 60px 20px;
+    background-color: #f7f7f7;
+    text-align: center;
+}
+
+/* Nagłówek - prosty, bez dodatkowych efektów */
+.category-header h2 {
+    font-size: 2.5rem;
+    color: #333;
+    margin-bottom: 40px;
+    font-weight: 600;
+    text-transform: none; /* Usunięcie efektu uppercase */
+    letter-spacing: normal;
+}
+
+/* Siatka kategorii */
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 30px;
+    padding: 0;
+    list-style: none;
+}
+
+/* Karta kategorii */
+.category-card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+}
+
+/* Efekt hover na karcie */
+.category-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Stylizacja tła karty */
+.category-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 87, 34, 0.1); /* Subtelne tło */
+    transition: background-color 0.3s ease;
+    z-index: -1;
+}
+
+/* Zmiana koloru tła na hover */
+.category-card:hover::before {
+    background-color: rgba(255, 87, 34, 0.2); /* Zmiana koloru tła na intensywniejszy */
+}
+
+/* Treść wewnątrz karty */
+.category-card-content {
+    padding: 30px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+/* Nagłówek kategorii w karcie */
+.category-card h3 {
+    font-size: 1.6rem;
+    color: #333;
+    text-transform: capitalize;
+    font-weight: 500;
+    transition: color 0.3s ease, transform 0.3s ease;
+    margin: 0;
+}
+
+/* Zmiana koloru tekstu na hover */
+.category-card:hover h3 {
+    color: #ff5722; /* Zmieniamy kolor tekstu przy hover */
+    transform: scale(1.05); /* Powiększamy tekst przy hover */
+}
+
+/* Stylizacja linku (usunięcie podkreślenia) */
+.category-card a {
     text-decoration: none;
+    color: inherit;
+}
+
+/* Animacja nagłówka */
+.category-card-content h3 {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.4s ease-out;
+}
+
+.category-card:hover .category-card-content h3 {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Przycisk */
+.category-card a {
+    display: inline-block;
+    padding: 12px 24px;
+    color: #333; /* Kolor tekstu w przycisku */
+    font-weight: bold;
+    border-radius: 8px;
+    transition: color 0.3s ease; /* Brak zmiany tła, tylko kolor tekstu */
+    margin-top: 20px;
+}
+
+/* Przycisk hover - zmiana koloru tekstu na papayaorange */
+.category-card a:hover {
+    color: #ffcc99; /* Kolor tekstu na hover (Papaya Orange) */
 }

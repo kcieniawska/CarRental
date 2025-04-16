@@ -15,7 +15,7 @@
             </div>
 
             <p class="car-description-heading">{{ car.description }}</p>
-
+            <h2 style="margin-top: 50px;margin-bottom: 50px;">Podstawowe informacje</h2>
             <div class="car-specs">
                 <ul>
                     <li><strong>Rok produkcji:</strong> {{ car.year }}</li>
@@ -33,7 +33,7 @@
 
             <div class="car-price-container">
                 <div class="car-price-left">
-                    <span class="price-label">Cena za wynajem:</span>
+                    <h2><span class="price-label">Cena za wynajem:</span></h2>
                 </div>
                 <div class="car-price-right">
                     <span class="price-value">{{ car.rent }} PLN/dzień</span>
@@ -64,7 +64,7 @@
             </div>
             {% endif %}
             <div class="reviews-container">
-                <h3>Opinie</h3>
+                <h2 style="margin-top: 50px; margin-bottom: 50px;">Opinie</h2>
                 <div class="reviews-section">
                     {% for review in reviews %}
                         <div class="review">

@@ -69,7 +69,7 @@ class Car(models.Model):
     value = models.PositiveIntegerField()  
     mileage_limit = models.PositiveIntegerField()  
     equipment = models.ManyToManyField(Equipment)  # Relacja M:N do modelu Equipment
-    
+    is_recommended = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.brand} {self.model} ({self.year})"

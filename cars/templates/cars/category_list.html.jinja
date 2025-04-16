@@ -5,19 +5,22 @@
 {% block content %}
 
 <!-- Sekcja kategorii samochodów -->
-<section class="categories">
-    <div class="content-wrapper">
-        <h2>Wybierz interesującą kategorię samochodu </h2>
-       
-        <ul class="category-list">
-            {% for category in categories %}
-            <li class="category-item">
-                <a href="{% url 'category_detail' category.0 %}">
-                    <h3>{{ category.1|capfirst }}</h3>
-                </a>
-            </li>
-        {% endfor %}
-        </ul>
+<section class="category-container">
+    <div class="category-header">
+        <h2>Wybierz interesującą kategorię samochodu</h2>
     </div>
+   
+    <ul class="category-grid">
+        {% for category in categories %}
+        <li class="category-card">
+            <a href="{% url 'category_detail' category.0 %}">
+                <div class="category-card-content">
+                    <h3>{{ category.1|capfirst }}</h3>
+                </div>
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
 </section>
+
 {% endblock %}

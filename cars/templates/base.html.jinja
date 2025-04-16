@@ -28,7 +28,7 @@
             <h1><a href="/"><img src="{% static 'images/papaya-logo.png' %}" alt="Opis zdjęcia">Papaya<span>Rent</span>Car</a></h1>
             <nav>
                 <a href="/">Strona główna</a> <span> </span>
-                <a href="/#poznaj-nasze-samochody">Nasze samochody</a> <span> </span>
+                <a href="{% url 'all_cars' %}">Nasze samochody</a> <span> </span>
                 <a href="{% url 'category_list' %}">Kategorie</a> <span> </span>
                 <a href="/contact/">Kontakt</a>
             </nav>
