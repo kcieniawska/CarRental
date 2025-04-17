@@ -75,6 +75,10 @@ def profile(request):
     print(f"User: {request.user.username}")  # Sprawdź, kto jest zalogowany
     print(f"Orders: {orders}")  # Sprawdź, jakie zamówienia są zwracane
     return render(request, 'users/profile.html.jinja', {'orders': orders})
+@login_required
+def profile_view(request):
+    user = request.user
+    return render(request, 'profile.html.jinja', {'user': user})
 
 # Widok zamówień użytkownika
 @login_required

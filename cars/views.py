@@ -23,11 +23,9 @@ def index(request):
     })
 # Strona szczegółów samochodu
 def car(request, car_id):
-    try:
-        car = get_object_or_404(Car, id=car_id)  # Automatycznie zwróci błąd 404, jeśli car_id nie istnieje
-    except Car.DoesNotExist:
-        logger.error(f"Car with id {car_id} not found.")
-        raise Http404("Car not found")
+    car = get_object_or_404(Car, pk=car_id)
+    return render(request, 'cars/car.html.jinja', {'car': car})
+    
     
     return render(request, 'cars/car.html.jinja', {'car': car})
 def all_cars_view(request):

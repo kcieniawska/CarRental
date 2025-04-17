@@ -1909,3 +1909,485 @@ nav.log .user-profile:hover {
 .category-card a:hover {
     color: #ffcc99; /* Kolor tekstu na hover (Papaya Orange) */
 }
+.btn-show-all {
+    background-color: #ef5b00;
+    border-radius: 50px;
+    color: #fff;
+    padding: 20px;
+}
+a.btn-show-all {
+    text-decoration: none;
+}
+.center-button {
+    margin-top: 20px;
+    margin-bottom: 20px;
+
+}
+a:hover.btn-show-all {
+    color: #ffffff;
+    background-color:  #bc4a04;
+}
+
+/* Ukrywanie błędów formularza, które pojawią się przy interakcji */
+.form-errors {
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    display: none; /* Początkowo ukryte */
+    transition: all 0.3s ease-in-out;
+}
+
+.form-errors.active {
+    display: block; /* Pokazuje błędy, gdy są aktywne */
+}
+
+.form-errors ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.form-errors ul li {
+    margin: 5px 0;
+}
+
+.form-errors strong {
+    font-weight: bold;
+}
+
+.form-errors ul li ul {
+    margin-left: 20px;
+}
+
+.form-errors ul li ul li {
+    color: #721c24;
+    font-size: 0.9rem;
+}
+
+/* Stylowanie formularza */
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 5px;
+    display: block;
+}
+
+input[type="text"], input[type="email"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+input[type="text"]:focus, input[type="email"]:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+/* Podświetlanie błędnych pól */
+input.invalid {
+    border-color: #dc3545;
+}
+
+/* Stylowanie przycisków */
+.checkout-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.pay-now-btn {
+    background-color: #e07722;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.pay-now-btn:hover {
+    background-color: #e07722;
+}
+
+.back-to-cart-button {
+    text-decoration: none;
+    background-color: #f8f9fa;
+    color: #888888;
+    padding: 10px 20px;
+    border: 1px solid #e07722;
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.back-to-cart-button:hover {
+    background-color: #e07722;
+    color: white;
+}
+
+/* Stylowanie podsumowania zamówienia */
+.order-summary {
+    margin-top: 20px;
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.order-summary h3 {
+    margin-bottom: 15px;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.summary-item {
+    margin-bottom: 15px;
+}
+
+.summary-item p {
+    margin: 5px 0;
+}
+
+.summary-total {
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-top: 15px;
+}
+
+/* Responsywność */
+@media (max-width: 768px) {
+    .checkout-buttons {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .pay-now-btn, .back-to-cart-button {
+        width: 100%;
+        text-align: center;
+    }
+
+    .form-group {
+        width: 100%;
+    }
+}#payment_method {
+    padding: 12px;
+    font-size: 1em;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+#payment_method:focus {
+    outline: none;
+    border-color: #007bff;
+    background-color: #fff;
+}
+
+/* Dodatkowy margines i przestrzeń wokół formy */
+.checkout-form-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Styl dla opcji select w metodzie płatności */
+#payment_method option {
+    padding: 12px;
+    font-size: 1em;
+    color: #333;
+}
+
+/* Podstawowe style dla strony z podsumowaniem zamówienia */
+.summary-page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: 'Arial', sans-serif;
+}
+
+/* Nagłówki sekcji */
+.summary-page h2 {
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.summary-page h3 {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+    color: #444;
+}
+
+/* Sekcja podsumowania wynajmu */
+.summary-page .order-summary,
+.summary-page .user-summary {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+/* Sekcja danych użytkownika */
+.summary-page .user-summary p {
+    border-top: 1px solid #ddd;
+    padding-top: 10px;
+}
+
+/* Przycisk do realizacji zamówienia */
+.summary-page .complete-order-btn {
+    padding: 12px 24px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.summary-page .complete-order-btn:hover {
+    background-color: #218838;
+}
+
+/* Stylowanie komunikatu potwierdzającego wysłanie maila */
+.summary-page .confirmation-message {
+    background-color: #d4edda;
+    padding: 15px;
+    border: 1px solid #c3e6cb;
+    border-radius: 5px;
+    color: #155724;
+    margin-top: 20px;
+}
+
+/* Responsywność */
+@media (max-width: 768px) {
+    .summary-page {
+        padding: 10px;
+    }
+
+    .summary-page h2 {
+        font-size: 2rem;
+    }
+
+    .summary-page h3 {
+        font-size: 1.5rem;
+    }
+
+    .summary-page .order-summary,
+    .summary-page .user-summary {
+        padding: 15px;
+    }
+
+    .summary-page .complete-order-btn {
+        width: 100%;
+        padding: 15px;
+    }
+}
+
+.order-complete-page {
+    background: linear-gradient(135deg, #f9f9f9, #eef2f3);
+    min-height: 100vh;
+    padding: 80px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.order-complete-container {
+    background-color: white;
+    padding: 40px 50px;
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+    max-width: 650px;
+    text-align: center;
+    animation: fadeInUp 1s ease-in-out;
+}
+
+.order-complete-container h1 {
+    font-size: 2.5em;
+    color: #2c3e50;
+    margin-bottom: 20px;
+}
+
+.order-complete-container p {
+    font-size: 1.2em;
+    color: #555;
+    margin-bottom: 15px;
+}
+
+.back-home-btn {
+    margin-top: 25px;
+    display: inline-block;
+    padding: 14px 28px;
+    background: #27ae60;
+    color: white;
+    border-radius: 10px;
+    text-decoration: none;
+    font-size: 1em;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+}
+
+.back-home-btn:hover {
+    background: #1e874b;
+}
+
+/* Konfetti animacja */
+.confetti-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.confetti {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: #f39c12;
+    animation: fall 3s infinite;
+    border-radius: 50%;
+    opacity: 0.8;
+}
+
+.confetti:nth-child(2) {
+    left: 30%;
+    background-color: #e74c3c;
+    animation-delay: 0.5s;
+}
+
+.confetti:nth-child(3) {
+    left: 60%;
+    background-color: #9b59b6;
+    animation-delay: 1s;
+}
+
+@keyframes fall {
+    0% { top: -10px; transform: rotate(0); }
+    100% { top: 100vh; transform: rotate(720deg); }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.table-profile-orders {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #fff;
+}
+
+.table-profile-orders th, .table-profile-orders td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+.table-profile-orders th {
+    background-color: #f8f9fa;
+    color: #333;
+    font-weight: bold;
+}
+
+.table-profile-orders tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.table-profile-orders tr:hover {
+    background-color: #e9ecef;
+}
+
+.table-profile-orders .badge {
+    font-size: 0.9em;
+    padding: 5px 10px;
+    border-radius: 12px;
+    text-transform: capitalize;
+}
+
+/* Statusy */
+.table-profile-orders .badge.bg-success {
+    background-color: #28a745;
+    color: white;
+}
+
+.table-profile-orders .badge.bg-warning {
+    background-color: #ffc107;
+    color: white;
+}
+
+.table-profile-orders .badge.bg-danger {
+    background-color: #dc3545;
+    color: white;
+}
+
+.table-profile-orders .badge.bg-secondary {
+    background-color: #6c757d;
+    color: white;
+}
+
+.table-profile-orders td {
+    font-size: 0.95em;
+    color: #555;
+}
+
+.table-profile-orders .table-profile-orders-empty {
+    text-align: center;
+    font-size: 1.2em;
+    color: #999;
+}
+.btn-edit-profile {
+    background-color: #FF8C00; /* Kolor tła przycisku (pomarańczowy) */
+    color: white;              /* Kolor tekstu (biały) */
+    border: 2px solid #FF8C00; /* Ramka w kolorze tła */
+    padding: 10px 20px;        /* Wewnętrzny margines przycisku */
+    font-size: 16px;           /* Rozmiar czcionki */
+    border-radius: 20px;        /* Zaokrąglone rogi */
+    transition: all 0.3s ease; /* Animacja przy przejściu myszki */
+    display: inline-block;     /* Sprawia, że przycisk traktowany jest jako element w linii */
+    margin-top: 20px;          /* Odstęp od górnej części kontenera */
+    text-align: center;        /* Centrowanie tekstu */
+    width: 20%;               /* Przyciąga przycisk do szerokości kontenera */
+    box-sizing: border-box;    /* Umożliwia lepsze zarządzanie rozmiarem */
+}
+a.btn-edit-profile {
+    text-decoration: none;
+    font-weight: bold;
+}
+/* Efekt najechania na przycisk */
+.btn-edit-profile:hover {
+    background-color: #e07b00; /* Ciemniejszy odcień pomarańczowego */
+    border-color: #e07b00;     /* Zmiana koloru ramki */
+    cursor: pointer;           /* Zmiana kursora na wskazujący */
+}
+
+/* Zapewnienie, że kontener profilu nie będzie za szeroki i nie wymusi przekroczenia */
+.profile-card .card-body {
+    padding-bottom: 50px; /* Dodajemy trochę przestrzeni, aby przycisk miał miejsce */
+}

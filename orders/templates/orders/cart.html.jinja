@@ -3,7 +3,7 @@
 {% block content %}
 <h1 style="margin-bottom: 50px;">Twój koszyk</h1>
 
-{% if cart %}
+{% if request.session.cart %}
     <div class="cart-table-wrapper">
         <table class="cart-table">
             <thead>
@@ -17,18 +17,16 @@
                 </tr>
             </thead>
             <tbody>
-                {% for item in cart %}
+                {% for item in request.session.cart %}
                 <tr>
-                    <!-- Nazwa samochodu z linkiem do szczegółów -->
-                    <td>{{ item.car_brand }} {{ item.car_model }}</a></td>
+                    <td>{{ item.car_brand }} {{ item.car_model }}</td>
                     <td>{{ item.start_date }}</td>
                     <td>{{ item.end_date }}</td>
                     <td>{{ item.rental_days }}</td>
-                    </td>
                     <td>
-                        <form method="post" action="{% url 'orders:remove_from_cart' item.car_id %}">
+                        <form method="POST" action="{% url 'orders:remove_from_cart' item.car_id %}">
                             {% csrf_token %}
-                            <button type="submit" class="btn-remove">🗑️ Usuń</button>
+                            <button type="submit" class="remove-btn">Usuń</button>
                         </form>
                     </td>
                     <td>{{ item.total_price }} zł</td>
@@ -37,12 +35,6 @@
             </tbody>
         </table>
     </div>
-
-    <div class="total-price-container">
-        <h3 class="total-price">Cena wynajmu łącznie: {{ total_price }} zł</h3>
-    </div>
-
-    <!-- Upiększony przycisk do podsumowania zamówienia -->
     <div class="checkout-button-container">
         <a href="{% url 'orders:checkout' %}" class="btn btn-primary btn-checkout btn-papaya-orange">Przejdź do podsumowania zamówienia</a>
     </div>

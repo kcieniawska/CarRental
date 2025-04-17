@@ -19,3 +19,4 @@ class OrderAdmin(admin.ModelAdmin):
 @admin.register(OrderItem)
 class OrderItemAdmin(admin.ModelAdmin):
     list_display = ['order', 'car', 'rental_days', 'price_per_day', 'total_price']
+

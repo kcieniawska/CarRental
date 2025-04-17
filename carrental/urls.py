@@ -18,6 +18,7 @@ urlpatterns = [
     path('cart/', orders_views.cart, name='cart'),  # Zmieniamy cars.views.cart na orders_views.cart
     path('orders/', include('orders.urls')),  # Obsługuje wszystkie ścieżki związane z zamówieniami
     path('contact/', views.contact, name='contact'),  # Poprawione: używamy views.contact
+    
 ]
 
 # Dodajemy ścieżki do obsługi plików multimedialnych

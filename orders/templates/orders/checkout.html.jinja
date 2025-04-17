@@ -2,53 +2,113 @@
 
 {% block content %}
 <div class="checkout-page">
-    <h2 class="checkout-title">Podaj swoje dane</h2>
+    <!-- Podsumowanie zamówienia -->
+    <div class="order-summary">
+        <h2>Podsumowanie zamówienia:</h2><br>
+        <div class="summary-item">
+            <p><strong>Samochód:</strong> 
+                {% if request.session.cart %}
+                    {% for item in request.session.cart %}
+                        {{ item.car_brand }} {{ item.car_model }}<br>  <!-- Wyświetlanie marki i modelu -->
+                    {% endfor %}
+                {% else %}
+                    Brak samochodu
+                {% endif %}
+            </p>
+            <p><strong>Data rozpoczęcia wynajmu:</strong> 
+                {% if request.session.start_date %}
+                    {{ request.session.start_date }}
+                {% else %}
+                    Brak daty rozpoczęcia
+                {% endif %}
+            </p>
+            <p><strong>Data zakończenia wynajmu:</strong> 
+                {% if request.session.end_date %}
+                    {{ request.session.end_date }}
+                {% else %}
+                    Brak daty zakończenia
+                {% endif %}
+            </p>
+            <p><strong>Łączna cena:</strong> 
+                {% if request.session.total_price %}
+                    {{ request.session.total_price }} zł
+                {% else %}
+                    Brak ceny
+                {% endif %}
+            </p>
+        </div>
+    </div>
 
+    <!-- Formularz wypełniania danych użytkownika -->
     <div class="checkout-form-container">
+        <h2 class="checkout-title">Wypełnij swoje dane</h2>
         <form method="POST" action="{% url 'orders:checkout' %}">
             {% csrf_token %}
             
-            <!-- Formularz danych osobowych -->
+            <!-- Dane użytkownika -->
             <div class="form-group">
                 <label for="first_name">Imię:</label>
-                <input type="text" id="first_name" name="first_name" value="{{ request.session.first_name|default:'' }}" required />
-            </div>
-            <div class="form-group">
-                <label for="last_name">Nazwisko:</label>
-                <input type="text" id="last_name" name="last_name" value="{{ request.session.last_name|default:'' }}" required />
-            </div>
-            <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" value="{{ request.session.email|default:'' }}" required />
-            </div>
-            <div class="form-group">
-                <label for="phone">Telefon:</label>
-                <input type="text" id="phone" name="phone" value="{{ request.session.phone|default:'' }}" required />
+                <input type="text" id="first_name" name="first_name" required />
             </div>
             
-            <!-- Formularz adresowy -->
             <div class="form-group">
-                <label for="street">Ulica:</label>
-                <input type="text" id="street" name="street" value="{{ request.session.street|default:'' }}" />
+                <label for="last_name">Nazwisko:</label>
+                <input type="text" id="last_name" name="last_name" required />
             </div>
+            
+            <div class="form-group">
+                <label for="birth_date">Data urodzenia:</label>
+                <input type="date" id="birth_date" name="birth_date" required />
+            </div>
+            
             <div class="form-group">
                 <label for="city">Miejscowość:</label>
-                <input type="text" id="city" name="city" value="{{ request.session.city|default:'' }}" required />
+                <input type="text" id="city" name="city" required />
             </div>
+            
             <div class="form-group">
-                <label for="postal_code">Kod pocztowy:</label>
-                <input type="text" id="postal_code" name="postal_code" value="{{ request.session.postal_code|default:'' }}" required />
+                <label for="street">Ulica (opcjonalnie):</label>
+                <input type="text" id="street" name="street" />
             </div>
+        
             <div class="form-group">
-                <label for="house_number">Numer domu/mieszkania:</label>
-                <input type="text" id="house_number" name="house_number" value="{{ request.session.house_number|default:'' }}" required />
+                <label for="phone_number">Numer telefonu:</label>
+                <input type="tel" id="phone_number" name="phone_number" required placeholder="123-456-789" />
             </div>
-
+            
+            <div class="form-group house-number-group">
+                <div style="display: flex; gap: 10px;">
+                    <div class="form-group">
+                        <label for="postal_code">Kod pocztowy:</label>
+                        <input type="text" id="postal_code" name="postal_code" pattern="\d{2}-\d{3}" placeholder="00-000" required />
+                    </div>
+                    <div>
+                        <label for="house_number">Numer domu:</label>
+                        <input type="text" id="house_number" name="house_number" required />
+                    </div>
+                    <div>
+                        <label for="apartment_number">Numer mieszkania (opcjonalnie):</label>
+                        <input type="text" id="apartment_number" name="apartment_number" />
+                    </div>
+                </div>
+            </div>
+        
+            <!-- Wybór metody płatności -->
+            <div class="form-group">
+                <label for="payment_method">Metoda płatności:</label>
+                <select id="payment_method" name="payment_method" required>
+                    <option value="paypal">PayPal</option>
+                    <option value="credit_card">Karta kredytowa</option>
+                    <option value="cash_on_site">Gotówka (płatność na miejscu)</option>
+                </select>
+            </div>
+        
+            <!-- Przyciski -->
             <div class="checkout-buttons">
-                <button type="submit" class="pay-now-btn">Przejdź do podsumowania</button>
-                <a href="{% url 'orders:cart' %}" class="back-to-cart-button">Wróć do koszyka</a>
+                <button type="submit" class="pay-now-btn">Podsumowanie</button>
             </div>
         </form>
     </div>
 </div>
+
 {% endblock %}

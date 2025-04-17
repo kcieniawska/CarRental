@@ -1,26 +1,23 @@
 from django import forms
 from .models import Order
-from .models import Car
 
 class OrderForm(forms.ModelForm):
+    # Dodajemy pole dla daty urodzenia
+    birth_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}), required=True)
+
+    # Dodajemy pole dla numeru mieszkania
+    apartment_number = forms.CharField(required=False, max_length=20)
+
     class Meta:
         model = Order
-        fields = ['first_name', 'last_name', 'email', 'phone', 'street', 'city', 'postal_code', 'house_number', 'payment_method', 'car', 'start_date', 'end_date']
+        fields = [
+            'first_name', 'last_name', 'birth_date', 'email', 'phone_number',
+            'street', 'city', 'postal_code', 'house_number', 'apartment_number', 'payment_method'
+        ]
 
-    # Możesz ustawić pola jako wymagane w formularzu
-    first_name = forms.CharField(max_length=100, required=True)
-    last_name = forms.CharField(max_length=100, required=True)
-    email = forms.EmailField(required=True)
-    phone = forms.CharField(max_length=20, required=True)
-    street = forms.CharField(max_length=200, required=False)  # Możesz ustawić na `required=True`, jeśli jest wymagane
-    city = forms.CharField(max_length=100, required=True)  # Wymagane
-    postal_code = forms.CharField(max_length=20, required=True)  # Wymagane
-    house_number = forms.CharField(max_length=20, required=True)  # Wymagane
-    payment_method = forms.ChoiceField(choices=Order.PAYMENT_METHODS, required=True)  # Wymagane
-    
-    # Dodajemy pole na samochód (wybór samochodu do wynajmu)
-    car = forms.ModelChoiceField(queryset=Car.objects.all(), required=True)
-
-    # Dodajemy pola na daty wynajmu (rozpoczęcia i zakończenia)
-    start_date = forms.DateField(required=True, widget=forms.SelectDateWidget)
-    end_date = forms.DateField(required=True, widget=forms.SelectDateWidget)
+    # Dodatkowa walidacja, jeśli chcesz sprawdzić np. czy email jest poprawny
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if not email:
+            raise forms.ValidationError("Email jest wymagany.")
+        return email

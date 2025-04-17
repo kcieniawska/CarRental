@@ -21,7 +21,7 @@
 
                             <!-- Link do edytowania profilu -->
                             <div class="text-center mt-4">
-                                <a href="{% url 'edit_profile' %}" class="btn btn-warning">Edytuj profil</a>
+                                <a href="{% url 'edit_profile' %}" class="btn-edit-profile">Edytuj profil</a>
                             </div>
                         </div>
                     </div>
@@ -37,7 +37,7 @@
                 </div>
                 <div class="card-body">
                     {% if user.orders.all %}
-                        <table class="table table-profile-orders">
+                    <table class="table table-profile-orders">
                             <thead>
                                 <tr>
                                     <th scope="col">Samochód</th>
@@ -53,8 +53,18 @@
                                     <td>{{ order.car }}</td>
                                     <td>{{ order.rental_days }}</td>
                                     <td>{{ order.total_price }} PLN</td>
-                                    <td>{{ order.get_status_display }}</td>
-                                    <td>{{ order.rental_date|date:"d M Y" }}</td>
+                                    <td>
+                                        {% if order.status == 'completed' %}
+                                            <span class="badge bg-success">Zrealizowane</span>
+                                        {% elif order.status == 'in_progress' %}
+                                            <span class="badge bg-warning">W trakcie</span>
+                                        {% elif order.status == 'not_completed' %}
+                                            <span class="badge bg-danger">Niezrealizowane</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">Brak statusu</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ order.rental_date }}</td> 
                                 </tr>
                                 {% endfor %}
                             </tbody>

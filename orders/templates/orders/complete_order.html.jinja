@@ -1,0 +1,20 @@
+{% extends 'base.html.jinja' %}
+
+{% block content %}
+<div class="order-complete-page">
+    <div class="confetti-wrapper">
+        <div class="confetti"></div>
+        <div class="confetti"></div>
+        <div class="confetti"></div>
+    </div>
+
+    <div class="order-complete-container">
+        <h1>🎉 Zamówienie zrealizowane! </h1>
+        <p>Dziękujemy, <strong>{{ request.session.first_name }}</strong> za skorzystanie z naszej wypożyczalni!</p>
+        <p>Twój samochód już czeka na Ciebie 🏎️</p>
+        <p>Wkrótce się z Tobą skontaktujemy, a wszystkie szczegóły znajdziesz w swoim panelu.</p>
+
+        <a href="/" class="back-home-btn">🏠 Wróć na stronę główną</a>
+    </div>
+</div>
+{% endblock %}

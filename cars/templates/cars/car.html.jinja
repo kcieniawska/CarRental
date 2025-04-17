@@ -43,19 +43,15 @@
             <h2 style="color: #333; margin-top: 50px; text-align: center;">Wypożycz samochód</h2>
             <div>
             {% if user.is_authenticated %}
-            <form method="POST" action="{% url 'orders:add_to_cart' car.id %}" id="add-to-cart-form">
+            <form method="POST" action="{% url 'orders:add_to_cart' car_id=car.id %}">
                 {% csrf_token %}
-                <div class="rental-dates">
-                    <label for="start_date">Data początkowa:</label>
-                    <input type="date" id="start_date" name="start_date" required>
-                </div>
-                <div class="rental-dates">
-                    <label for="end_date">Data końcowa:</label>
-                    <input type="date" id="end_date" name="end_date" required>
-                </div>
-                <div class="car-cta">
-                    <button type="submit" class="rent-button"><strong>Zarezerwuj teraz</strong></button>
-                </div>
+                <label for="start_date">Data rozpoczęcia:</label>
+                <input type="date" name="start_date" required>
+            
+                <label for="end_date">Data zakończenia:</label>
+                <input type="date" name="end_date" required>
+            
+                <button type="submit">Dodaj do koszyka</button>
             </form>
             {% else %}
             <div class="alert alert-warning">

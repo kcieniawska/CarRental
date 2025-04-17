@@ -15,7 +15,7 @@
                 {% if user.is_authenticated %}
                     <!-- Jeśli użytkownik jest zalogowany -->
                     <li> <a href="{% url 'profile' %}" class="user-profile">{{ user.username }}</a></li>
-                    <li><a href="{% url 'cart' %}">Koszyk</a></li>
+                    <li><a href="{% url 'orders:cart' %}">Koszyk</a></li>
                     <li><a href="{% url 'logout' %}">Wyloguj się</a></li>
                 {% else %}
                     <!-- Jeśli użytkownik nie jest zalogowany -->
