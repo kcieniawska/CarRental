@@ -54,19 +54,25 @@
                         <li><strong>Kod i miasto:</strong> {{ order.postal_code }} {{ order.city }}</li>
                     </ul>
                 </div>
-                <div>
-                    <!-- Dodaj opinię -->
-                    {% if order.status == 'completed' %}
-                        <div class="order-section">
-                            <h4 class="order-section-title">📝 Dodaj opinię o samochodzie</h4>
-                            <form method="POST" action="{% url 'orders:add_review' order.car.id %}">
-                                {% csrf_token %}
-                                <textarea name="content" rows="4" placeholder="Napisz swoją opinię..." required></textarea>
-                                <button type="submit" class="btn btn-primary mt-2">Wyślij opinię</button>
-                            </form>
-                        </div>
-                    {% endif %}
-                </div>
+
+                <!-- Dodaj opinię -->
+                {% if order.status == 'completed' %}
+                    <div class="order-section">
+                        <h4 class="order-section-title">📝 Dodaj opinię o samochodzie</h4>
+                        <form method="POST" action="{% url 'users:add_review' order.id %}">
+                            {% csrf_token %}
+                            <label for="rating">Ocena:</label>
+                            <select name="rating" required>
+                                <option value="">Wybierz ocenę</option>
+                                {% for i in "12345"|make_list %}
+                                    <option value="{{ i }}">{{ i }} ★</option>
+                                {% endfor %}
+                            </select>
+                            <textarea name="content" rows="4" placeholder="Napisz swoją opinię..." required></textarea>
+                            <button type="submit" class="btn btn-primary mt-2">Wyślij opinię</button>
+                        </form>
+                    </div>
+                {% endif %}
 
                 <!-- Powrót -->
                 <div class="order-back-btn-wrapper">

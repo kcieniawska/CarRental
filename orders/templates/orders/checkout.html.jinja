@@ -18,7 +18,6 @@
                 <tbody>
                         <tr>
                             <td>{{ request.session.car_brand }} {{ request.session.car_model }}</td>
-
                             <td>{{ request.session.start_date }}</td>
                             <td>{{ request.session.end_date }}</td>
                             <td>{{ request.session.total_price }} zł</td>
@@ -31,83 +30,104 @@
     <div class="checkout-form-container">
         <h2 class="checkout-title">Wypełnij dane</h2>
         <!-- Podsumowanie wynajmu -->
-
-<form method="POST" action="{% url 'orders:checkout' %}" class="checkout-form">
-    {% csrf_token %}
+        <form method="POST" action="{% url 'orders:checkout' %}" class="checkout-form" id="checkout-form">
+            {% csrf_token %}
     
-    <!-- Grupa pól obok siebie (Imię, Nazwisko) -->
-    <div class="form-group inline-fields">
-        <div class="field">
-            <label for="first_name">Imię:</label>
-            <input type="text" id="first_name" name="first_name" required />
-        </div>
-        <div class="field">
-            <label for="last_name">Nazwisko:</label>
-            <input type="text" id="last_name" name="last_name" required />
-        </div>
-    </div>
+            <div class="form-group inline-fields">
+                <div class="field">
+                    <label for="first_name">Imię:</label>
+                    <input type="text" id="first_name" name="first_name" required />
+                </div>
+                <div class="field">
+                    <label for="last_name">Nazwisko:</label>
+                    <input type="text" id="last_name" name="last_name" required />
+                </div>
+            </div>
 
-    <!-- Email, Telefon -->
-    <div class="form-group inline-fields">
-        <div class="field">
-            <label for="email">Twój email:</label>
-            <input type="email" id="email" name="email" required />
-        </div>
-        <div class="field">
-            <label for="phone_number">Numer telefonu:</label>
-            <input type="tel" id="phone_number" name="phone_number" required />
-        </div>
-    </div>
+            <!-- Email, Telefon -->
+            <div class="form-group inline-fields">
+                <div class="field">
+                    <label for="email">Twój email:</label>
+                    <input type="email" id="email" name="email" required />
+                </div>
+                <div class="field">
+                    <label for="phone_number">Numer telefonu:</label>
+                    <input type="tel" id="phone_number" name="phone_number" required pattern="^\+?[0-9]{9,15}$" placeholder="Np. +48123456789" />
+                </div>
+            </div>
 
-    <!-- Data urodzenia, Miasto -->
-    <div class="form-group inline-fields">
-        <div class="field">
-            <label for="birth_date">Data urodzenia:</label>
-            <input type="date" id="birth_date" name="birth_date" required />
-        </div>
-        <div class="field">
-            <label for="city">Miejscowość:</label>
-            <input type="text" id="city" name="city" required />
-        </div>
-    </div>
+            <!-- Data urodzenia, Miasto -->
+            <div class="form-group inline-fields">
+                <div class="field">
+                    <label for="birth_date">Data urodzenia:</label>
+                    <input type="date" id="birth_date" name="birth_date" required min="{{ min_birth_date }}" />
+                </div>
+                <div class="field">
+                    <label for="city">Miejscowość:</label>
+                    <input type="text" id="city" name="city" required />
+                </div>
+            </div>
 
-    <!-- Adres -->
-    <div class="form-group inline-fields">
-        <div class="field">
-            <label for="street">Ulica:</label>
-            <input type="text" id="street" name="street" required />
-        </div>
-        <div class="field">
-            <label for="house_number">Numer domu:</label>
-            <input type="text" id="house_number" name="house_number" required />
-        </div>
-        <div class="field">
-            <label for="apartment_number">Numer mieszkania:</label>
-            <input type="text" id="apartment_number" name="apartment_number" />
-        </div>
-        <div class="field">
-            <label for="postal_code">Kod pocztowy:</label>
-            <input type="text" id="postal_code" name="postal_code" required />
-        </div>
-    </div>
+            <!-- Adres -->
+            <div class="form-group inline-fields">
+                <div class="field">
+                    <label for="street">Ulica:</label>
+                    <input type="text" id="street" name="street" required />
+                </div>
+                <div class="field">
+                    <label for="house_number">Numer domu:</label>
+                    <input type="text" id="house_number" name="house_number" required pattern="^\d+[A-Za-z]*$" placeholder="Np. 12A" />
+                </div>
+            </div>
 
-    <!-- Metoda płatności -->
-    <div class="form-group">
-        <label for="payment_method">Metoda płatności:</label>
-        <select id="payment_method" name="payment_method" required>
-            <option value="paypal">PayPal</option>
-            <option value="credit_card">Karta kredytowa</option>
-            <option value="cash_on_site">Gotówka</option>
-        </select>
-    </div>
+            <!-- Numer mieszkania oraz Kod pocztowy w jednej grupie -->
+            <div class="form-group inline-fields">
+                <div class="field">
+                    <label for="apartment_number">Numer mieszkania:</label>
+                    <input type="text" id="apartment_number" name="apartment_number" />
+                </div>
+                <div class="field">
+                    <label for="postal_code">Kod pocztowy:</label>
+                    <input type="text" id="postal_code" name="postal_code" required pattern="^\d{2}-\d{3}$" placeholder="Np. 12-345" />
+                </div>
+            
+            </div>
 
-    <!-- Przyciski -->
-    <div class="form-buttons">
-        <a href="{% url 'orders:cart' %}" class="checkout-btn">◄ Cofnij do koszyka</a>
-        <button type="submit" class="checkout-btn">Przejdź do podsumowania ►</button>
-    </div>
-</form>
+            <!-- Metoda płatności -->
+            <div class="form-group">
+                <label for="payment_method">Metoda płatności:</label>
+                <select id="payment_method" name="payment_method" required>
+                    <option value="paypal">PayPal</option>
+                    <option value="credit_card">Karta kredytowa</option>
+                    <option value="cash_on_site">Gotówka</option>
+                </select>
+            </div>
 
+            <!-- Przyciski -->
+            <div class="form-buttons">
+                <a href="{% url 'orders:cart' %}" class="checkout-btn">◄ Cofnij do koszyka</a>
+                <button type="submit" class="checkout-btn">Przejdź do podsumowania ►</button>
+            </div>
+        </form>
     </div>
 </div>
+
+<!-- Skrypt walidacji formularza -->
+<script>
+    document.getElementById('checkout-form').addEventListener('submit', function(event) {
+        const birthDate = document.getElementById('birth_date').value;
+        const currentDate = new Date();
+        const minDate = new Date(currentDate.setFullYear(currentDate.getFullYear() - 21)); // Ustalamy datę 21 lat wstecz
+
+        const birthDateObject = new Date(birthDate);
+        if (birthDateObject > minDate) {
+            alert('Aby wypożyczyć samochód, musisz mieć przynajmniej 21 lat!');
+            event.preventDefault(); // Zatrzymanie wysyłki formularza
+            return false;
+        }
+
+        return true; // Formularz jest poprawny
+    });
+</script>
+
 {% endblock %}

@@ -12,19 +12,66 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from .forms import ReviewForm
 from django.contrib import messages
+from django.db.models import Count, Q, Avg
+from orders.models import Order, Review
 # Ustawienie loggera
 logger = logging.getLogger(__name__)
 
-# Strona główna - wyświetlanie wszystkich samochodów
+from django.db.models import Count, Q, Avg
+
+
+
 def index(request):
-    recommended_cars = Car.objects.filter(is_recommended=True)[:3]  # Pobieranie polecanych samochodów
+    # Samochody polecane
+    recommended_cars = Car.objects.filter(is_recommended=True)[:3]
+
+    # Najczęściej wynajmowane samochody
+    most_rented = Car.objects.annotate(
+        order_count=Count('orders')  # Liczymy zamówienia powiązane z samochodami
+    ).order_by('-order_count')[:3]
+
+    # Najczęściej recenzowane samochody
+    most_reviewed = Car.objects.annotate(
+        reviews_count=Count('car_reviews')  # Liczymy recenzje powiązane z samochodami
+    ).filter(reviews_count__gt=0)  # Tylko samochody z recenzjami
+
+    # Dodanie średniej oceny dla samochodów na podstawie recenzji
+    most_reviewed = most_reviewed.annotate(
+        avg_rating=Avg('car_reviews__rating')  # Liczymy średnią ocenę z recenzji
+    )
+
+    # Sortowanie według liczby recenzji i średniej oceny
+    most_reviewed = most_reviewed.order_by('-reviews_count', '-avg_rating')[:3]
+
     return render(request, 'cars/index.html.jinja', {
-        'recommended_cars': recommended_cars
+        'recommended_cars': recommended_cars,
+        'most_rented_cars': most_rented,
+        'most_reviewed_cars': most_reviewed,
     })
 # Strona szczegółów samochodu
 def car(request, car_id):
     car = get_object_or_404(Car, pk=car_id)
-    return render(request, 'cars/car.html.jinja', {'car': car})
+    
+    # Pobranie zatwierdzonych opinii
+    reviews = Review.objects.filter(car=car, is_approved=True)
+    
+    # Pobranie oczekujących opinii (niezatwierdzonych)
+    pending_reviews = Review.objects.filter(car=car, is_approved=False)
+    
+    # Sprawdzamy, czy użytkownik jest moderatorem
+    is_moderator = request.user.is_staff
+    
+    # Użytkownik, który dodał opinię
+    user_reviews = Review.objects.filter(user=request.user, car=car)
+
+    return render(request, 'cars/car.html.jinja', {
+        'car': car,
+        'reviews': reviews,
+        'pending_reviews': pending_reviews,
+        'is_moderator': is_moderator,
+        'user_reviews': user_reviews,
+    })
+
     
 def all_cars_view(request):
     cars = Car.objects.all()  # lub filtrujesz, jak chcesz
@@ -99,29 +146,3 @@ def logout_view(request):
     logout(request)
     logger.info(f'User {request.user.username} logged out.')
     return redirect('index')  # Przekierowanie po wylogowaniu
-
-@login_required
-def add_review(request, car_id):
-    car = get_object_or_404(Car, id=car_id)
-    
-    # Sprawdzamy, czy użytkownik już dodał opinię
-    if car.reviews.filter(user=request.user).exists():
-        messages.warning(request, "Już dodałeś opinię dla tego samochodu.")
-        return redirect('car', car_id=car.id)
-
-    if request.method == 'POST':
-        form = ReviewForm(request.POST)
-        if form.is_valid():
-            review = form.save(commit=False)
-            review.car = car
-            review.user = request.user
-            review.save()
-            messages.success(request, "Twoja opinia została dodana i czeka na zatwierdzenie przez moderatora.")
-            return redirect('car', car_id=car.id)
-    else:
-        form = ReviewForm()
-
-    return render(request, 'cars/car.html.jinja', {
-        'car': car,
-        'review_form': form,
-    })

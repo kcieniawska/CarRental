@@ -15,15 +15,15 @@
             </div>
 
             <p class="car-description-heading">{{ car.description }}</p>
-            <h2 style="margin-top: 50px;margin-bottom: 50px;">Podstawowe informacje</h2>
+            <h2 class="section-title">Podstawowe informacje</h2>
             <div class="car-specs">
                 <ul>
                     <li><strong>Rok produkcji:</strong> {{ car.year }}</li>
-                    <li><strong>Typ nadwozia:</strong> {{ car.body_type }}</li>
-                    <li><strong>Rodzaj paliwa:</strong> {{ car.engine_type }}</li>
+                    <li><strong>Typ nadwozia:</strong> {{ car.get_body_type_display }}</li>
+                    <li><strong>Rodzaj paliwa:</strong> {{ car.get_engine_type_display }}</li>
                     <li><strong>Pojemność silnika:</strong> {{ car.engine_capacity }} L</li>
                     <li><strong>Moc:</strong> {{ car.engine_power }} KM</li>
-                    <li><strong>Typ skrzyni biegów:</strong> {{ car.gearbox }}</li>
+                    <li><strong>Typ skrzyni biegów:</strong> {{ car.get_gearbox_display }}</li>
                     <li><strong>Zużycie paliwa:</strong> {{ car.fuel_consumption }} L/100km</li>
                     <li><strong>Liczba drzwi:</strong> {{ car.doors_count }}</li>
                     <li><strong>Liczba miejsc:</strong> {{ car.seats_count }}</li>
@@ -40,30 +40,26 @@
                 </div>
             </div>
 
-            <h2 style="color: #333; margin-top: 50px; text-align: center;">Wypożycz samochód</h2>
-            <div><br>
+            <h2 class="section-title">Wypożycz samochód</h2>
+            <div>
             {% if user.is_authenticated %}
-            <form method="POST" action="{% url 'orders:add_to_cart' car_id=car.id %}" class="order-form">
+            <form method="POST" action="{% url 'orders:add_to_cart' car_id=car.id %}" class="order-form" id="rental-form">
                 {% csrf_token %}
             
                 <div class="form-group">
                     <label for="start_date">Data rozpoczęcia:</label>
-                    <input type="date" name="start_date" required>
+                    <input type="date" name="start_date" id="start_date" required min="{{ current_date }}">
                 </div>
             
                 <div class="form-group">
                     <label for="end_date">Data zakończenia:</label>
-                    <input type="date" name="end_date" required>
+                    <input type="date" name="end_date" id="end_date" required min="{{ current_date }}">
                 </div>
             
-                <!-- Ukryte pole dla liczby dni wynajmu -->
                 <input type="hidden" name="rental_days" id="rental_days" value="">
-            
+
                 <button type="submit">Dodaj do koszyka</button>
             </form>
-            
-
-            
             {% else %}
             <div class="alert alert-warning">
                 <strong>Uwaga!</strong> Musisz być zalogowany, aby dokonać rezerwacji.
@@ -73,18 +69,73 @@
             </div>
 
             <div class="reviews-container">
-                <h2 style="margin-top: 50px; margin-bottom: 50px;">Opinie</h2>
-                <div class="reviews-section">
-                    {% for review in reviews %}
-                        <div class="review">
-                            <p><strong>{{ review.user.username }}</strong> ({{ review.created_at|date:"F j, Y, H:i" }})</p>
-                            <p>{{ review.content }}</p>
-                        </div>
-                    {% empty %}
-                        <p>Brak zatwierdzonych opinii.</p>
-                    {% endfor %}
-                </div>
+                <h2 class="section-title">Opinie</h2>
+            
+                {% if user.is_staff %}
+                    <li class="moderation-link"><a href="{% url 'orders:moderate_reviews' %}" class="moderation-link">👩‍🔧 ● Zarządzaj opiniami</a></li>
+                {% endif %}
+            
+                {% for review in reviews %}
+                    <div class="review-item">
+                        <p><strong>{{ review.user.username }}</strong> ({{ review.created_at|date:"d M Y, H:i" }})</p>
+                        <p>{{ review.content }}</p>
+                    </div>
+                {% empty %}
+                    <p>Brak zatwierdzonych opinii.</p>
+                {% endfor %}
+            
+                {% if is_moderator %}
+                    {% if pending_reviews %}
+                    <br><h3 class="pending-reviews-title">Opinie oczekujące na zatwierdzenie:</h3>
+                        <ul class="pending-reviews-list"><br>
+                            {% for review in pending_reviews %}
+                                <li class="pending-review-item"><strong>{{ review.user.username }}</strong> ({{ review.created_at|date:"d M Y, H:i" }}) - Oczekuje na zatwierdzenie</li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p>Brak opinii oczekujących na zatwierdzenie.</p>
+                    {% endif %}
+                {% endif %}
+            
+                {% if user_reviews %}
+                    <h3 class="user-reviews-title">Twoje opinie:</h3>
+                    <ul class="user-reviews-list"> 
+                        {% for review in user_reviews %}
+                            <li class="user-review-item"><strong>{{ review.created_at|date:"d M Y, H:i" }}:</strong> {{ review.content }} 
+                            {% if not review.is_approved %}
+                                - <span class="pending-approval">Oczekuje na zatwierdzenie</span>
+                            {% endif %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            
             </div>
         </div>
     </div>
+
+    <!-- Skrypt walidacji dat -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Ustawienie dzisiejszej daty w polu "start_date"
+            var today = new Date().toISOString().split('T')[0];
+            document.getElementById("start_date").setAttribute("min", today);
+            document.getElementById("end_date").setAttribute("min", today);
+
+            // Walidacja formularza przed wysłaniem
+            document.getElementById('rental-form').addEventListener('submit', function(event) {
+                var startDate = new Date(document.getElementById('start_date').value);
+                var endDate = new Date(document.getElementById('end_date').value);
+
+                // Sprawdzenie, czy data zakończenia nie jest wcześniejsza niż data rozpoczęcia
+                if (endDate < startDate) {
+                    alert("Data zakończenia nie może być wcześniejsza niż data rozpoczęcia.");
+                    event.preventDefault();
+                    return false;
+                }
+            });
+        });
+    </script>
+
 {% endblock %}

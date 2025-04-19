@@ -13,4 +13,19 @@ class OrderForm(forms.ModelForm):
             'street', 'city', 'postal_code', 'house_number', 'apartment_number', 'payment_method'
         ]
 
-    # 🔥 WALIDACJA USUNIĘTA, bo nie dotyczy tych danych
+from .models import Review
+
+class ReviewForm(forms.ModelForm):
+    class Meta:
+        model = Review
+        fields = ['content']
+        widgets = {
+            'content': forms.Textarea(attrs={
+                'rows': 4,
+                'placeholder': 'Napisz swoją opinię...',
+                'class': 'form-control'
+            })
+        }
+        labels = {
+            'content': 'Treść opinii',
+        }

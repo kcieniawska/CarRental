@@ -20,28 +20,60 @@
     </section>
 
     <!-- Sekcja 2: Poznaj nasze samochody -->
-    <section class="cars" id="polecane-samochody">
-        <h2>Polecane samochody</h2>
+    <section class="cars" id="najczesciej-wypozyczane">
+        <h2>Najczęściej wypożyczane</h2>
         <div class="car-list">
-            {% for car in recommended_cars %}
+            {% for car in most_rented_cars %}
                 <div class="car-item">
                     <a href="{% url 'cars:car_detail' car.id %}">
                         <img src="{{ car.image.url }}" alt="{{ car.brand }} {{ car.model }}">
                         <h3>{{ car.brand }} {{ car.model }}</h3>
+                        <div class="price"><span>Rocznik:</span> {{ car.year }}</div>
                         <div class="price"><span>Miejsce odbioru:</span> {{ car.location }}</div>
-                        <div class="price"><span>Rocznik:</span> {{ car.year }}</div><br>
-                        <div class="price"><span>Cena wynajmu:</span> {{ car.rent }} PLN/dzień</div>
+                        <div class="price"><span>Wypożyczeń:</span> {{ car.order_count }}</div>
                     </a>
                 </div>
             {% empty %}
-                <p>Brak polecanych samochodów.</p>
+                <p>Brak danych do wyświetlenia.</p>
             {% endfor %}
         </div>
-        <div class="center-button"><br>
-            <a href="{% url 'cars:all_cars' %}" class="btn-show-all">Zobacz wszystkie samochody</a>
+        <!-- Przycisk odnośnik do wszystkich samochodów w sekcji najczęściej wypożyczanych -->
+        <div class="cta-cars">
+            <a href={% url 'cars:all_cars' %} class="btn-most-rented">Zobacz wszystkie auta</a>
         </div>
     </section>
-
+    
+    <!-- Sekcja: Najczęściej oceniane -->
+    <section class="cars" id="najczesciej-oceniane">
+        <h2>Najczęściej oceniane</h2>
+        <div class="car-list">
+            {% for car in most_reviewed_cars %}
+                <div class="car-item">
+                    <a href="{% url 'cars:car_detail' car.id %}">
+                        <img src="{{ car.image.url }}" alt="{{ car.brand }} {{ car.model }}">
+                        <h3>{{ car.brand }} {{ car.model }}</h3>
+                        <div class="price"><span>Rocznik:</span> {{ car.year }}</div>
+                        <div class="rating">
+                            <span>Ocena: </span>
+                            {% for i in stars %}
+                                <span class="star{% if i <= car.avg_rating %} filled{% endif %}">★</span>
+                            {% endfor %}
+                            <!-- Dodajemy średnią ocenę -->
+                            <span class="average-rating">({{ car.avg_rating|floatformat:1 }})</span>
+                        </div>
+                    </a>
+                </div>
+            {% empty %}
+                <p>Brak ocenionych aut.</p>
+            {% endfor %}
+        </div>
+        <!-- Przycisk odnośnik do wszystkich samochodów w sekcji najczęściej ocenianych -->
+        <div class="cta-cars">
+            <a href="{% url 'cars:all_cars' %}" class="btn-most-reviewed">Zobacz wszystkie auta</a>
+        </div>
+    </section>
+    
+    
     <!-- Sekcja 3: Dlaczego wybrać naszą wypożyczalnię -->
     <section class="why-choose">
         <h2>Dlaczego warto wybrać PapayaRentCar?</h2>
@@ -70,68 +102,80 @@
     </section>
 
     <!-- Sekcja 4: FAQ -->
-    <section class="faq" id="faq">
-        <h2>Najczęściej zadawane pytania</h2>
+<section class="faq" id="faq">
+    <h2>Najczęściej zadawane pytania</h2><br>
+    <div class="faq-container">  <!-- Dodajemy kontener do wyśrodkowania pytań -->
         <div class="faq-item">
-            <h3>Jakie dokumenty są potrzebne, aby wynająć samochód?</h3>
+            <h3>🔸 Jakie dokumenty są potrzebne, aby wynająć samochód?</h3>
             <p>Aby wynająć samochód, potrzebujesz ważnego prawa jazdy oraz dowodu tożsamości. W niektórych przypadkach możemy poprosić o dodatkowe dokumenty.</p>
         </div>
         <div class="faq-item">
-            <h3>Czy mogę wynająć samochód na jeden dzień?</h3>
+            <h3>🔸 Czy mogę wynająć samochód na jeden dzień?</h3>
             <p>Tak, oferujemy wynajem na krótki okres, nawet na jeden dzień. Prosimy o wcześniejsze złożenie rezerwacji.</p>
         </div>
         <div class="faq-item">
-            <h3>Jakie są zasady ubezpieczenia samochodów?</h3>
+            <h3>🔸 Jakie są zasady ubezpieczenia samochodów?</h3>
             <p>Wszystkie nasze samochody są objęte podstawowym ubezpieczeniem OC. Istnieje również możliwość wykupienia dodatkowego ubezpieczenia, które obejmuje np. szkody własne, kradzież lub uszkodzenia opon.</p>
         </div>
         <div class="faq-item">
-            <h3>Czy mogę wynająć samochód, jeśli nie mam pełnych 25 lat?</h3>
+            <h3>🔸 Czy mogę wynająć samochód, jeśli nie mam pełnych 25 lat?</h3>
             <p>Tak, oferujemy wynajem dla kierowców powyżej 21. roku życia, jednak w przypadku osób poniżej 25. roku życia może obowiązywać dodatkowa opłata młodego kierowcy.</p>
         </div>
         <div class="faq-item">
-            <h3>Czy mogę zwrócić samochód wcześniej niż zaplanowano?</h3>
+            <h3>🔸 Czy mogę zwrócić samochód wcześniej niż zaplanowano?</h3>
             <p>Tak, możliwe jest wcześniejsze zwrócenie samochodu, jednak prosimy o kontakt w celu ustalenia szczegółów. W przypadku wcześniejszego zwrotu mogą obowiązywać dodatkowe opłaty.</p>
         </div>
         <div class="faq-item">
-            <h3>Czy oferujecie dostawę samochodów do miejsca zamieszkania?</h3>
+            <h3>🔸 Czy oferujecie dostawę samochodów do miejsca zamieszkania?</h3>
             <p>Tak, oferujemy usługę dostawy samochodu pod wskazany adres w wybranych lokalizacjach. Prosimy o wcześniejsze skontaktowanie się z nami, aby omówić szczegóły.</p>
         </div>
         <div class="faq-item">
-            <h3>Co się stanie, jeśli spóźnię się z oddaniem samochodu?</h3>
+            <h3>🔸 Co się stanie, jeśli spóźnię się z oddaniem samochodu?</h3>
             <p>Jeśli spóźnisz się z oddaniem samochodu, będziesz musiał zapłacić dodatkową opłatę za opóźnienie. W przypadku dużych opóźnień mogą obowiązywać dodatkowe koszty.</p>
         </div>
         <div class="faq-item">
-            <h3>Czy mogę wynająć samochód na długoterminowo?</h3>
+            <h3>🔸 Czy mogę wynająć samochód na długoterminowo?</h3>
             <p>Tak, oferujemy wynajem długoterminowy. Możemy zaproponować korzystniejsze warunki i zniżki dla klientów, którzy wynajmują pojazd na dłuższy okres.</p>
         </div>
         <div class="faq-item">
-            <h3>Czy samochód jest dostarczany z pełnym bakiem?</h3>
+            <h3>🔸 Czy samochód jest dostarczany z pełnym bakiem?</h3>
             <p>Tak, wszystkie nasze pojazdy są wydawane z pełnym bakiem. Prosimy o zwrócenie pojazdu z pełnym bakiem, aby uniknąć dodatkowych opłat.</p>
         </div>
         <div class="faq-item">
-            <h3>Czy mogę wynająć samochód za granicą?</h3>
+            <h3>🔸 Czy mogę wynająć samochód za granicą?</h3>
             <p>Wynajem samochodu za granicą jest możliwy w wybranych lokalizacjach. Prosimy o kontakt przed dokonaniem rezerwacji, aby upewnić się, że oferujemy wynajem w kraju, do którego się wybierasz.</p>
         </div>
         <div class="faq-item">
-            <h3>Jak mogę zmienić lub anulować moją rezerwację?</h3>
+            <h3>🔸 Jak mogę zmienić lub anulować moją rezerwację?</h3>
             <p>Możesz zmienić lub anulować rezerwację do 24 godzin przed planowanym odbiorem pojazdu. W takim przypadku nie pobieramy żadnej opłaty. Po tym czasie mogą obowiązywać opłaty za anulowanie.</p>
         </div>
         <div class="faq-item">
-            <h3>Czy mogę wynająć samochód, jeśli nie mam karty kredytowej?</h3>
+            <h3>🔸 Czy mogę wynająć samochód, jeśli nie mam karty kredytowej?</h3>
             <p>Tak, w większości przypadków akceptujemy płatności gotówką lub przelewem. Jednak do zabezpieczenia kaucji wymagamy posiadania karty kredytowej.</p>
         </div>
-    </section>
+        <div class="faq-item" style="background-color: #E56717; color: #fff;">
+            <h3 style="text-align: center;"><a style="text-decoration:none; color: #fff;" href="/contact/">🔸 Chcesz zadać pytanie? Skontaktuj się z nami!</a> 🔸</h3>
+        </div>
+    </div>  <!-- Zakończenie kontenera faq-container -->
+</section>
+
 
     <!-- Skrypt JavaScript - Dodaj na końcu, przed zamknięciem tagu </body> -->
     <script>
         // Wyszukiwanie wszystkich pytań w FAQ
         const faqItems = document.querySelectorAll('.faq-item h3');
-
+    
         // Dodanie zdarzenia kliknięcia dla każdego pytania
         faqItems.forEach(item => {
             item.addEventListener('click', function() {
                 // Toggle dla klasy 'open', aby rozwijać i zwijać odpowiedzi
                 const faqItem = item.parentElement;
+                const answer = faqItem.querySelector('p');
+                
+                // Przełączamy widoczność odpowiedzi
+                answer.style.display = (answer.style.display === 'block') ? 'none' : 'block';
+                
+                // Dodajemy klasę 'open', aby zmienić tło
                 faqItem.classList.toggle('open');
             });
         });

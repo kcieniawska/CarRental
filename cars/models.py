@@ -70,9 +70,22 @@ class Car(models.Model):
     mileage_limit = models.PositiveIntegerField()  
     equipment = models.ManyToManyField(Equipment)  # Relacja M:N do modelu Equipment
     is_recommended = models.BooleanField(default=False)
+    
 
     def __str__(self):
         return f"{self.brand} {self.model} ({self.year})"
+    average_rating = models.DecimalField(max_digits=3, decimal_places=2, default=0)
+
+    def __str__(self):
+        return f"{self.brand} {self.model}"
+
+    def update_average_rating(self):
+        """Metoda do aktualizacji średniej oceny samochodu na podstawie opinii"""
+        reviews = self.reviews.all()
+        if reviews:
+            total_rating = sum([review.rating for review in reviews])
+            self.average_rating = total_rating / len(reviews)
+            self.save()
 #Model opinii
 class Review(models.Model):
     car = models.ForeignKey(Car, related_name='reviews', on_delete=models.CASCADE)

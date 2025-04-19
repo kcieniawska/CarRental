@@ -1,0 +1,58 @@
+{% extends "base.html.jinja" %}
+
+{% block title %}Moderacja opinii{% endblock %}
+
+{% block content %}
+    <div class="moderation-container">
+        <h2 class="moderation-header">Opinie do zatwierdzenia</h2>
+
+        {% if pending_reviews %}
+            <ul class="moderation-review-list">
+                {% for review in pending_reviews %}
+                    <li class="moderation-review-item">
+                        <div class="review-header">
+                            <strong>Auto:</strong> {{ review.car.brand }} {{ review.car.model }}<br>
+                            <strong>Użytkownik:</strong> {{ review.user.username }}<br>
+                            <strong>Data dodania:</strong> {{ review.created_at|date:"d M Y, H:i" }}<br>
+                        </div>
+                        
+                        <div class="review-content">
+                            <strong>Treść opinii:</strong><br>
+                            <p class="review-text">{{ review.review_content }}</p>
+                        </div>
+                        
+                        <div class="review-rating">
+                            <strong>Ocena:</strong>
+                            <span class="review-stars">
+                                {% for i in review.full_stars %}
+                                    <span class="star">&#9733;</span> <!-- pełna gwiazdka -->
+                                {% endfor %}
+                                {% for i in review.empty_stars %}
+                                    <span class="star-empty">&#9734;</span> <!-- pusta gwiazdka -->
+                                {% endfor %}
+                            </span>
+                        </div>
+
+                        <div class="moderation-actions-centered">
+                            <div class="moderation-actions">
+                                <form method="post" action="{% url 'orders:approve_review' review.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn-approve">Zatwierdź</button>
+                                </form>
+                        
+                                <form method="post" action="{% url 'orders:delete_review' review.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn-delete">Usuń</button>
+                                </form>
+                            </div>
+                        </div>
+                        
+                    </li>
+                {% endfor %}
+            </ul>
+        
+        {% else %}
+            <p class="moderation-no-reviews">Brak opinii do zatwierdzenia.</p>
+        {% endif %}
+    </div>
+{% endblock %}

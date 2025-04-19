@@ -1,0 +1,13 @@
+{% extends 'base.html.jinja' %}
+
+{% block content %}
+  <h1>Dodaj opinię o {{ car.brand }} {{ car.model }}</h1>
+
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Dodaj opinię</button>
+  </form>
+
+  <p><a href="{% url 'car_detail' car.id %}">Powrót do szczegółów samochodu</a></p>
+{% endblock %}

@@ -24,7 +24,20 @@ class CustomUser(AbstractUser):
     profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
     birth_date = models.DateField(null=True, blank=True)
 
-    objects = CustomUserManager()  # Użycie własnego menedżera
+    objects = CustomUserManager()
+
+    # Dodajemy related_name, aby rozwiązać konflikt w nazwach
+    groups = models.ManyToManyField(
+        'auth.Group', 
+        related_name='user_set_users',  # Zmieniamy nazwę odwrotnego powiązania
+        blank=True,
+    )
+    
+    user_permissions = models.ManyToManyField(
+        'auth.Permission', 
+        related_name='user_set_users',  # Zmieniamy nazwę odwrotnego powiązania
+        blank=True,
+    )
 
     def __str__(self):
         return self.username

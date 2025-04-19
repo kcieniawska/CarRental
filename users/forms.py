@@ -2,6 +2,7 @@ from django import forms
 from .models import CustomUser
 from django.core.exceptions import ValidationError
 
+
 # Formularz do rejestracji użytkownika
 class CustomUserCreationForm(forms.ModelForm):
     password1 = forms.CharField(label="Hasło", widget=forms.PasswordInput)

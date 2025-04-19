@@ -43,7 +43,9 @@ def user_login(request):
         form = AuthenticationForm()
     return render(request, 'users/login.html.jinja', {'form': form})
 
-
+@login_required
+def profile_view(request):
+    return render(request, 'users/profile.html.jinja')  # Twoja strona profilu
 # Widok edycji profilu
 @login_required
 def edit_profile(request):
@@ -56,10 +58,9 @@ def edit_profile(request):
         user.save()
         messages.success(request, 'Profil został pomyślnie zaktualizowany!')
 
-        return redirect('profile')
-
+        return redirect('users:profile')  # Upewnij się, że używasz prefiksu 'users:'
+    
     return render(request, 'users/edit_profile.html.jinja')
-
 
 # Widok wylogowania
 def logout_view(request):
@@ -101,3 +102,41 @@ def create_order(request):
     else:
         form = OrderForm()
     return render(request, 'users/create_order.html.jinja', {'form': form})
+
+from django.shortcuts import render, get_object_or_404, redirect
+from orders.models import Review
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+
+def add_review(request, order_id):
+    # Pobierz zamówienie na podstawie order_id
+    order = get_object_or_404(Order, id=order_id)
+    
+    # Pobierz powiązany samochód z zamówienia
+    car = order.car
+
+    if request.method == 'POST':
+        # Pobierz dane z formularza
+        rating = request.POST.get('rating')
+        content = request.POST.get('content')
+
+        # Sprawdź, czy dane są poprawne
+        if rating and content:
+            # Utwórz nową opinię
+            review = Review.objects.create(
+                car=car,
+                user=request.user,
+                rating=rating,
+                content=content,
+            )
+            review.save()
+            
+            # Wyświetl komunikat o sukcesie
+            messages.success(request, "Twoja opinia została pomyślnie dodana!")
+
+            # Przekieruj do strony szczegółów samochodu
+            return redirect('cars:car_detail', car_id=car.id)
+        else:
+            messages.error(request, "Proszę wypełnić wszystkie pola!")
+
+    return render(request, 'users/add_review.html.jinja', {'car': car, 'order': order})

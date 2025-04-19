@@ -2919,3 +2919,359 @@ button[type="submit"].remove-item:hover {
     background-color: #ff9900;
     color: #fff;
 }
+/* Sekcja opinii */
+.order-section form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.order-section form label {
+    font-weight: bold;
+    margin-bottom: 0.2rem;
+    color: #333;
+}
+
+.order-section select,
+.order-section textarea {
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+    font-family: Roboto;
+}
+
+.order-section select:focus,
+.order-section textarea:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
+}
+
+.order-section textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.order-section .btn {
+    align-self: flex-start;
+    background-color: #f27005;
+    color: white;
+    padding: 0.5rem 1.25rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s ease;
+}
+
+.order-section .btn:hover {
+    background-color: #f76c09;
+}
+/* Dodanie tła i ogólnej ramki dla całego panelu moderacji */
+/* Stylizacja kontenera i nagłówka */
+.moderation-container {
+    margin: 30px;
+}
+
+.moderation-header {
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 30px;
+    color: #333;
+}
+
+/* Lista opinii */
+.moderation-review-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.moderation-review-item {
+    background-color: #f9f9f9;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Sekcje opinii */
+.review-header {
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+}
+
+.review-content {
+    margin-bottom: 15px;
+}
+
+.review-text {
+    font-size: 1rem;
+    color: #555;
+}
+
+/* Ocena gwiazdkowa */
+.review-stars {
+    font-size: 1.5rem;
+    color: #ffb400; /* Złota kolor gwiazdek */
+}
+
+.star {
+    color: #ffb400;
+}
+
+.star-empty {
+    color: #ccc;
+}
+
+/* Przyciski */
+.moderation-actions-centered {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+.moderation-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.btn-approve,
+.btn-delete {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.btn-approve {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.btn-delete {
+    background-color: #f44336;
+    color: white;
+}
+
+/* Brak opinii do zatwierdzenia */
+.moderation-no-reviews {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #777;
+}
+
+/* Responsywność */
+@media (max-width: 768px) {
+    .moderation-review-list {
+        padding: 10px;
+    }
+
+    .moderation-review-item {
+        margin: 10px 0;
+        padding: 15px;
+    }
+
+    .moderation-approve-btn {
+        width: 100%;
+        padding: 12px;
+        font-size: 1.2rem;
+    }
+}
+/* Stylizacja gwiazdek */
+.review-stars {
+    font-size: 1.5rem;
+    color: #ffd700; /* Złoty kolor dla pełnych gwiazdek */
+}
+
+.star {
+    color: #ffd700;
+}
+
+.star-empty {
+    color: #ddd; /* Kolor szary dla pustych gwiazdek */
+}
+
+/* Opcjonalnie, możesz dodać margines między gwiazdkami */
+.star, .star-empty {
+    margin-right: 5px;
+}
+
+/* Opinie */
+.reviews-container {
+    margin-top: 50px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.review-item {
+    border-bottom: 1px solid #ddd;
+    padding: 15px 0;
+}
+
+.review-item p {
+    margin: 0;
+    font-size: 1rem;
+    color: #555;
+}
+
+li.moderation-link {
+    text-decoration: none;
+    color: #ff6a13;
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
+.moderation-link {
+    color: #ff6a13;
+    font-weight: bold;
+    list-style-type: none;
+    text-decoration: none;
+}
+
+/* Komunikaty o oczekujących opiniach */
+.pending-reviews-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #ff6a13;
+}
+
+.pending-reviews-list {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.pending-review-item {
+    font-size: 1rem;
+    color: #555;
+}
+
+.pending-approval {
+    color: #ffcc00;
+    font-weight: bold;
+}
+
+/* Alert */
+.alert-warning {
+    background-color: #fff3cd;
+    color: #856404;
+    border-radius: 5px;
+    padding: 15px;
+    margin-top: 20px;
+}
+
+.alert-warning a {
+    color: #ff6a13;
+}
+
+.btn-login {
+    color: #ff6a13;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.btn-login:hover {
+    text-decoration: underline;
+}
+
+
+/* Sekcja FAQ */
+.faq {
+    background-color: #f9f9f9; /* Tło przypominające inne sekcje */
+    border-radius: 8px; /* Zaokrąglone rogi dla spójności z innymi kartami */
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Delikatny cień wokół sekcji */
+    max-width: 1200px; /* Maksymalna szerokość, jak inne sekcje */
+    width: 100%; /* Cała dostępna szerokość */
+    margin: 0 auto; /* Wyśrodkowanie sekcji */
+}
+
+/* Kontener do wyśrodkowania elementów */
+.faq .faq-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Wyśrodkowanie pytania w pionie */
+    gap: 20px; /* Odstęp między pytaniami */
+}
+
+/* Styl dla każdego pytania (faq-item) */
+.faq-item {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%; /* Pełna szerokość, ale max-width kontroluje szerokość */
+    max-width: 600px; /* Maksymalna szerokość dla każdego pytania */
+    box-sizing: border-box;
+    text-align: left;
+}
+
+/* Nagłówki pytań */
+.faq-item h3 {
+    margin: 0;
+    font-size: 16px;
+}
+
+/* Efekt hover */
+.faq-item:hover {
+    background-color: #f0f0f0;
+}
+
+/* Styl dla odpowiedzi */
+.faq-item p {
+    display: none;
+    margin-top: 15px;
+    font-size: 1.1em;
+    color: #666;
+    text-align: left;
+}
+
+/* Aktywne pytanie (zmiana tła) */
+.faq-item.open {
+    background-color: #e0f7fa;
+}
+
+/* Przycisk dla sekcji "Najczęściej wypożyczane" */
+.btn-most-rented {
+    background-color: #ff8401; /* Kolor tła */
+    color: white; /* Kolor tekstu */
+    padding: 12px 24px; /* Wymiary przycisku */
+    text-align: center; /* Wyśrodkowanie tekstu */
+    text-decoration: none; /* Brak podkreślenia */
+    font-size: 16px; /* Rozmiar czcionki */
+    border-radius: 5px; /* Zaokrąglenie rogów */
+    display: inline-block;
+    margin-top: 20px; /* Przestrzeń nad przyciskiem */
+    transition: background-color 0.3s ease; /* Animacja zmiany koloru */
+    font-weight: bold;
+}
+
+.btn-most-rented:hover {
+    background-color: rgb(179, 57, 20);/* Zmiana koloru po najechaniu */
+}
+
+/* Przycisk dla sekcji "Najczęściej oceniane" */
+.btn-most-reviewed {
+    background-color: #ff8401; /* Kolor tła */
+    color: white; /* Kolor tekstu */
+    padding: 12px 24px; /* Wymiary przycisku */
+    text-align: center; /* Wyśrodkowanie tekstu */
+    text-decoration: none; /* Brak podkreślenia */
+    font-size: 16px; /* Rozmiar czcionki */
+    border-radius: 5px; /* Zaokrąglenie rogów */
+    display: inline-block;
+    margin-top: 20px; /* Przestrzeń nad przyciskiem */
+    transition: background-color 0.3s ease; /* Animacja zmiany koloru */
+    font-weight: bold;
+}
+
+.btn-most-reviewed:hover {
+    background-color: rgb(179, 57, 20); /* Zmiana koloru po najechaniu */
+}

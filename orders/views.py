@@ -13,6 +13,7 @@ from .models import Cart, Order, CartItem, OrderItem
 from cars.models import Car
 from .forms import OrderForm
 from django.views.decorators.http import require_POST
+from .forms import ReviewForm
 
 
 # === Pomocnicze ===
@@ -142,6 +143,11 @@ def checkout(request):
         'total_price': request.session.get('total_price'),
     })
 
+def checkout_view(request):
+    # Obliczanie minimalnej daty urodzenia (21 lat temu)
+    min_birth_date = date.today().replace(year=date.today().year - 21).isoformat()
+    
+    return render(request, 'checkout.html', {'min_birth_date': min_birth_date})
 
 # === Summary ===
 @login_required
@@ -384,3 +390,94 @@ def cart_view(request):
         'total_price': total_price,
     })
 # === Pomocnicza funkcja do tworzenia zamówienia z koszyka ===
+@login_required
+def add_review(request, car_id):
+    # Sprawdź, czy użytkownik ma zakończone zamówienie na ten samochód
+    order = get_object_or_404(Order, user=request.user, car_id=car_id, status='completed')
+
+    # Sprawdź, czy użytkownik już dodał opinię
+    if Review.objects.filter(user=request.user, car_id=car_id, is_approved=False).exists():
+        messages.error(request, "Już dodałeś opinię o tym samochodzie.")
+        return redirect('car_detail', car_id=car_id)
+
+    if request.method == 'POST':
+        content = request.POST.get('content')
+        if content:
+            # Utwórz nową opinię
+            review = Review.objects.create(
+                user=request.user,
+                car_id=car_id,
+                content=content,
+                is_approved=False  # Opinia jest początkowo oczekująca na zatwierdzenie
+            )
+            review.save()
+            messages.success(request, "Opinia została dodana i oczekuje na zatwierdzenie.")
+            return redirect('car_detail', car_id=car_id)
+    return redirect('car_detail', car_id=car_id)
+
+
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib import messages
+from .models import Review
+from cars.models import Car
+
+
+@login_required
+def add_review(request, car_id):
+    car = Car.objects.get(id=car_id)
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.user = request.user
+            review.car = car
+            review.save()
+            return redirect('cars:car_detail', car_id=car.id)
+    else:
+        form = ReviewForm()
+    return render(request, 'orders/add_review.html', {'form': form, 'car': car})
+from django.shortcuts import render
+from .models import Review
+from django.contrib.auth.decorators import user_passes_test
+
+def is_moderator(user):
+    return user.is_staff
+
+@user_passes_test(is_moderator)
+def moderate_reviews(request):
+    reviews = Review.objects.filter(is_approved=False)  # Niezatwierdzone opinie
+    return render(request, 'orders/moderate_reviews.html', {'reviews': reviews})
+
+# Zatwierdzanie opinii
+@user_passes_test(is_moderator)
+def approve_review(request, review_id):
+    review = Review.objects.get(id=review_id)
+    review.is_approved = True
+    review.save()
+    return redirect('orders:moderate_reviews')
+
+def moderate_reviews_view(request):
+    # Tylko moderatorzy mają dostęp do tego widoku
+    if not request.user.is_staff:
+        return redirect(' ')  # Można przekierować użytkownika, jeśli nie jest moderatorem
+
+    # Pobierz wszystkie oczekujące na zatwierdzenie opinie
+    pending_reviews = Review.objects.filter(is_approved=False)
+
+    # Obliczanie pełnych i pustych gwiazdek dla każdej recenzji
+    for review in pending_reviews:
+        review.full_stars = [1] * review.rating  # używamy 'rating' zamiast 'review_rating'
+        review.empty_stars = [1] * (5 - review.rating)  # używamy 'rating' zamiast 'review_rating'
+
+    return render(request, 'orders/moderate_reviews.html.jinja', {
+        'pending_reviews': pending_reviews,
+    })
+def delete_review(request, review_id):
+    # Pobieramy opinię na podstawie ID
+    review = get_object_or_404(Review, id=review_id)
+    
+    # Usuwamy opinię
+    review.delete()
+
+    # Po usunięciu przekierowujemy z powrotem do widoku moderacji opinii
+    return redirect('orders:moderate_reviews')
