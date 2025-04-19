@@ -13,7 +13,7 @@
     <ul class="category-grid">
         {% for category in categories %}
         <li class="category-card">
-            <a href="{% url 'category_detail' category.0 %}">
+            <a href="{% url 'cars:category_detail' category.0 %}">
                 <div class="category-card-content">
                     <h3>{{ category.1|capfirst }}</h3>
                 </div>

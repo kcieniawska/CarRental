@@ -65,7 +65,7 @@ class Car(models.Model):
     year = models.PositiveSmallIntegerField()  
     location = models.CharField(max_length=100)  
     available = models.BooleanField(default=True)  
-    rent = models.DecimalField(max_digits=10, decimal_places=2)  
+    rent = models.DecimalField(max_digits=10, decimal_places=2, default=0)  
     value = models.PositiveIntegerField()  
     mileage_limit = models.PositiveIntegerField()  
     equipment = models.ManyToManyField(Equipment)  # Relacja M:N do modelu Equipment

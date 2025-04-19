@@ -3,45 +3,58 @@
 {% block content %}
 <h1 style="margin-bottom: 50px;">Twój koszyk</h1>
 
-{% if request.session.cart %}
+{% if cart_items %}
     <div class="cart-table-wrapper">
         <table class="cart-table">
             <thead>
                 <tr>
                     <th>Samochód</th>
-                    <th>Data rozpoczęcia</th>
-                    <th>Data zakończenia</th>
+                    <th>Okres</th>
                     <th>Liczba dni</th>
-                    <th>Akcja</th>
                     <th>Cena</th>
+                    <th>Akcja</th>
                 </tr>
             </thead>
             <tbody>
-                {% for item in request.session.cart %}
+                {% for item in cart_items %}
                 <tr>
-                    <td>{{ item.car_brand }} {{ item.car_model }}</td>
-                    <td>{{ item.start_date }}</td>
-                    <td>{{ item.end_date }}</td>
+                    <td>{{ item.car.brand }} {{ item.car.model }}</td>
+                    <td>{{ item.start_date }} – {{ item.end_date }}</td>
                     <td>{{ item.rental_days }}</td>
+                    <td>{{ item.total_price }} PLN</td>
                     <td>
-                        <form method="POST" action="{% url 'orders:remove_from_cart' item.car_id %}">
+                        <form method="POST" action="{% url 'orders:remove_from_cart' item.car.id %}">
                             {% csrf_token %}
-                            <button type="submit" class="remove-btn">Usuń</button>
+                            <button type="submit" class="remove-item">Usuń</button>
                         </form>
                     </td>
-                    <td>{{ item.total_price }} zł</td>
                 </tr>
                 {% endfor %}
+                <tr class="total-row">
+                    <td colspan="4" class="total-label"><strong>Łączna cena wynajmu:</strong></td>
+                    <td class="total-price"><strong>{{ total_price }} PLN</strong></td>
+                </tr>
             </tbody>
         </table>
-    </div>
-    <div class="checkout-button-container">
-        <a href="{% url 'orders:checkout' %}" class="btn btn-primary btn-checkout btn-papaya-orange">Przejdź do podsumowania zamówienia</a>
+        <form method="POST" action="{% url 'orders:clear_cart' %}">
+            {% csrf_token %}
+            <button type="submit" class="clear-cart">Wyczyść koszyk</button>
+        </form>
     </div>
 
+    <div class="cart-summary">
+        <a href="{% url 'cars:all_cars' %}" class="btn btn-secondary btn-checkout mr-3">
+            ◄ Nasze samochody
+        </a>
+        <form method="POST" action="{% url 'orders:checkout' %}">
+            {% csrf_token %}
+            <input type="hidden" name="from_cart" value="true">
+            <a href="{% url 'orders:checkout' %}" class="btn btn-secondary btn-checkout mr-3">Przejdź dalej ►</a>
+        </form>
+    </div>
+    
 {% else %}
     <p class="empty-cart-message">Twój koszyk jest pusty.</p>
-    <a href="{% url 'all_cars' %}" class="btn-browse">🚗 Poznaj nasze samochody</a>
+    <a href="{% url 'cars:all_cars' %}" class="btn-browse">🚗 Poznaj nasze samochody</a>
 {% endif %}
-
 {% endblock %}

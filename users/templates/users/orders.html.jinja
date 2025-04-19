@@ -1,0 +1,80 @@
+{% extends 'base.html.jinja' %}
+
+{% block content %}
+<div class="order-container">
+    <div class="order-wrapper">
+        <div class="order-card">
+            <div class="order-header">
+                <h3>Szczegóły zamówienia #{{ order.id }}</h3>
+            </div>
+            <div class="order-body">
+
+                <!-- Dane użytkownika -->
+                <div class="order-section">
+                    <h4 class="order-section-title">🧑‍💼 Dane użytkownika</h4>
+                    <ul class="order-list">
+                        <li><strong>Imię i nazwisko:</strong> {{ order.first_name }} {{ order.last_name }}</li>
+                        <li><strong>Email:</strong> {{ order.email }}</li>
+                        <li><strong>Telefon:</strong> {{ order.phone_number }}</li>
+                    </ul>
+                </div>
+
+                <!-- Samochód -->
+                <div class="order-section">
+                    <h4 class="order-section-title">🚗 Samochód</h4>
+                    <ul class="order-list">
+                        <li><strong>Model:</strong> {{ order.car.brand }} {{ order.car.model }}</li>
+                        <li><strong>Cena za dzień:</strong> {{ order.car.rent }} PLN</li>
+                    </ul>
+                </div>
+
+                <!-- Szczegóły wypożyczenia -->
+                <div class="order-section">
+                    <h4 class="order-section-title">📅 Szczegóły wypożyczenia</h4>
+                    <ul class="order-list">
+                        <li><strong>Od:</strong> {{ order.start_date }}</li>
+                        <li><strong>Do:</strong> {{ order.end_date }}</li>
+                        <li><strong>Liczba dni:</strong> {{ order.rental_days }}</li>
+                        <li><strong>Płatność:</strong> {{ order.get_payment_method_display }}</li>
+                        <li><strong>Status:</strong> {{ order.get_status_display }}</li>
+                        <li><strong>Data złożenia:</strong> {{ order.order_date|date:"d M Y H:i" }}</li>
+                        <li><strong>Całkowita cena:</strong> <span class="order-price">{{ order.total_price }} PLN</span></li>
+                    </ul>
+                </div>
+
+                <!-- Adres -->
+                <div class="order-section">
+                    <h4 class="order-section-title">📍 Adres</h4>
+                    <ul class="order-list">
+                        <li>
+                            <strong>Adres:</strong>
+                            {{ order.street }} {{ order.house_number }}
+                            {% if order.apartment_number %}/{{ order.apartment_number }}{% endif %}
+                        </li>
+                        <li><strong>Kod i miasto:</strong> {{ order.postal_code }} {{ order.city }}</li>
+                    </ul>
+                </div>
+                <div>
+                    <!-- Dodaj opinię -->
+                    {% if order.status == 'completed' %}
+                        <div class="order-section">
+                            <h4 class="order-section-title">📝 Dodaj opinię o samochodzie</h4>
+                            <form method="POST" action="{% url 'orders:add_review' order.car.id %}">
+                                {% csrf_token %}
+                                <textarea name="content" rows="4" placeholder="Napisz swoją opinię..." required></textarea>
+                                <button type="submit" class="btn btn-primary mt-2">Wyślij opinię</button>
+                            </form>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Powrót -->
+                <div class="order-back-btn-wrapper">
+                    <a href="{% url 'users:profile' %}" class="order-back-btn">← Wróć do profilu</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

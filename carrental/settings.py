@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_extensions',
     'cars',
     'users',
     'orders',
@@ -63,7 +64,7 @@ TEMPLATES = [
         'DIRS': [BASE_DIR / 'templates'],  # lub inny katalog z szablonami
         'APP_DIRS': True,
         'OPTIONS': {
-            'environment': 'carrental.jinja2.environment',  # to za chwilę tworzymy
+
         },
     },
     {
@@ -117,14 +118,14 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'PL'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Warsaw'  # Ustaw odpowiednią strefę czasową
 
 USE_I18N = True
 
 USE_TZ = True
-LANGUAGE_CODE = 'pl'  
+ 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
@@ -140,16 +141,9 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'users.CustomUser'
-LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = '/users/login/'
 LOGOUT_REDIRECT_URL = '/'
 CSRF_COOKIE_SECURE = False
 SESSION_COOKIE_SECURE = False 
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 SESSION_COOKIE_AGE = 86400  # 1 hour, możesz ustawić na dłużej
-
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'  # SMTP Gmail
-EMAIL_PORT = 587  # Port do wysyłania e-maili przez Gmail
-EMAIL_USE_TLS = True  # Użyj TLS dla bezpieczeństwa
-EMAIL_HOST_USER = '14690@eans-nt.edu.pl'  # Twój adres e-mail Gmail
-EMAIL_HOST_PASSWORD = 'Nero234#2004'  # Hasło do konta e-mail (lub hasło aplikacji, jeśli masz włączoną weryfikację dwuetapową)

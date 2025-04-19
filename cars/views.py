@@ -26,8 +26,6 @@ def car(request, car_id):
     car = get_object_or_404(Car, pk=car_id)
     return render(request, 'cars/car.html.jinja', {'car': car})
     
-    
-    return render(request, 'cars/car.html.jinja', {'car': car})
 def all_cars_view(request):
     cars = Car.objects.all()  # lub filtrujesz, jak chcesz
     return render(request, 'cars/cars.html.jinja', {'cars': cars})

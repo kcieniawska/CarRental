@@ -7,49 +7,48 @@
     <!-- Informacje o wynajmie -->
     <div class="order-summary">
         <h3>Informacje o wynajmie:</h3>
-        <p><strong>Samochód:</strong> {% if request.session.car_name %}{{ request.session.car_name }}{% else %}Brak samochodu{% endif %}</p>
-        <p><strong>Data rozpoczęcia wynajmu:</strong> {% if request.session.start_date %}{{ request.session.start_date }}{% else %}Brak daty rozpoczęcia{% endif %}</p>
-        <p><strong>Data zakończenia wynajmu:</strong> {% if request.session.end_date %}{{ request.session.end_date }}{% else %}Brak daty zakończenia{% endif %}</p>
-        <p><strong>Łączna cena:</strong> {% if request.session.total_price %}{{ request.session.total_price }} zł{% else %}Brak ceny{% endif %}</p>
+        <p><strong>Samochód:</strong> {{ request.session.car_brand }} {{ request.session.car_model }}</p>
+        <p><strong>Data rozpoczęcia wynajmu:</strong> {{ request.session.start_date|default:"Brak daty rozpoczęcia" }}</p>
+        <p><strong>Data zakończenia wynajmu:</strong> {{ request.session.end_date|default:"Brak daty zakończenia" }}</p>
+        <p><strong>Łączna cena:</strong> {{ request.session.total_price|default:"Brak ceny" }} zł</p>
     </div>
 
     <!-- Dane użytkownika -->
     <div class="user-summary">
         <h3>Dane użytkownika:</h3>
-        <p><strong>Imię:</strong> {% if request.session.first_name %}{{ request.session.first_name }}{% else %}Brak imienia{% endif %}</p>
-        <p><strong>Nazwisko:</strong> {% if request.session.last_name %}{{ request.session.last_name }}{% else %}Brak nazwiska{% endif %}</p>
-        <p><strong>Data urodzenia:</strong> {% if request.session.birth_date %}{{ request.session.birth_date }}{% else %}Brak daty urodzenia{% endif %}</p>
-        <p><strong>Miejscowość:</strong> {% if request.session.city %}{{ request.session.city }}{% else %}Brak miejscowości{% endif %}</p>
-        <p><strong>Ulica:</strong> {% if request.session.street %}{{ request.session.street }}{% else %}Brak ulicy{% endif %}</p>
-        <p><strong>Kod pocztowy:</strong> {% if request.session.postal_code %}{{ request.session.postal_code }}{% else %}Brak kodu pocztowego{% endif %}</p>
-        <p><strong>Numer domu:</strong> {% if request.session.house_number %}{{ request.session.house_number }}{% else %}Brak numeru domu{% endif %}</p>
-        <p><strong>Numer mieszkania:</strong> {% if request.session.apartment_number %}{{ request.session.apartment_number }}{% else %}Brak numeru mieszkania{% endif %}</p>
+        <p><strong>Imię:</strong> {{ request.session.first_name|default:"Brak imienia" }}</p>
+        <p><strong>Nazwisko:</strong> {{ request.session.last_name|default:"Brak nazwiska" }}</p>
+        <p><strong>Data urodzenia:</strong> {{ request.session.birth_date|default:"Brak daty urodzenia" }}</p>
+        <p><strong>Miejscowość:</strong> {{ request.session.city|default:"Brak miejscowości" }}</p>
+        <p><strong>Ulica:</strong> {{ request.session.street|default:"Brak ulicy" }}</p>
+        <p><strong>Kod pocztowy:</strong> {{ request.session.postal_code|default:"Brak kodu pocztowego" }}</p>
+        <p><strong>Numer domu:</strong> {{ request.session.house_number|default:"Brak numeru domu" }}</p>
+        <p><strong>Numer mieszkania:</strong> {{ request.session.apartment_number|default:"Brak numeru mieszkania" }}</p>
         <p><strong>Metoda płatności:</strong> 
-            {% if request.session.payment_method == 'cash_on_site' %}
-        Gotówka przy odbiorze
-    {% elif request.session.payment_method == 'paypal' %}
-        PayPal
-    {% elif request.session.payment_method == 'credit_card' %}
-        Karta kredytowa
-    {% else %}
-        Brak metody płatności
-    {% endif %}
+            {% with method=request.session.payment_method %} 
+                {% if method == 'cash_on_site' %} 
+                    Gotówka przy odbiorze 
+                {% elif method == 'paypal' %} 
+                    PayPal 
+                {% elif method == 'credit_card' %} 
+                    Karta kredytowa 
+                {% else %} 
+                    Brak metody płatności 
+                {% endif %}
+            {% endwith %}
         </p>
     </div>
 
     <!-- Przycisk do realizacji zamówienia -->
     <div class="order-actions">
-        <form method="POST" action="{% url 'orders:complete_order' %}">
+        <!-- Cofanie się do koszyka -->
+        <a href="{% url 'orders:checkout' %}" class="checkout-btn">Cofnij do koszyka</a>
+    
+        <!-- Realizacja zamówienia -->
+        <form method="POST" action="{% url 'orders:complete_order' %}" onsubmit="this.querySelector('button').disabled = true;">
             {% csrf_token %}
-            <button type="submit" class="complete-order-btn">Zrealizuj zamówienie</button>
+            <button type="submit" class="checkout-btn">Zrealizuj zamówienie</button>
         </form>
     </div>
-
-    <!-- Komunikat potwierdzający wysłanie maila -->
-    {% if confirmation_sent %}
-    <div class="confirmation-message">
-        <p><strong>Potwierdzenie zostało wysłane na Twój adres e-mail!</strong></p>
-    </div>
-    {% endif %}
 </div>
 {% endblock %}

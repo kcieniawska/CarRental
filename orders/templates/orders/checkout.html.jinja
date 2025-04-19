@@ -2,113 +2,112 @@
 
 {% block content %}
 <div class="checkout-page">
-    <!-- Podsumowanie zamówienia -->
-    <div class="order-summary">
-        <h2>Podsumowanie zamówienia:</h2><br>
+    <div class="checkout-summary">
+        <h2>Podsumowanie zamówienia</h2><br>
         <div class="summary-item">
-            <p><strong>Samochód:</strong> 
-                {% if request.session.cart %}
-                    {% for item in request.session.cart %}
-                        {{ item.car_brand }} {{ item.car_model }}<br>  <!-- Wyświetlanie marki i modelu -->
-                    {% endfor %}
-                {% else %}
-                    Brak samochodu
-                {% endif %}
-            </p>
-            <p><strong>Data rozpoczęcia wynajmu:</strong> 
-                {% if request.session.start_date %}
-                    {{ request.session.start_date }}
-                {% else %}
-                    Brak daty rozpoczęcia
-                {% endif %}
-            </p>
-            <p><strong>Data zakończenia wynajmu:</strong> 
-                {% if request.session.end_date %}
-                    {{ request.session.end_date }}
-                {% else %}
-                    Brak daty zakończenia
-                {% endif %}
-            </p>
-            <p><strong>Łączna cena:</strong> 
-                {% if request.session.total_price %}
-                    {{ request.session.total_price }} zł
-                {% else %}
-                    Brak ceny
-                {% endif %}
-            </p>
+            <h3>Twoje wypożyczone auta</h3>
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <th>Samochód</th>
+                        <th>Data rozpoczęcia</th>
+                        <th>Data zakończenia</th>
+                        <th>Łączna cena</th>
+                    </tr>
+                </thead>
+                <tbody>
+                        <tr>
+                            <td>{{ request.session.car_brand }} {{ request.session.car_model }}</td>
+
+                            <td>{{ request.session.start_date }}</td>
+                            <td>{{ request.session.end_date }}</td>
+                            <td>{{ request.session.total_price }} zł</td>
+                        </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 
-    <!-- Formularz wypełniania danych użytkownika -->
     <div class="checkout-form-container">
-        <h2 class="checkout-title">Wypełnij swoje dane</h2>
-        <form method="POST" action="{% url 'orders:checkout' %}">
-            {% csrf_token %}
-            
-            <!-- Dane użytkownika -->
-            <div class="form-group">
-                <label for="first_name">Imię:</label>
-                <input type="text" id="first_name" name="first_name" required />
-            </div>
-            
-            <div class="form-group">
-                <label for="last_name">Nazwisko:</label>
-                <input type="text" id="last_name" name="last_name" required />
-            </div>
-            
-            <div class="form-group">
-                <label for="birth_date">Data urodzenia:</label>
-                <input type="date" id="birth_date" name="birth_date" required />
-            </div>
-            
-            <div class="form-group">
-                <label for="city">Miejscowość:</label>
-                <input type="text" id="city" name="city" required />
-            </div>
-            
-            <div class="form-group">
-                <label for="street">Ulica (opcjonalnie):</label>
-                <input type="text" id="street" name="street" />
-            </div>
-        
-            <div class="form-group">
-                <label for="phone_number">Numer telefonu:</label>
-                <input type="tel" id="phone_number" name="phone_number" required placeholder="123-456-789" />
-            </div>
-            
-            <div class="form-group house-number-group">
-                <div style="display: flex; gap: 10px;">
-                    <div class="form-group">
-                        <label for="postal_code">Kod pocztowy:</label>
-                        <input type="text" id="postal_code" name="postal_code" pattern="\d{2}-\d{3}" placeholder="00-000" required />
-                    </div>
-                    <div>
-                        <label for="house_number">Numer domu:</label>
-                        <input type="text" id="house_number" name="house_number" required />
-                    </div>
-                    <div>
-                        <label for="apartment_number">Numer mieszkania (opcjonalnie):</label>
-                        <input type="text" id="apartment_number" name="apartment_number" />
-                    </div>
-                </div>
-            </div>
-        
-            <!-- Wybór metody płatności -->
-            <div class="form-group">
-                <label for="payment_method">Metoda płatności:</label>
-                <select id="payment_method" name="payment_method" required>
-                    <option value="paypal">PayPal</option>
-                    <option value="credit_card">Karta kredytowa</option>
-                    <option value="cash_on_site">Gotówka (płatność na miejscu)</option>
-                </select>
-            </div>
-        
-            <!-- Przyciski -->
-            <div class="checkout-buttons">
-                <button type="submit" class="pay-now-btn">Podsumowanie</button>
-            </div>
-        </form>
+        <h2 class="checkout-title">Wypełnij dane</h2>
+        <!-- Podsumowanie wynajmu -->
+
+<form method="POST" action="{% url 'orders:checkout' %}" class="checkout-form">
+    {% csrf_token %}
+    
+    <!-- Grupa pól obok siebie (Imię, Nazwisko) -->
+    <div class="form-group inline-fields">
+        <div class="field">
+            <label for="first_name">Imię:</label>
+            <input type="text" id="first_name" name="first_name" required />
+        </div>
+        <div class="field">
+            <label for="last_name">Nazwisko:</label>
+            <input type="text" id="last_name" name="last_name" required />
+        </div>
+    </div>
+
+    <!-- Email, Telefon -->
+    <div class="form-group inline-fields">
+        <div class="field">
+            <label for="email">Twój email:</label>
+            <input type="email" id="email" name="email" required />
+        </div>
+        <div class="field">
+            <label for="phone_number">Numer telefonu:</label>
+            <input type="tel" id="phone_number" name="phone_number" required />
+        </div>
+    </div>
+
+    <!-- Data urodzenia, Miasto -->
+    <div class="form-group inline-fields">
+        <div class="field">
+            <label for="birth_date">Data urodzenia:</label>
+            <input type="date" id="birth_date" name="birth_date" required />
+        </div>
+        <div class="field">
+            <label for="city">Miejscowość:</label>
+            <input type="text" id="city" name="city" required />
+        </div>
+    </div>
+
+    <!-- Adres -->
+    <div class="form-group inline-fields">
+        <div class="field">
+            <label for="street">Ulica:</label>
+            <input type="text" id="street" name="street" required />
+        </div>
+        <div class="field">
+            <label for="house_number">Numer domu:</label>
+            <input type="text" id="house_number" name="house_number" required />
+        </div>
+        <div class="field">
+            <label for="apartment_number">Numer mieszkania:</label>
+            <input type="text" id="apartment_number" name="apartment_number" />
+        </div>
+        <div class="field">
+            <label for="postal_code">Kod pocztowy:</label>
+            <input type="text" id="postal_code" name="postal_code" required />
+        </div>
+    </div>
+
+    <!-- Metoda płatności -->
+    <div class="form-group">
+        <label for="payment_method">Metoda płatności:</label>
+        <select id="payment_method" name="payment_method" required>
+            <option value="paypal">PayPal</option>
+            <option value="credit_card">Karta kredytowa</option>
+            <option value="cash_on_site">Gotówka</option>
+        </select>
+    </div>
+
+    <!-- Przyciski -->
+    <div class="form-buttons">
+        <a href="{% url 'orders:cart' %}" class="checkout-btn">◄ Cofnij do koszyka</a>
+        <button type="submit" class="checkout-btn">Przejdź do podsumowania ►</button>
+    </div>
+</form>
+
     </div>
 </div>
-
 {% endblock %}

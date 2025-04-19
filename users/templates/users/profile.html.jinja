@@ -1,33 +1,29 @@
 {% extends 'base.html.jinja' %}
 
 {% block content %}
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
             <div class="card shadow-sm profile-card">
-                <div class="card-header bg-papaya-orange text-white text-center">
-                    <h2>Profil {{ user.username }}</h2>
-                </div>
                 <div class="card-body">
-                    <div class="row">
-                        <!-- Kolumna z danymi użytkownika -->
-                        <div class="col-md-12">
-                            <div class="profile-details">
-                                <p><strong>Użytkownik:</strong> {{ user.username }}</p><br>
-                                <p><strong>Imię: </strong>{{ user.first_name }}<br> <strong>Nazwisko: </strong> {{ user.last_name }}</p>
-                                <p><strong>Email:</strong> {{ user.email }}</p>
-                                <p><strong>Data rejestracji:</strong> {{ user.date_joined|date:"d M Y" }}</p>
-                            </div>
-
-                            <!-- Link do edytowania profilu -->
-                            <div class="text-center mt-4">
-                                <a href="{% url 'edit_profile' %}" class="btn-edit-profile">Edytuj profil</a>
-                            </div>
-                        </div>
+                    <div class="user-panel-container py-5">
+                        <div class="row justify-content-center">
+                            <div class="col-md-8">
+                                <div class="user-panel-card shadow-sm">
+                                    <div class="user-panel-header text-center">
+                                        <h2>Profil użytkownika: {{ user.username }}</h2>
+                                    </div>
+                                    <div class="user-panel-body">
+                                        <ul class="user-info-list">
+                                            <li><strong>Imię:</strong> {{ user.first_name }}</li>
+                                            <li><strong>Nazwisko:</strong> {{ user.last_name }}</li>
+                                            <li><strong>Email:</strong> {{ user.email }}</li>
+                                            <li><strong>Data rejestracji:</strong> {{ user.date_joined|date:"d M Y" }}</li>
+                                        </ul>
+                    
+                                        <div class="text-center mt-4"><br>
+                                            <a href="{% url 'users:edit_profile' %}" class="btn-edit-profile-papaya">Edytuj profil</a>
+                                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
+
 
         <!-- Zakładka Moje zamówienia -->
         <div class="col-md-8 mt-4">
@@ -36,41 +32,42 @@
                     <h2>Moje zamówienia</h2>
                 </div>
                 <div class="card-body">
-                    {% if user.orders.all %}
-                    <table class="table table-profile-orders">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Samochód</th>
-                                    <th scope="col">Liczba dni</th>
-                                    <th scope="col">Całkowita cena</th>
-                                    <th scope="col">Status</th>
-                                    <th scope="col">Data zamówienia</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for order in user.orders.all %}
-                                <tr>
-                                    <td>{{ order.car }}</td>
-                                    <td>{{ order.rental_days }}</td>
-                                    <td>{{ order.total_price }} PLN</td>
-                                    <td>
-                                        {% if order.status == 'completed' %}
-                                            <span class="badge bg-success">Zrealizowane</span>
-                                        {% elif order.status == 'in_progress' %}
-                                            <span class="badge bg-warning">W trakcie</span>
-                                        {% elif order.status == 'not_completed' %}
-                                            <span class="badge bg-danger">Niezrealizowane</span>
-                                        {% else %}
-                                            <span class="badge bg-secondary">Brak statusu</span>
-                                        {% endif %}
-                                    </td>
-                                    <td>{{ order.rental_date }}</td> 
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+                    {% if orders %}
+                    <table class="orders-table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Samochód</th>
+                                <th>Liczba dni</th>
+                                <th>Całkowita cena</th>
+                                <th>Status</th>
+                                <th>Data zamówienia</th>
+                                <th>Szczegóły</th> <!-- Dodajemy kolumnę na link do szczegółów -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for order in orders %}
+                            <tr>
+                                <td>{{ order.car.brand }} {{ order.car.model }}</td>
+                                <td>{{ order.rental_days }}</td>
+                                <td>{{ order.total_price }} PLN</td>
+                                <td>
+                                    {% if order.status == 'in_progress' %}
+                                        <span class="status-pending">W trakcie</span>
+                                    {% elif order.status == 'paid' %}
+                                        <span class="status-completed">Zapłacone</span>
+                                    {% elif order.status == 'completed' %}
+                                        <span class="status-completed">Zrealizowane</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ order.order_date|date:"d M Y" }}</td>
+                                <!-- Link do szczegółów zamówienia -->
+                                <td><a href="{% url 'users:user_orders' order.id %}" style="color: #333; text-decoration: none;">►</a></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                     {% else %}
-                        <p>Nie masz żadnych zamówień.</p>
+                    <p>Nie masz żadnych zamówień.</p>
                     {% endif %}
                 </div>
             </div>

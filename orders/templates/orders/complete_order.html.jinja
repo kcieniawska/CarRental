@@ -10,10 +10,10 @@
 
     <div class="order-complete-container">
         <h1>🎉 Zamówienie zrealizowane! </h1>
-        <p>Dziękujemy, <strong>{{ request.session.first_name }}</strong> za skorzystanie z naszej wypożyczalni!</p>
+        <p>Dziękujemy za skorzystanie z naszej wypożyczalni!</p>
         <p>Twój samochód już czeka na Ciebie 🏎️</p>
         <p>Wkrótce się z Tobą skontaktujemy, a wszystkie szczegóły znajdziesz w swoim panelu.</p>
-
+        <a href="{% url 'users:profile' %}" class="back-home-btn">👤 Zobacz moje zamówienia</a>
         <a href="/" class="back-home-btn">🏠 Wróć na stronę główną</a>
     </div>
 </div>

@@ -6,7 +6,7 @@
     <div class="car-detail-container">
         <div class="car-info">
             <ul>
-                <li><strong>Kategoria samochodu: </strong><a href="{% url 'category_detail' car.category %}">{{ car.get_category_display }}</a></li><br>
+                <li><strong>Kategoria samochodu: </strong><a href="{% url 'cars:category_detail' car.category %}">{{ car.get_category_display }}</a></li><br>
             </ul>
             <h1 class="car-title">{{ car.brand }} {{ car.model }}</h1>
 
@@ -41,24 +41,37 @@
             </div>
 
             <h2 style="color: #333; margin-top: 50px; text-align: center;">Wypożycz samochód</h2>
-            <div>
+            <div><br>
             {% if user.is_authenticated %}
-            <form method="POST" action="{% url 'orders:add_to_cart' car_id=car.id %}">
+            <form method="POST" action="{% url 'orders:add_to_cart' car_id=car.id %}" class="order-form">
                 {% csrf_token %}
-                <label for="start_date">Data rozpoczęcia:</label>
-                <input type="date" name="start_date" required>
             
-                <label for="end_date">Data zakończenia:</label>
-                <input type="date" name="end_date" required>
+                <div class="form-group">
+                    <label for="start_date">Data rozpoczęcia:</label>
+                    <input type="date" name="start_date" required>
+                </div>
+            
+                <div class="form-group">
+                    <label for="end_date">Data zakończenia:</label>
+                    <input type="date" name="end_date" required>
+                </div>
+            
+                <!-- Ukryte pole dla liczby dni wynajmu -->
+                <input type="hidden" name="rental_days" id="rental_days" value="">
             
                 <button type="submit">Dodaj do koszyka</button>
             </form>
+            
+
+            
             {% else %}
             <div class="alert alert-warning">
                 <strong>Uwaga!</strong> Musisz być zalogowany, aby dokonać rezerwacji.
                 <a href="{% url 'login' %}" style="color: #ff6a13;" class="btn btn-papaya-orange-text">Zaloguj się</a>
             </div>
             {% endif %}
+            </div>
+
             <div class="reviews-container">
                 <h2 style="margin-top: 50px; margin-bottom: 50px;">Opinie</h2>
                 <div class="reviews-section">
@@ -72,5 +85,6 @@
                     {% endfor %}
                 </div>
             </div>
+        </div>
     </div>
 {% endblock %}

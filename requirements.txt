@@ -40,3 +40,4 @@ tornado==6.3.3
 traitlets==5.13.0
 tzdata==2025.1
 wcwidth==0.2.9
+django-extensions>=3.2
