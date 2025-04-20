@@ -1,15 +1,16 @@
 {% extends "base.html.jinja" %}
-
+{% load static %}
 {% block title %}Kontakt{% endblock %}
+
 
 {% block content %}
 <section class="contact">
     <div class="content-wrapper">
         <h2>Skontaktuj się z nami</h2>
-
+        <img style="width: 50%"src="{% static 'images/PRC-banner.png' %}" alt="Opis zdjęcia">
         <!-- Sekcja formularza -->
         <div class="contact-form">
-            <h3>Formularz kontaktowy</h3>
+            <h3>Formularz kontaktowy</h3><br>
             <form action="#" method="post">
                 <div class="form-group">
                     <label for="name">Imię i nazwisko:</label>
@@ -28,13 +29,33 @@
         </div>
 
         <!-- Sekcja danych kontaktowych -->
-        <div class="contact-info">
-            <h3>Dane kontaktowe</h3>
-            <p><strong>Telefon:</strong> +48 123 456 789</p>
-            <p><strong>Email:</strong> kontakt@example.com</p>
-            <p><strong>Adres:</strong> ul. Przykładowa 123, 00-000 Miasto</p>
-        </div>
 
+            
+            <!-- Dane kontaktowe -->
+            <div class="contact-wrapper">
+                <!-- Sekcja danych kontaktowych właściciela -->
+                <div class="why-choose">
+                    <div class="contact-photo" style="background-image: url('{% static 'images/contact-photo.png' %}');"></div>
+                    <div class="contact-details">
+                        <h3>Karolina Cieniawska</h3>
+                        <p>Autor strony, właściciel <strong>PapayaRentCar</strong></p>
+                        <p><strong>Telefon:</strong> +48 123 456 789</p>
+                        <p><strong>Email:</strong> <a style="text-decoration: none; color: #333;"href="mailto:14690@eans-nt.edu.pl">14690@eans-nt.edu.pl</a></p>
+                    </div>
+                </div>
+            
+                <!-- Sekcja danych firmy -->
+                <div class="why-choose">
+                    <div class="company-photo" style="background-image: url('{% static 'images/prc.png' %}');"></div>
+                    <div class="contact-details">
+                        <h3>PapayaRentCar</h3>
+                        <p><strong>Telefon:</strong> +48 123 456 789</p>
+                        <p><strong>Email:</strong> example@example.com</p>
+                        <p><strong>Adres:</strong> ul. Kokoszków 71, 34-400 Nowy Targ</p>
+                    </div>
+                </div>
+            </div>
+            
         <!-- Sekcja mapy -->
         <div class="contact-map">
             <h3>Odnajdź nas</h3>

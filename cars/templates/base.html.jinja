@@ -3,7 +3,7 @@
 <head>
     {% load static %}
     <meta charset="UTF-8">
-    <link rel="icon" href="{% static 'images/papaya.png' %}" type="image/x-icon">
+    <link rel="icon" href="{% static 'images/PRC.png' %}" type="image/x-icon">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css">
     <title>PapayaRentCar | {% block title %}Strona główna{% endblock %}</title>
@@ -14,22 +14,22 @@
             <nav class="log">
                 {% if user.is_authenticated %}
                     <!-- Jeśli użytkownik jest zalogowany -->
-                    <li> <a href="{% url 'users:profile' %}" class="user-profile">{{ user.username }}</a></li>
-                    <li><a href="{% url 'orders:cart' %}">Koszyk</a></li>
-                    <li><a href="{% url 'users:logout' %}">Wyloguj się</a></li>
-                {% else %}
+                    <li> <a href="{% url 'users:profile' %}" class="user-profile">👤 {{ user.username }}</a></li>
+                    <li><a class="user-profile" href="{% url 'orders:cart' %}">🛒 Koszyk</a></li>
+                    <li><a class="user-profile" href="{% url 'users:logout' %}">↪️ Wyloguj się</a></li>
+                    {% else %}
                     <!-- Jeśli użytkownik nie jest zalogowany -->
-                    <li><a href="{% url 'users:login' %}" class="auth-link">Logowanie</a> <span></span></li>
-                    <li><a href="{% url 'users:register' %}" class="auth-link">Rejestracja</a></li>
+                    <li><a href="{% url 'users:login' %}" class="auth-link, user-profile">Logowanie</a></li>
+                    <li><a href="{% url 'users:register' %}" class="auth-link, user-profile">Rejestracja</a></li>
                 {% endif %}
             </nav>
         </div>
         <div class="header-main">
-            <h1><a href="/"><img src="{% static 'images/papaya-logo.png' %}" alt="Opis zdjęcia">Papaya<span>Rent</span>Car</a></h1>
+            <h1><a href="/">Papaya<span>Rent</span>Car</a></h1>
             <nav>
-                <a href="/">Strona główna</a> <span> </span>
-                <a href="{% url 'cars:all_cars' %}">Nasze samochody</a> <span> </span>
-                <a href="{% url 'cars:category_list' %}">Kategorie</a> <span> </span>
+                <a href="/">Strona główna</a>
+                <a href="{% url 'cars:all_cars' %}">Nasze samochody</a>
+                <a href="{% url 'cars:category_list' %}">Kategorie</a>
                 <a href="/contact/">Kontakt</a>
             </nav>
         </div>
