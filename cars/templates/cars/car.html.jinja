@@ -96,94 +96,78 @@
     </div>
 {% endif %}
 </div>
-            <div class="reviews-container">
-                <div class="car-rating">
-                    <h3 style="text-align: left; margin-bottom:50px;">
-                        {% if average_rating %}
-                            Średnia ocena samochodu: 
-                            <span style="color: #ed8c4e; font-weight: bold;">
-                                {% if average_rating|floatformat:1 == average_rating %} ★
-                                    {{ average_rating|floatformat:0 }} ★  <!-- Bez miejsc po przecinku, jeśli to liczba całkowita -->
-                                {% else %}
-                                    {{ average_rating|floatformat:1 }} ★ <!-- Z jednym miejscem po przecinku -->
-                                {% endif %}
-                            </span>
-                        {% else %}
-                        ★ <span><a href="{% url 'users:profile'  %}" style="color: #ed8c4e; font-weight: bold; text-decoration: none;">Ten samochód nie dostał żadnej oceny. Oceń go teraz!</a></span>
-                        {% endif %}
-                    </h3>
-                </div>
-                
-                <h2 class="section-title">Opinie</h2>
-            
-                {% if user.is_staff %}
-                    <li class="moderation-link"><a href="{% url 'orders:moderate_reviews' %}" class="moderation-link">👩‍🔧 ● Zarządzaj opiniami</a></li>
-                {% endif %}
-            
-                {% for review in reviews %}
-                    <div class="review-item">
-                        <p><strong>{{ review.user.username }}</strong> ({{ review.created_at|date:"d M Y, H:i" }})</p>
-                        <p>{{ review.content }}</p>
-                    </div>
-                {% empty %}
-                    <p>Brak zatwierdzonych opinii.</p>
-                {% endfor %}
-            
-                {% if is_moderator %}
-                    {% if pending_reviews %}
-                        <br><h3 class="pending-reviews-title">Opinie oczekujące na zatwierdzenie:</h3>
-                        <ul class="pending-reviews-list"><br>
-                            {% for review in pending_reviews %}
-                                <li class="pending-review-item"><strong>{{ review.user.username }}</strong> ({{ review.created_at|date:"d M Y, H:i" }}) - Oczekuje na zatwierdzenie</li>
-                            {% endfor %}
-                        </ul>
+<div class="reviews-container">
+    <div class="car-rating">
+        <h3 style="text-align: left; margin-bottom:50px;">
+            {% if average_rating %}
+                Średnia ocena samochodu: 
+                <span style="color: #ed8c4e; font-weight: bold;">
+                    {% if average_rating|floatformat:1 == average_rating %} ★
+                        {{ average_rating|floatformat:0 }} ★
                     {% else %}
-                        <p>Brak opinii oczekujących na zatwierdzenie.</p>
+                        {{ average_rating|floatformat:1 }} ★
                     {% endif %}
-                {% endif %}
-            
-                {% if user_reviews %}
-                <br>
-                <ul class="user-reviews-list"> 
-                    {% for review in user_reviews %}
-                        {% if not review.is_approved %}
-                        <h3 class="user-reviews-title">Twoje opinie:</h3><br>
-                            <li class="user-review-item"><strong>{{ review.created_at|date:"d M Y, H:i" }}:</strong> {{ review.content }} 
-                                - <span class="pending-approval">Oczekuje na zatwierdzenie</span>
-                            </li>
-                        {% endif %}
-                    {% endfor %}
-                </ul>
+                </span>
             {% else %}
-                <p>Nie dodałeś jeszcze żadnej opinii.</p>
+            ★ <span><a href="{% url 'users:profile'  %}" style="color: #ed8c4e; font-weight: bold; text-decoration: none;">Ten samochód nie dostał żadnej oceny. Oceń go teraz!</a></span>
             {% endif %}
-            </div>
-            
-            </div>
-        </div>
+        </h3>
     </div>
+    
+    <h2 class="section-title">Opinie</h2>
 
-    <!-- Skrypt walidacji dat -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Ustawienie dzisiejszej daty w polu "start_date"
-            var today = new Date().toISOString().split('T')[0];
-            document.getElementById("start_date").setAttribute("min", today);
-            document.getElementById("end_date").setAttribute("min", today);
+    {% if user.is_staff %}
+        <li class="moderation-link">
+            <a href="{% url 'orders:moderate_reviews' %}" class="moderation-link">👩‍🔧 ● Zarządzaj opiniami</a>
+        </li>
+    {% endif %}
 
-            // Walidacja formularza przed wysłaniem
-            document.getElementById('rental-form').addEventListener('submit', function(event) {
-                var startDate = new Date(document.getElementById('start_date').value);
-                var endDate = new Date(document.getElementById('end_date').value);
+    {% for review in reviews %}
+    <div class="review-item">
+        <p>
+            <strong>{{ review.user.username }}</strong> ({{ review.created_at|date:"d M Y, H:i" }})
+            <span class="review-stars-inline">
+                {% for i in "12345" %}
+                    {% if forloop.counter <= review.rating %}
+                        <span style="color: gold;">★</span>
+                    {% else %}
+                        <span style="color: lightgray;">☆</span>
+                    {% endif %}
+                {% endfor %}
+            </span>
+        </p>
+        <p>{{ review.content }}</p>
+    </div>
+{% endfor %}
 
-                // Sprawdzenie, czy data zakończenia nie jest wcześniejsza niż data rozpoczęcia
-                if (endDate < startDate) {
-                    alert("Data zakończenia nie może być wcześniejsza niż data rozpoczęcia.");
-                    event.preventDefault();
-                    return false;
-                }
-            });
-        });
-    </script>
+    {% if is_moderator %}
+        {% if pending_reviews %}
+            <br><h3 class="pending-reviews-title">Opinie oczekujące na zatwierdzenie:</h3>
+            <ul class="pending-reviews-list"><br>
+                {% for pending_review in pending_reviews %}
+                    <li class="pending-review-item"><strong>{{ pending_review.user.username }}</strong> ({{ pending_review.created_at|date:"d M Y, H:i" }}) - Oczekuje na zatwierdzenie</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Brak opinii oczekujących na zatwierdzenie.</p>
+        {% endif %}
+    {% endif %}
 
+    {% if user_reviews %}
+        <br>
+        <ul class="user-reviews-list"> 
+            {% for review in user_reviews %}
+            
+                {% if not review.is_approved %}
+                <h3 class="user-reviews-title">Twoje opinie:</h3><br>
+                    <li class="user-review-item"><strong>{{ review.created_at|date:"d M Y, H:i" }}:</strong> {{ review.content }} 
+                        - <span class="pending-approval">Oczekuje na zatwierdzenie</span>
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Nie dodałeś jeszcze żadnej opinii.</p>
+    {% endif %}
+</div>
 {% endblock %}
