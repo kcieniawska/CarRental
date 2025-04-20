@@ -38,11 +38,12 @@
                 <div class="car-price-right">
                     <span class="price-value">{{ car.rent }} PLN/dzień</span>
                 </div>
-                
             </div>
+            
+            <!-- Status samochodu -->
             <div class="papaya-status-container">
                 <div class="papaya-status-label">
-                    <h2><span class="price-label">Status:</span></h2>
+                    <h2>Status:</h2>
                 </div>
                 <div class="papaya-status-value">
                     {% if is_available %}
@@ -52,6 +53,18 @@
                     {% endif %}
                 </div>
             </div>
+            
+            <!-- Informacje o wypożyczeniu (jeśli niedostępny) -->
+            {% if not is_available %}
+                <div class="papaya-status-date">
+                    <span>📅 Ten samochód jest wypożyczony do: <strong>{{ rental_end_date|date:"d M Y" }}</strong> </span>
+                    <span>🚘 Wypożyczenie trwa od <strong>{{ rental_start_date|date:"d M Y" }}</strong> do <strong>{{ rental_end_date|date:"d M Y" }}</strong>.</span>
+                </div>
+            {% endif %}
+            
+            
+            
+            
             
             <h2 class="section-title">Wypożycz samochód</h2>
 <div>
@@ -72,7 +85,7 @@
         </form>
     {% else %}
         <div class="rental-unavailable-message">
-            <strong>To auto jest aktualnie niedostępne do wypożyczenia.</strong><br>
+            <strong><br>To auto jest aktualnie niedostępne do wypożyczenia.</strong><br>
             Sprawdź inne terminy lub wybierz inny pojazd. 🚗
         </div>
     {% endif %}

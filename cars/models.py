@@ -72,6 +72,8 @@ class Car(models.Model):
     equipment = models.ManyToManyField(Equipment)  # Relacja M:N do modelu Equipment
     is_recommended = models.BooleanField(default=False)
     is_available = models.BooleanField(default=True)
+    rental_start_date = models.DateField(null=True, blank=True)
+    rental_end_date = models.DateField(null=True, blank=True)
     
 
     def __str__(self):
@@ -91,6 +93,18 @@ class Car(models.Model):
     def is_currently_available(self):
         today = date.today()
         return not self.orders.filter(start_date__lte=today, end_date__gte=today).exists()
+    def set_availability(self):
+        today = date.today()
+        active_order = self.orders.filter(start_date__lte=today, end_date__gte=today).first()
+
+        if active_order:
+            self.is_available = False
+            self.rental_start_date = active_order.start_date
+            self.rental_end_date = active_order.end_date
+        else:
+            self.is_available = True
+            self.rental_start_date = None
+            self.rental_end_date = None
 #Model opinii
 class Review(models.Model):
     car = models.ForeignKey(Car, related_name='reviews', on_delete=models.CASCADE)

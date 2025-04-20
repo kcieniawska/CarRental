@@ -49,3 +49,52 @@
     </div>
 </section>
 {% endblock %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.querySelector('.contact-form form');
+        const nameInput = document.getElementById('name');
+        const emailInput = document.getElementById('email');
+        const messageInput = document.getElementById('message');
+    
+        form.addEventListener('submit', function (event) {
+            let isValid = true;
+            clearErrors();
+    
+            if (nameInput.value.trim() === '') {
+                showError(nameInput, 'Podaj swoje imię i nazwisko.');
+                isValid = false;
+            }
+    
+            if (!validateEmail(emailInput.value)) {
+                showError(emailInput, 'Podaj poprawny adres e-mail.');
+                isValid = false;
+            }
+    
+            if (messageInput.value.trim().length < 10) {
+                showError(messageInput, 'Wiadomość musi zawierać co najmniej 10 znaków.');
+                isValid = false;
+            }
+    
+            if (!isValid) {
+                event.preventDefault(); // Blokuje wysyłkę formularza
+            }
+        });
+    
+        function showError(input, message) {
+            const error = document.createElement('small');
+            error.classList.add('error-message');
+            error.innerText = message;
+            input.parentElement.appendChild(error);
+        }
+    
+        function clearErrors() {
+            const errors = document.querySelectorAll('.error-message');
+            errors.forEach(e => e.remove());
+        }
+    
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+    });
+    </script>
