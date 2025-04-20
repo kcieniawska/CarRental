@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings  # Importujemy settings, by uzyskać dostęp do modelu użytkownika
 from django.contrib.auth.models import User
+from datetime import date
     
 
 # Model Equipment
@@ -70,6 +71,7 @@ class Car(models.Model):
     mileage_limit = models.PositiveIntegerField()  
     equipment = models.ManyToManyField(Equipment)  # Relacja M:N do modelu Equipment
     is_recommended = models.BooleanField(default=False)
+    is_available = models.BooleanField(default=True)
     
 
     def __str__(self):
@@ -86,6 +88,9 @@ class Car(models.Model):
             total_rating = sum([review.rating for review in reviews])
             self.average_rating = total_rating / len(reviews)
             self.save()
+    def is_currently_available(self):
+        today = date.today()
+        return not self.orders.filter(start_date__lte=today, end_date__gte=today).exists()
 #Model opinii
 class Review(models.Model):
     car = models.ForeignKey(Car, related_name='reviews', on_delete=models.CASCADE)

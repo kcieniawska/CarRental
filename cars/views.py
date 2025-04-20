@@ -14,6 +14,7 @@ from .forms import ReviewForm
 from django.contrib import messages
 from django.db.models import Count, Q, Avg
 from orders.models import Order, Review
+from datetime import date
 # Ustawienie loggera
 logger = logging.getLogger(__name__)
 
@@ -51,17 +52,10 @@ def index(request):
 # Strona szczegółów samochodu
 def car(request, car_id):
     car = get_object_or_404(Car, pk=car_id)
-    
-    # Pobranie zatwierdzonych opinii
+
     reviews = Review.objects.filter(car=car, is_approved=True)
-    
-    # Pobranie oczekujących opinii (niezatwierdzonych)
     pending_reviews = Review.objects.filter(car=car, is_approved=False)
-    
-    # Sprawdzamy, czy użytkownik jest moderatorem
     is_moderator = request.user.is_staff
-    
-    # Użytkownik, który dodał opinię
     user_reviews = Review.objects.filter(user=request.user, car=car)
 
     return render(request, 'cars/car.html.jinja', {
@@ -70,6 +64,8 @@ def car(request, car_id):
         'pending_reviews': pending_reviews,
         'is_moderator': is_moderator,
         'user_reviews': user_reviews,
+        'is_available': car.is_currently_available(),
+        'current_date': date.today().isoformat(),
     })
 
     

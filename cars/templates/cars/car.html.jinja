@@ -38,35 +38,51 @@
                 <div class="car-price-right">
                     <span class="price-value">{{ car.rent }} PLN/dzień</span>
                 </div>
+                
             </div>
-
+            <div class="papaya-status-container">
+                <div class="papaya-status-label">
+                    <h2><span class="price-label">Status:</span></h2>
+                </div>
+                <div class="papaya-status-value">
+                    {% if is_available %}
+                        <span class="papaya-status-green">Dostępny</span>
+                    {% else %}
+                        <span class="papaya-status-red">Niedostępny</span>
+                    {% endif %}
+                </div>
+            </div>
+            
             <h2 class="section-title">Wypożycz samochód</h2>
-            <div>
-            {% if user.is_authenticated %}
-            <form method="POST" action="{% url 'orders:add_to_cart' car_id=car.id %}" class="order-form" id="rental-form">
-                {% csrf_token %}
-            
-                <div class="form-group">
-                    <label for="start_date">Data rozpoczęcia:</label>
-                    <input type="date" name="start_date" id="start_date" required min="{{ current_date }}">
-                </div>
-            
-                <div class="form-group">
-                    <label for="end_date">Data zakończenia:</label>
-                    <input type="date" name="end_date" id="end_date" required min="{{ current_date }}">
-                </div>
-            
-                <input type="hidden" name="rental_days" id="rental_days" value="">
-
-                <button type="submit">Dodaj do koszyka</button>
-            </form>
-            {% else %}
-            <div class="alert alert-warning">
-                <strong>Uwaga!</strong> Musisz być zalogowany, aby dokonać rezerwacji.
-                <a href="{% url 'login' %}" style="color: #ff6a13;" class="btn btn-papaya-orange-text">Zaloguj się</a>
+<div>
+{% if user.is_authenticated %}
+    {% if is_available %}
+        <form method="POST" action="{% url 'orders:add_to_cart' car_id=car.id %}" class="order-form" id="rental-form">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="start_date">Data rozpoczęcia:</label>
+                <input type="date" name="start_date" id="start_date" required min="{{ current_date }}">
             </div>
-            {% endif %}
+            <div class="form-group">
+                <label for="end_date">Data zakończenia:</label>
+                <input type="date" name="end_date" id="end_date" required min="{{ current_date }}">
             </div>
+            <input type="hidden" name="rental_days" id="rental_days" value="">
+            <button type="submit">Dodaj do koszyka</button>
+        </form>
+    {% else %}
+        <div class="rental-unavailable-message">
+            <strong>To auto jest aktualnie niedostępne do wypożyczenia.</strong><br>
+            Sprawdź inne terminy lub wybierz inny pojazd. 🚗
+        </div>
+    {% endif %}
+{% else %}
+    <div class="alert alert-warning">
+        <strong>Uwaga!</strong> Musisz być zalogowany, aby dokonać rezerwacji.
+        <a href="{% url 'login' %}" style="color: #ff6a13;" class="btn btn-papaya-orange-text">Zaloguj się</a>
+    </div>
+{% endif %}
+</div>
 
             <div class="reviews-container">
                 <h2 class="section-title">Opinie</h2>

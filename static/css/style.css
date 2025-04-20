@@ -3275,3 +3275,44 @@ li.moderation-link {
 .btn-most-reviewed:hover {
     background-color: rgb(179, 57, 20); /* Zmiana koloru po najechaniu */
 }
+/* === STATUS DOSTĘPNOŚCI === */
+
+.papaya-status-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    padding: 12px 0;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 50px;
+}
+
+.papaya-status-label h2 {
+    margin: 0;
+}
+
+.papaya-status-value {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* Zielony status */
+.papaya-status-green {
+    background-color: #e2fbe5;
+    color: #15803d;
+    padding: 6px 14px;
+    border: 2px solid #15803d;
+    border-radius: 30px;
+    box-shadow: 0 0 5px rgba(21, 128, 61, 0.2);
+}
+
+/* Czerwony status */
+.papaya-status-red {
+    background-color: #ffe2e2;
+    color: #b91c1c;
+    padding: 6px 14px;
+    border: 2px solid #b91c1c;
+    border-radius: 30px;
+    box-shadow: 0 0 5px rgba(185, 28, 28, 0.2);
+}
