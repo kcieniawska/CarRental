@@ -42,7 +42,6 @@
             <a href={% url 'cars:all_cars' %} class="btn-most-rented">Zobacz wszystkie auta</a>
         </div>
     </section>
-    
     <!-- Sekcja: Najczęściej oceniane -->
     <section class="cars" id="najczesciej-oceniane">
         <h2>Najczęściej oceniane</h2>
@@ -54,12 +53,20 @@
                         <h3>{{ car.brand }} {{ car.model }}</h3>
                         <div class="price"><span>Rocznik:</span> {{ car.year }}</div>
                         <div class="rating">
-                            <span>Ocena: </span>
+                            <span style="font-weight: bold; color: #333;">Ocena: </span>
                             {% for i in stars %}
-                                <span class="star{% if i <= car.avg_rating %} filled{% endif %}">★</span>
+                            <span class="star{% if i <= car.avg_rating %} filled{% endif %}">★</span>
                             {% endfor %}
                             <!-- Dodajemy średnią ocenę -->
-                            <span class="average-rating">({{ car.avg_rating|floatformat:1 }})</span>
+                            <span class="average-rating" style="font-weight: bold; color: #ed8c4e;">
+                                {% if car.avg_rating == car.avg_rating|floatformat:0 %} ★
+                                {{ car.avg_rating|floatformat:0 }} ★ <!-- Jeśli ocena jest liczbą całkowitą (np. 5.0), wyświetl ją bez miejsc po przecinku -->
+                            {% else %}
+                                {{ car.avg_rating|floatformat:1 }} ★ <!-- Jeśli ocena ma miejsce po przecinku, wyświetl jedno miejsce -->
+                            {% endif %}
+
+
+                            </span>
                         </div>
                     </a>
                 </div>
@@ -71,6 +78,25 @@
         <div class="cta-cars">
             <a href="{% url 'cars:all_cars' %}" class="btn-most-reviewed">Zobacz wszystkie auta</a>
         </div>
+    </section>
+    <!-- Sekcja 3: Dostępne samochody -->
+    <section class="cars" id="dostepne-samochody">
+        <h2>Dostępne samochody</h2>
+        <div class="car-list">
+            {% for car in available_cars %}
+                <div class="car-item">
+                    <a href="{% url 'cars:car_detail' car.id %}">
+                        <img src="{{ car.image.url }}" alt="{{ car.brand }} {{ car.model }}">
+                        <h3>{{ car.brand }} {{ car.model }}</h3>
+                        <div class="price"><span>Rocznik:</span> {{ car.year }}</div>
+                        <div class="price"><span>Miejsce odbioru:</span> {{ car.location }}</div>
+                    </a>
+                </div>
+            {% empty %}
+                <p>Brak dostępnych samochodów.</p>
+            {% endfor %}
+            </div>
+            
     </section>
     
     

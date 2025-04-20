@@ -96,8 +96,24 @@
     </div>
 {% endif %}
 </div>
-
             <div class="reviews-container">
+                <div class="car-rating">
+                    <h3 style="text-align: left; margin-bottom:50px;">
+                        {% if average_rating %}
+                            Średnia ocena samochodu: 
+                            <span style="color: #ed8c4e; font-weight: bold;">
+                                {% if average_rating|floatformat:1 == average_rating %} ★
+                                    {{ average_rating|floatformat:0 }} ★  <!-- Bez miejsc po przecinku, jeśli to liczba całkowita -->
+                                {% else %}
+                                    {{ average_rating|floatformat:1 }} ★ <!-- Z jednym miejscem po przecinku -->
+                                {% endif %}
+                            </span>
+                        {% else %}
+                        ★ <span><a href="{% url 'users:profile'  %}" style="color: #ed8c4e; font-weight: bold; text-decoration: none;">Ten samochód nie dostał żadnej oceny. Oceń go teraz!</a></span>
+                        {% endif %}
+                    </h3>
+                </div>
+                
                 <h2 class="section-title">Opinie</h2>
             
                 {% if user.is_staff %}
@@ -115,7 +131,7 @@
             
                 {% if is_moderator %}
                     {% if pending_reviews %}
-                    <br><h3 class="pending-reviews-title">Opinie oczekujące na zatwierdzenie:</h3>
+                        <br><h3 class="pending-reviews-title">Opinie oczekujące na zatwierdzenie:</h3>
                         <ul class="pending-reviews-list"><br>
                             {% for review in pending_reviews %}
                                 <li class="pending-review-item"><strong>{{ review.user.username }}</strong> ({{ review.created_at|date:"d M Y, H:i" }}) - Oczekuje na zatwierdzenie</li>
@@ -127,17 +143,20 @@
                 {% endif %}
             
                 {% if user_reviews %}
-                    <h3 class="user-reviews-title">Twoje opinie:</h3>
-                    <ul class="user-reviews-list"> 
-                        {% for review in user_reviews %}
+                <br>
+                <ul class="user-reviews-list"> 
+                    {% for review in user_reviews %}
+                        {% if not review.is_approved %}
+                        <h3 class="user-reviews-title">Twoje opinie:</h3><br>
                             <li class="user-review-item"><strong>{{ review.created_at|date:"d M Y, H:i" }}:</strong> {{ review.content }} 
-                            {% if not review.is_approved %}
                                 - <span class="pending-approval">Oczekuje na zatwierdzenie</span>
-                            {% endif %}
                             </li>
-                        {% endfor %}
-                    </ul>
-                {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>Nie dodałeś jeszcze żadnej opinii.</p>
+            {% endif %}
             </div>
             
             </div>

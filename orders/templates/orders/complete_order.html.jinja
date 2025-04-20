@@ -13,6 +13,14 @@
         <p>Dziękujemy za skorzystanie z naszej wypożyczalni!</p>
         <p>Twój samochód już czeka na Ciebie 🏎️</p>
         <p>Wkrótce się z Tobą skontaktujemy, a wszystkie szczegóły znajdziesz w swoim panelu.</p>
+        
+        <!-- Wyświetlenie szczegółów zamówienia -->
+        <h2>Szczegóły zamówienia:</h2>
+        <p><strong>Samochód:</strong> {{ order.car.brand }} {{ order.car.model }}</p>
+        <p><strong>Data rozpoczęcia:</strong> {{ order.start_date }}</p>
+        <p><strong>Data zakończenia:</strong> {{ order.end_date }}</p>
+        <p><strong>Cena całkowita:</strong> {{ order.total_price }} zł</p>
+
         <a href="{% url 'users:profile' %}" class="back-home-btn">👤 Zobacz moje zamówienia</a>
         <a href="/" class="back-home-btn">🏠 Wróć na stronę główną</a>
     </div>

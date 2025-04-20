@@ -31,7 +31,17 @@ def index(request):
         order_count=Count('orders')  # Liczymy zamówienia powiązane z samochodami
     ).order_by('-order_count')[:3]
 
-    # Najczęściej recenzowane samochody
+    # Dostępne samochody
+    available_cars = Car.objects.filter(is_available=True)
+
+    # Zaktualizuj dostępność dla każdego samochodu
+    available_cars = [car for car in available_cars if car.is_currently_available()]
+
+    context = {
+        'available_cars': available_cars,
+    }
+
+    # Najczęściej oceniane
     most_reviewed = Car.objects.annotate(
         reviews_count=Count('car_reviews')  # Liczymy recenzje powiązane z samochodami
     ).filter(reviews_count__gt=0)  # Tylko samochody z recenzjami
@@ -45,6 +55,7 @@ def index(request):
     most_reviewed = most_reviewed.order_by('-reviews_count', '-avg_rating')[:3]
 
     return render(request, 'cars/index.html.jinja', {
+        'available_cars': available_cars,
         'recommended_cars': recommended_cars,
         'most_rented_cars': most_rented,
         'most_reviewed_cars': most_reviewed,
@@ -68,6 +79,11 @@ def car(request, car_id):
     
     # Użytkownik, który dodał opinię
     user_reviews = Review.objects.filter(user=request.user, car=car)
+    average_rating = car.car_reviews.aggregate(Avg('rating'))['rating__avg']
+    
+    # Jeśli brak ocen, ustawiamy średnią na 0
+    if not average_rating:
+        average_rating = 0.0
 
     context = {
         'car': car,
@@ -78,6 +94,7 @@ def car(request, car_id):
         'is_available': car.is_available,
         'rental_start_date': car.rental_start_date,
         'rental_end_date': car.rental_end_date,
+        'average_rating': average_rating,
     }
 
     return render(request, 'cars/car.html.jinja', context)
