@@ -13,12 +13,11 @@ urlpatterns = [
     # Aliasy do logowania i rejestracji
     path('login/', user_views.user_login, name='login'),
     path('register/', user_views.register, name='register'),
-    path('users/', include('users.urls')),  # Obsługuje logowanie/wylogowanie
+    path('users/', include('users.urls', namespace='users')),  # Ustawiamy przestrzeń nazw dla 'users'
     # Ścieżka koszyka:
     path('cart/', orders_views.cart, name='cart'),  # Zmieniamy cars.views.cart na orders_views.cart
     path('orders/', include('orders.urls')),  # Obsługuje wszystkie ścieżki związane z zamówieniami
     path('contact/', views.contact, name='contact'),  # Poprawione: używamy views.contact
-    
 ]
 
 # Dodajemy ścieżki do obsługi plików multimedialnych
