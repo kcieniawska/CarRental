@@ -153,7 +153,7 @@
         {% endif %}
     {% endif %}
 
-    {% if user_reviews %}
+    {% if user_reviews is not None %}
         <br>
         <ul class="user-reviews-list"> 
             {% for review in user_reviews %}

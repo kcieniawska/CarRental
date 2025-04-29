@@ -76,12 +76,14 @@ def car(request, car_id):
 
     # Sprawdzamy, czy użytkownik jest moderatorem
     is_moderator = request.user.is_staff
-    
-    # Użytkownik, który dodał opinię
-    user_reviews = Review.objects.filter(user=request.user, car=car)
+
+    # Jeśli użytkownik jest zalogowany, pobieramy jego opinie
+    if request.user.is_authenticated:
+        user_reviews = Review.objects.filter(user=request.user, car=car)
+    else:
+        user_reviews = None
+
     average_rating = car.car_reviews.aggregate(Avg('rating'))['rating__avg']
-    
-    # Jeśli brak ocen, ustawiamy średnią na 0
     if not average_rating:
         average_rating = 0.0
 

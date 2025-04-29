@@ -57,22 +57,33 @@
 
                 <!-- Dodaj opinię -->
                 {% if order.status == 'completed' %}
-                    <div class="order-section">
-                        <h4 class="order-section-title">📝 Dodaj opinię o samochodzie</h4>
-                        <form method="POST" action="{% url 'users:add_review' order.id %}">
-                            {% csrf_token %}
-                            <label for="rating">Ocena:</label>
-                            <select name="rating" required>
-                                <option value="">Wybierz ocenę</option>
-                                {% for i in "12345"|make_list %}
-                                    <option value="{{ i }}">{{ i }} ★</option>
-                                {% endfor %}
-                            </select>
-                            <textarea name="content" rows="4" placeholder="Napisz swoją opinię..." required></textarea>
-                            <button type="submit" class="btn btn-primary mt-2">Wyślij opinię</button>
-                        </form>
-                    </div>
-                {% endif %}
+    <div class="order-section">
+        <h4 class="order-section-title">📝 Twoja opinia o samochodzie</h4>
+        {% if existing_review %}
+            <p><strong>Ocena:</strong> {{ existing_review.rating }} ★</p>
+            <p><strong>Treść:</strong> {{ existing_review.content }}</p>
+
+            <a href="{% url 'users:edit_review' existing_review.id %}" class="btn btn-secondary">Edytuj</a>
+            <form method="POST" action="{% url 'users:delete_review' existing_review.id %}" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger" onclick="return confirm('Czy na pewno chcesz usunąć tę opinię?');">Usuń</button>
+            </form>
+        {% else %}
+            <form method="POST" action="{% url 'users:add_review' order.id %}">
+                {% csrf_token %}
+                <label for="rating">Ocena:</label>
+                <select name="rating" required>
+                    <option value="">Wybierz ocenę</option>
+                    {% for i in "12345"|make_list %}
+                        <option value="{{ i }}">{{ i }} ★</option>
+                    {% endfor %}
+                </select>
+                <textarea name="content" rows="4" placeholder="Napisz swoją opinię..." required></textarea>
+                <button type="submit" class="btn btn-primary mt-2">Wyślij opinię</button>
+            </form>
+        {% endif %}
+    </div>
+{% endif %}
 
                 <!-- Powrót -->
                 <div class="order-back-btn-wrapper">
