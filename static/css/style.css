@@ -74,12 +74,6 @@ nav.log .auth-link:hover {
     text-decoration: none;
 }
 
-/* Zapewniamy, że listy są obok siebie */
-nav.log li {
-    display: inline-block; /* Linki będą obok siebie */
-    margin-right: 10px;
-}
-
 
 /* Stylizacja li w panelu */
 nav.log li {
@@ -3446,3 +3440,9 @@ li.moderation-link {
 }
 
 
+.form-error span {
+    color: red;
+    font-size: 0.9em;
+    margin-top: 4px;
+    display: block;
+}

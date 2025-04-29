@@ -60,7 +60,8 @@
             <div class="form-group inline-fields">
                 <div class="field">
                     <label for="birth_date">Data urodzenia:</label>
-                    <input type="date" id="birth_date" name="birth_date" required min="{{ min_birth_date }}" />
+                    <input type="date" id="birth_date" name="birth_date" required min="{{ min_birth_date }}" max="{{ max_birth_date }}" />
+                    <span id="birth_date_error" class="form-error"></span>
                 </div>
                 <div class="field">
                     <label for="city">Miejscowość:</label>
@@ -116,17 +117,28 @@
 <script>
     document.getElementById('checkout-form').addEventListener('submit', function(event) {
         const birthDate = document.getElementById('birth_date').value;
-        const currentDate = new Date();
-        const minDate = new Date(currentDate.setFullYear(currentDate.getFullYear() - 21)); // Ustalamy datę 21 lat wstecz
-
         const birthDateObject = new Date(birthDate);
-        if (birthDateObject > minDate) {
-            alert('Aby wypożyczyć samochód, musisz mieć przynajmniej 21 lat!');
-            event.preventDefault(); // Zatrzymanie wysyłki formularza
+        const currentDate = new Date();
+
+        const min21Date = new Date(currentDate.getFullYear() - 21, currentDate.getMonth(), currentDate.getDate());
+        const minAllowedDate = new Date(1900, 0, 1); // 1 stycznia 1900
+
+        const errorSpan = document.getElementById('birth_date_error');
+        errorSpan.textContent = ''; // Wyczyść poprzednie błędy
+
+        if (birthDateObject > min21Date) {
+            errorSpan.textContent = '❌ Musisz mieć co najmniej 21 lat, aby wypożyczyć samochód :(';
+            event.preventDefault();
             return false;
         }
 
-        return true; // Formularz jest poprawny
+        if (birthDateObject < minAllowedDate) {
+            errorSpan.textContent = '❌ Data urodzenia nie może być wcześniejsza niż 1900 rok :(';
+            event.preventDefault();
+            return false;
+        }
+
+        return true; // Wszystko OK
     });
 </script>
 

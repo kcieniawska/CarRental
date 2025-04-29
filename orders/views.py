@@ -84,7 +84,19 @@ def car_detail(request, car_id):
         'today': date.today(),
         'default_end_date': date.today() + timedelta(days=1),
     })
-
+HOLIDAYS = [
+    date(2025, 1, 1),   # Nowy Rok
+    date(2025, 4, 20),  # Wielkanoc
+    date(2025, 4, 21),  # Poniedziałek Wielkanocny
+    date(2025, 5, 1),   # Święto Pracy
+    date(2025, 5, 3),   # Konstytucji 3 Maja
+    date(2025, 5, 29),  # Boże Ciało
+    date(2025, 8, 15),  # Wniebowzięcie NMP
+    date(2025, 11, 1),  # Wszystkich Świętych
+    date(2025, 11, 11), # Niepodległość
+    date(2025, 12, 25), # Boże Narodzenie
+    date(2025, 12, 26), # Drugi dzień świąt
+]
 
 @login_required
 def add_to_cart(request, car_id):
@@ -104,6 +116,15 @@ def add_to_cart(request, car_id):
 
         if rental_days <= 0:
             messages.error(request, "Data zakończenia musi być późniejsza.")
+            return redirect('cars:car_detail', car_id=car.id)
+
+        # 🔒 Walidacja: niedziela i święta (start lub koniec)
+        if start.weekday() == 6 or end.weekday() == 6:
+            messages.error(request, "Wypożyczalnia jest nieczynna w niedziele.")
+            return redirect('cars:car_detail', car_id=car.id)
+
+        if start in HOLIDAYS or end in HOLIDAYS:
+            messages.error(request, "Wypożyczalnia jest nieczynna w dni świąteczne.")
             return redirect('cars:car_detail', car_id=car.id)
 
         CartItem.objects.create(
@@ -144,11 +165,21 @@ def checkout(request):
     })
 
 def checkout_view(request):
-    # Obliczanie minimalnej daty urodzenia (21 lat temu)
-    min_birth_date = date.today().replace(year=date.today().year - 21).isoformat()
-    
-    return render(request, 'checkout.html', {'min_birth_date': min_birth_date})
+    today = date.today()
 
+    try:
+        # Obsługa 29 lutego itp.
+        min_birth_date = today.replace(year=today.year - 100).isoformat()
+    except ValueError:
+        # Jeśli dziś jest 29.02 i 100 lat temu nie było przestępnego — cofamy o 1 dzień
+        min_birth_date = (today.replace(day=28, month=2, year=today.year - 100)).isoformat()
+
+    max_birth_date = today.replace(year=today.year - 21).isoformat()
+
+    return render(request, 'orders/checkout.html.jinja', {
+        'min_birth_date': min_birth_date,
+        'max_birth_date': max_birth_date,
+    })
 # === Summary ===
 @login_required
 def summary(request):

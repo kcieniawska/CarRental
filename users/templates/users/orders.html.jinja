@@ -35,7 +35,16 @@
                         <li><strong>Od:</strong> {{ order.start_date }}</li>
                         <li><strong>Do:</strong> {{ order.end_date }}</li>
                         <li><strong>Liczba dni:</strong> {{ order.rental_days }}</li>
-                        <li><strong>Płatność:</strong> {{ order.get_payment_method_display }}</li>
+                        <li>
+                            <strong>Płatność:</strong>
+                            {% if order.payment_method == 'cash_on_site' %}
+                                Przy odbiorze
+                            {% elif order.payment_method == 'card' %}
+                                Karta kredytowa
+                            {% else %}
+                                {{ order.get_payment_method_display }}
+                            {% endif %}
+                        </li>
                         <li><strong>Status:</strong> {{ order.get_status_display }}</li>
                         <li><strong>Data złożenia:</strong> {{ order.order_date|date:"d M Y H:i" }}</li>
                         <li><strong>Całkowita cena:</strong> <span class="order-price">{{ order.total_price }} PLN</span></li>

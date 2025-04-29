@@ -3,6 +3,25 @@
 {% block title %}{{ car.brand }} {{ car.model }}{% endblock %}
 
 {% block content %}
+{% if messages %}
+    <div id="toast-container">
+        {% for message in messages %}
+        <div class="toast {{ message.tags }}">
+            <span class="toast-icon">
+                {% if message.tags == "success" %}✅
+                {% elif message.tags == "error" %}❌
+                {% elif message.tags == "warning" %}⚠️
+                {% else %}ℹ️
+                {% endif %}
+            </span>
+            {{ message }}
+            <button class="toast-close" onclick="this.parentElement.remove()">×</button>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div id="toast-container" style="display:none;"></div>
+    {% endif %}
     <div class="car-detail-container">
         <div class="car-info">
             <ul>
@@ -62,10 +81,6 @@
                 </div>
             {% endif %}
             
-            
-            
-            
-            
             <h2 class="section-title">Wypożycz samochód</h2>
 <div>
 {% if user.is_authenticated %}
@@ -75,10 +90,12 @@
             <div class="form-group">
                 <label for="start_date">Data rozpoczęcia:</label>
                 <input type="date" name="start_date" id="start_date" required min="{{ current_date }}">
+                <span id="start_date_error" class="form-error"></span>
             </div>
             <div class="form-group">
                 <label for="end_date">Data zakończenia:</label>
                 <input type="date" name="end_date" id="end_date" required min="{{ current_date }}">
+                <span id="end_date_error" class="form-error"></span>
             </div>
             <input type="hidden" name="rental_days" id="rental_days" value="">
             <button type="submit">Dodaj do koszyka</button>
@@ -170,4 +187,137 @@
         <p>Nie dodałeś jeszcze żadnej opinii.</p>
     {% endif %}
 </div>
+<style>
+    #toast-container {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 10000;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        width: 90%;
+        max-width: 400px;
+        pointer-events: none;
+    }
+    
+    .toast {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 16px 20px;
+        border-radius: 12px;
+        font-weight: 500;
+        font-size: 15px;
+        line-height: 1.4;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        color: white;
+        animation: fadeOutToast 5s ease-out forwards;
+        opacity: 0.95;
+        pointer-events: auto;
+        position: relative;
+    }
+    
+    .toast::before {
+        font-size: 18px;
+        line-height: 1;
+    }
+    
+    .toast.success {
+        background: linear-gradient(135deg, #28a745, #218838);
+    }
+    
+    .toast.error {
+        background: linear-gradient(135deg, #dc3545, #c82333);
+    }
+    
+    .toast.warning {
+        background: linear-gradient(135deg, #ffc107, #e0a800);
+        color: black;
+    }
+    
+    .toast.info {
+        background: linear-gradient(135deg, #17a2b8, #138496);
+    }
+    
+    @keyframes fadeOutToast {
+        0% { opacity: 1; transform: translateY(0); }
+        90% { opacity: 1; }
+        100% { opacity: 0; transform: translateY(-20px); }
+    }
+    .toast-close {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 18px;
+        font-weight: bold;
+        position: absolute;
+        top: 8px;
+        right: 12px;
+        cursor: pointer;
+        opacity: 0.8;
+        transition: opacity 0.3s ease;
+    }
+    
+    .toast-close:hover {
+        opacity: 1;
+    }
+    
+</style>
+
+<script>
+    // Lista świąt w formacie YYYY-MM-DD
+    const holidays = [
+        "2025-01-01", "2025-04-20", "2025-04-21", "2025-05-01", "2025-05-03",
+        "2025-05-29", "2025-08-15", "2025-11-01", "2025-11-11", "2025-12-25", "2025-12-26"
+    ];
+
+    function isHolidayOrSunday(dateStr) {
+        const date = new Date(dateStr);
+        const day = date.getDay(); // 0 = niedziela
+        return day === 0 || holidays.includes(dateStr);
+    }
+
+    document.getElementById('rental-form').addEventListener('submit', function(event) {
+        const startInput = document.getElementById('start_date');
+        const endInput = document.getElementById('end_date');
+        const start = startInput.value;
+        const end = endInput.value;
+
+        const startError = document.getElementById('start_date_error');
+        const endError = document.getElementById('end_date_error');
+        startError.textContent = '';
+        endError.textContent = '';
+
+        let hasError = false;
+
+        if (isHolidayOrSunday(start)) {
+            startError.textContent = "Wypożyczalnia nieczynna w niedziele i święta!";
+            hasError = true;
+        }
+
+        if (isHolidayOrSunday(end)) {
+            endError.textContent = "Wypożyczalnia nieczynna w niedziele i święta!";
+            hasError = true;
+        }
+
+        if (hasError) {
+            event.preventDefault(); // Zatrzymaj wysyłkę
+        }
+    });
+    window.addEventListener('DOMContentLoaded', () => {
+        const msg = document.getElementById('messages');
+        if (msg) {
+            msg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    });
+    // Usuwanie komunikatu po zakończeniu animacji
+    document.addEventListener('DOMContentLoaded', function () {
+        const toasts = document.querySelectorAll('.toast');
+        toasts.forEach(toast => {
+            toast.addEventListener('animationend', () => toast.remove());
+        });
+    });
+</script>
 {% endblock %}

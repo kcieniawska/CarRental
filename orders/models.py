@@ -3,6 +3,7 @@ from django.conf import settings
 from cars.models import Car
 from datetime import date
 from django.utils import timezone
+from django.core.exceptions import ValidationError
 
 class Cart(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='carts')
@@ -24,7 +25,6 @@ class Cart(models.Model):
         super(Cart, self).save(*args, **kwargs)
 class Order(models.Model):
     PAYMENT_METHODS = [
-        
         ('credit_card', 'Karta kredytowa'),
         ('paypal', 'PayPal'),
         ('bank_transfer', 'Przelew bankowy'),
@@ -38,7 +38,7 @@ class Order(models.Model):
     is_ordered = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='orders')
-    car = models.ForeignKey(Car, on_delete=models.CASCADE, related_name='orders')
+    car = models.ForeignKey('cars.Car', on_delete=models.CASCADE, related_name='orders')
     start_date = models.DateField()
     end_date = models.DateField()
     rental_days = models.PositiveIntegerField(blank=True, null=True)
@@ -60,13 +60,32 @@ class Order(models.Model):
     payment_method = models.CharField(max_length=20, choices=PAYMENT_METHODS, default='credit_card')
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='in_progress')
 
+    def clean(self):
+        today = date.today()
+
+        # Walidacja wieku
+        if self.birth_date.year < 1900:
+            raise ValidationError("Data urodzenia nie może być wcześniejsza niż rok 1900.")
+        
+        age = today.year - self.birth_date.year - ((today.month, today.day) < (self.birth_date.month, self.birth_date.day))
+        if age < 21:
+            raise ValidationError("Musisz mieć co najmniej 21 lat, aby wypożyczyć auto.")
+
+        # Walidacja dat wypożyczenia
+        if self.start_date < today:
+            raise ValidationError("Data rozpoczęcia nie może być wcześniejsza niż dzisiaj.")
+        if self.end_date <= self.start_date:
+            raise ValidationError("Data zakończenia musi być późniejsza niż data rozpoczęcia.")
+
     def save(self, *args, **kwargs):
+        self.full_clean()  # Wykonaj walidację z `clean()` przed zapisaniem
+
         if self.start_date and self.end_date:
             rental_days = (self.end_date - self.start_date).days
             self.rental_days = rental_days
             self.total_price = self.car.rent * self.rental_days
 
-        super(Order, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"Order {self.id} by {self.user.username}"
