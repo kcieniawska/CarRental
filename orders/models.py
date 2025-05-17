@@ -28,6 +28,7 @@ class Order(models.Model):
         ('credit_card', 'Karta kredytowa'),
         ('paypal', 'PayPal'),
         ('bank_transfer', 'Przelew bankowy'),
+        ('cash_on_site', "Gotowka przy odbiorze")
     ]
     STATUS_CHOICES = [
         ('completed', 'Zrealizowane'),
